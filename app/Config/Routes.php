@@ -33,8 +33,12 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->get('/transaksi/pembelian', 'Transaksi::pembelian');
+$routes->get('transaksi/pembelian/deletePembelian/(:segment)', 'Transaksi::deletePembelian/$1');
+
 $routes->get('/transaksi/penjualan', 'Transaksi::penjualan');
+
 $routes->get('/transaksi/return_service', 'Transaksi::serviceReturn');
+
 $routes->get('/transaksi/garansi', 'Transaksi::garansi');
 
 $routes->get('/master_barang', 'Master::barang');
