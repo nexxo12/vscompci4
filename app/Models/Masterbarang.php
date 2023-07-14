@@ -14,4 +14,9 @@ class Masterbarang extends Model
     {
         return $this->select('*')->orderBy('NAMA_BARANG', 'ASC')->findAll();
     }
+
+    public function showbarangbyid($idbarang)
+    {
+        return $this->select('*')->where('ID_BARANG', $idbarang)->findAll();
+    }
 }

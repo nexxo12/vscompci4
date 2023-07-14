@@ -7,10 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit0b71e15d7b4d841d27f3ba60f67e4b98
 {
     public static $files = array (
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '7e9bd612cc444b3eed788ebbe46263a0' => __DIR__ . '/..' . '/laminas/laminas-zendframework-bridge/src/autoload.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     );
@@ -48,6 +48,10 @@ class ComposerStaticInit0b71e15d7b4d841d27f3ba60f67e4b98
         array (
             'Kint\\' => 5,
         ),
+        'H' => 
+        array (
+            'Hermawan\\DataTables\\' => 20,
+        ),
         'F' => 
         array (
             'Faker\\' => 6,
@@ -72,8 +76,8 @@ class ComposerStaticInit0b71e15d7b4d841d27f3ba60f67e4b98
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -115,6 +119,10 @@ class ComposerStaticInit0b71e15d7b4d841d27f3ba60f67e4b98
         array (
             0 => __DIR__ . '/..' . '/kint-php/kint/src',
         ),
+        'Hermawan\\DataTables\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/hermawan/codeigniter4-datatables/src',
+        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
@@ -147,6 +155,13 @@ class ComposerStaticInit0b71e15d7b4d841d27f3ba60f67e4b98
             'org\\bovigo\\vfs\\' => 
             array (
                 0 => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php',
+            ),
+        ),
+        'P' => 
+        array (
+            'PHPSQLParser\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/greenlion/php-sql-parser/src',
             ),
         ),
     );

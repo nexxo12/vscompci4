@@ -60,51 +60,209 @@
                             </div>
                         </div>
                         <!-- end page title end breadcrumb -->
-
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="card m-b-30">
-                                    <div class="card-body">
+                                    <form action="" id="form_addchart">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="card m-b-30">
+                                                        <div class="card-body">
 
-                                        <h4 class="mt-0 header-title">HTML Highlight</h4>
-                                        <p class="text-muted m-b-30 font-14">Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
+                                                            <h4 class="mt-0 header-title">Detail Barang</h4>
+                                                            <br><br>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Invoice :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="INV/<?= date('y'); ?><?= date('m'); ?>/VSC/<?= $autonumPJ; ?>" name="invoice" id="example-text-input" readonly>
+                                                                </div>
 
-                                        <pre class=" language-markup"><code class=" language-markup">
-&lt;html&gt;
-    &lt;!-- this is a comment --&gt;
-    &lt;head&gt;
-        &lt;title&gt;HTML Example&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        The indentation tries to be &lt;em&gt;somewhat &amp;quot;do what
-        I mean&amp;quot;&lt;/em&gt;... but might not match your style.
-    &lt;/body&gt;
-&lt;/html&gt;
-                                            </code></pre>
-                                    </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="barang" class="col-sm-2 mt-2 col-form-label">Barang :</label>
+                                                                <div class="col-sm-10">
+                                                                    <div class="input-group mt-2">
+                                                                        <input type="text" width="10%" value="" id="idpenjualan" name="idpenjualan" hidden>
+                                                                        <input type="text" width="10%" value="" id="idbarang" name="idbarang" hidden>
+                                                                        <input type="text" class="form-control" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
+                                                                        <span class="input-group-append">
+                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#exampleModal"></button>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Modal -->
+                                                            <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel">List Barang</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="table-responsive">
+                                                                                <table id="datatable_list" class="table">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Kode</th>
+                                                                                            <th>Nama Barang</th>
+                                                                                            <th>Stok</th>
+                                                                                            <th>Modal Rp.</th>
+                                                                                            <th>Aksi</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End Modal -->
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Qty :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" name="qty" id="qty" required>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Harga (Rp.) :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="number" value="0" name="harga" id="harga">
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Diskon (Rp.) :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="number" value="" name="diskon" id="example-text-input">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- end col -->
+
+                                                <div class="col-lg-6">
+                                                    <div class="card m-b-30">
+                                                        <div class="card-body">
+
+                                                            <h4 class="mt-0 header-title">Info Customer</h4>
+                                                            <br><br>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Kasir :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" name="kasir" id="example-text-input" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Type CS :</label>
+                                                                <div class="col-sm-10">
+                                                                    <select class="form-control" name="typecustomer">
+                                                                        <?php foreach ($showcustomer as $sc) : ?>
+                                                                            <option value="<?= $sc['ID_PELANGGAN']; ?>"><?= $sc['NAMA']; ?></option>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Customer :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" name="namacustomer" id="example-text-input" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Ref MP :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv" id="example-text-input">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Catatan :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="catatan" id="example-text-input">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- end col -->
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" class="addchart btn btn-primary waves-effect waves-light" id="liveToastBtn">Add Chart</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </div> <!-- end col -->
-
-                            <div class="col-lg-6">
-                                <div class="card m-b-30">
-                                    <div class="card-body">
-
-                                        <h4 class="mt-0 header-title">Css Highlight</h4>
-                                        <p class="text-muted m-b-30 font-14">Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
-
-                                        <pre class="line-numbers">
-            <code class="language-css">
-.example {
-    font-family: Georgia, Times, serif;
-    color: #555;
-    text-align: center;
-}</code>
-            </pre>
-                                    </div>
-                                </div>
-                            </div> <!-- end col -->
+                            </div>
 
                         </div> <!-- end row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card m-b-30">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table" id="table_listbarang">
+                                                <thead class="thead-default">
+                                                    <tr>
+                                                        <th>No.</th>
+                                                        <th>Nama Barang</th>
+                                                        <th>Harga Rp.</th>
+                                                        <th>Qty</th>
+                                                        <th>Subtotal</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="datachart">
+
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <h6>Catatan:</h6>
+                                                        </td>
+                                                        <td style="text-align:right;">
+                                                            <h6>Diskon</h6>
+                                                        </td>
+                                                        <td>
+                                                            <h6>Rp.</h6>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="text-align:right;">
+                                                            <h3>Total</h3>
+                                                        </td>
+                                                        <td>
+                                                            <h3>Rp.</h3>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-primary waves-effect waves-light" id="liveToastBtn">Checkout</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
 
                     </div><!-- container -->
 
@@ -112,9 +270,7 @@
 
             </div> <!-- content -->
 
-            <footer class="footer">
-                © 2021 - VSKomputer.
-            </footer>
+            <?= $this->include('layout/footerc'); ?>
 
         </div>
         <!-- End Right content here -->

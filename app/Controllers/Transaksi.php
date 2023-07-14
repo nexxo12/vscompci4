@@ -5,6 +5,11 @@ namespace App\Controllers;
 use App\Models\Pembelian;
 use App\Models\Masterbarang;
 use App\Models\Supplier;
+use App\Models\InvPenjualan;
+use App\Models\Customer;
+use App\Models\Listpenjualan;
+use App\Models\PenjualanModel;
+use \Hermawan\DataTables\DataTable;
 
 class Transaksi extends BaseController
 {
@@ -12,11 +17,19 @@ class Transaksi extends BaseController
 	protected $pembelian;
 	protected $masterbarang;
 	protected $supplier;
+	protected $inv_pj;
+	protected $customer;
+	protected $list_pj;
+	protected $penjualanID;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();
 		$this->masterbarang = new Masterbarang();
 		$this->supplier = new Supplier();
+		$this->inv_pj = new InvPenjualan();
+		$this->customer = new Customer();
+		$this->list_pj = new Listpenjualan();
+		$this->penjualanID = new PenjualanModel();
 	}
 
 	// CONTROLLER PAGE PEMBELIAN===================================
@@ -59,15 +72,72 @@ class Transaksi extends BaseController
 	}
 	//  END CONTROLLER PEMBELIAN======================================
 
-
+	// CONTROLLER PAGE PENJUALAN===================================
 	public function penjualan()
 	{
 		$data = [
-			'tittle' => 'Penjualan - VSKomputer'
+			'tittle' => 'Penjualan - VSKomputer',
+			'autonumPJ' => $this->inv_pj->invoicepj(),
+			'showbarang' => $this->masterbarang->ShowBarang(),
+			'showcustomer' => $this->customer->showcustomer()
 		];
 		return view('/transaksi/penjualan', $data);
 	}
 
+	public function showstok()
+	{
+		if ($this->request->isAJAX()) {
+			$db = \Config\Database::connect();
+			$builder = $db->table('master_barang')->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL');
+			return DataTable::of($builder)->toJson();
+		}
+	}
+
+	public function addbarang()
+	{
+		$idbarang = $this->request->getVar('id');
+		$result = $this->masterbarang->showbarangbyid($idbarang);
+		return json_encode($result);
+	}
+
+	public function showlistbarang()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->list_pj->showlistpenjualan();
+			return json_encode($result);
+			// $db = \Config\Database::connect();
+			// $builder = $db->table('list_penjualan')->select('ID_BARANG, HARGA_JL, JUMLAH_BELI, TOTAL_HARGA');
+			// return DataTable::of($builder)->addNumbering()->toJson();
+		}
+	}
+	public function refreshidpj()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->penjualanID->AutonumIDPJ();
+			return json_encode($result);
+		}
+	}
+
+	public function addcart()
+	{
+		if ($this->request->isAJAX()) {
+			$this->list_pj->insert([
+				'ID_PENJUALAN' => $this->request->getVar('idpenjualan'),
+				'INV_PENJUALAN' => $this->request->getVar('invoice'),
+				'ID_BARANG' => $this->request->getVar('idbarang'),
+				'JUMLAH_BELI' => $this->request->getVar('qty'),
+				'HARGA_JL' => $this->request->getVar('harga'),
+				'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty')
+
+			]);
+			// return redirect()->to('index');
+		}
+	}
+
+	public function deletecart()
+	{
+	}
+	//  END CONTROLLER PENJUALAN======================================
 	public function serviceReturn()
 	{
 		$data = [

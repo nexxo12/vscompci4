@@ -1,24 +1,24 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => 'v4.1.3',
-    'version' => '4.1.3.0',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => 'fb0e453edcaa93bad13fe850a1064e9f3cb78595',
     'name' => 'codeigniter4/appstarter',
   ),
   'versions' => 
   array (
     'codeigniter4/appstarter' => 
     array (
-      'pretty_version' => 'v4.1.3',
-      'version' => '4.1.3.0',
+      'pretty_version' => 'dev-main',
+      'version' => 'dev-main',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => 'fb0e453edcaa93bad13fe850a1064e9f3cb78595',
     ),
     'codeigniter4/framework' => 
     array (
@@ -46,6 +46,24 @@
       array (
       ),
       'reference' => 'ed22aee8d17c7b396f74a58b1e7fefa4f90d5ef1',
+    ),
+    'greenlion/php-sql-parser' => 
+    array (
+      'pretty_version' => 'v4.5.0',
+      'version' => '4.5.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a5d5c292d97271c95140192e6f0e962916e39b50',
+    ),
+    'hermawan/codeigniter4-datatables' => 
+    array (
+      'pretty_version' => 'v0.6.1',
+      'version' => '0.6.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'b3ffc89d449520ce6e0c41a69c8a949302b8dd1a',
     ),
     'kint-php/kint' => 
     array (

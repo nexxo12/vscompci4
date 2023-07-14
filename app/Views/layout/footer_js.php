@@ -55,6 +55,9 @@
 <script src="/assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script>
 <script src="/assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
 
+<!-- Sweet-Alert  -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Plugins Init js -->
 <script src="/assets/pages/form-advanced.js"></script>
 
@@ -97,11 +100,11 @@
 
     });
 </script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function() {
-        $('#datatable').DataTable();
+        $('#datatable_list').DataTable();
     });
-</script>
+</script> -->
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -119,21 +122,190 @@
     });
 </script>
 
-<!-- AJAX PAGE PEMBELIAN -->
+<!-- PAGE PENJUALAN-->
+<script type="text/javascript">
+    $(".listbarang").click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "GET",
+            url: $(this).attr('href'), //data dikirim dari a href
+            dataType: "JSON",
+            success: function(result) {
+                for (var i = 0; i < result.length; i++) {
+                    $("#idbarang").val(result[i].ID_BARANG);
+                    $("#namabarang").val(result[i].NAMA_BARANG);
+                    // $("#id_brg").val(result[i].id_barang);
+                    $('#exampleModal').modal('hide');
+
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            }
+        })
+    })
+</script>
 <script>
-    // $("#btn_pembelian").click(function(e) {
-    //     e.preventDefault();
+    $(document).ready(function() {
+        loadcart();
+        refreshidpj();
+        $('#datatable_list').DataTable({
+            processing: true,
+            serverSide: true,
+            // "bFilter": false,
+            // "bLengthChange": false,
+            // "bPaginate": false,
+            // "bInfo": false,
+            ajax: '/Transaksi/showstok',
+            order: [],
+            columnDefs: [{
+                // targets: 0,
+                orderable: false,
+                "defaultContent": "-",
+                "targets": "_all"
+            }, ]
+        });
+    });
+</script>
+<script type="text/javascript">
+    function refreshidpj() {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '/Transaksi/refreshidpj',
+            dataType: "JSON",
+            success: function(result) {
+                for (var i = 0; i < result.length; i++) {
+                    var idpj = parseInt(result[i].ID_PENJUALAN);
+                    idpj++;
+                    $("#idpenjualan").val(idpj);
+
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            }
+        })
+    }
+
+    // function listbarang() {
     //     $.ajax({
-    //         url: '<?php echo base_url('/Transaksi/savePembelian'); ?>',
-    //         type: 'post',
-    //         dataType: 'json',
-    //         data: $("#form-pembelian").serialize(),
-    //         success: function() {
-    //             alert("berhasil");
+    //         type: "POST",
+    //         async: false,
+    //         url: '/Transaksi/showstok',
+    //         dataType: "JSON",
+    //         success: function(result) {
+    //             var html = '';
+    //             for (var i = 0; i < result.length; i++) {
+    //                 var no = parseInt(i);
+    //                 no++;
+    //                 html += '<tr>' +
+    //                     '<td>' + result[i].ID_BARANG + '</td>' +
+    //                     '<td>' + result[i].NAMA_BARANG + '</td>' +
+    //                     '<td>' + result[i].STOK + '</td>' +
+    //                     '<td>' + result[i].HARGA_JUAL + '</td>' +
+    //                     '<td><button class="btn btn-danger ti-trash" onclick="deletebrg()" value="' + result[i].ID_BARANG + '" type="button"></button></td>' +
+    //                     '</tr>';
+    //             }
+    //             $('#ajax_listbarang').html(html);
+
     //         },
     //         error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
     //             alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
     //         }
     //     })
-    // })
+    // }
 </script>
+<script type="text/javascript">
+    function loadcart() {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '/Transaksi/showlistbarang',
+            dataType: "JSON",
+            success: function(result) {
+                var html = '';
+                for (var i = 0; i < result.length; i++) {
+                    var no = parseInt(i);
+                    no++;
+                    html += '<tr>' +
+                        '<th>' + no + '</th>' +
+                        '<td>' + result[i].NAMA_BARANG + '</td>' +
+                        '<td>' + result[i].HARGA_JL + '</td>' +
+                        '<td>' + result[i].JUMLAH_BELI + '</td>' +
+                        '<td>' + result[i].TOTAL_HARGA + '</td>' +
+                        '<td><button class="btn btn-danger ti-trash" onclick="deletebrg()" value="' + result[i].ID_PENJUALAN + '" type="button"></button></td>' +
+                        '</tr>';
+                }
+                $('#datachart').html(html);
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            }
+
+
+        })
+    }
+    $(".addchart").click(function(e) {
+        e.preventDefault();
+        $idbarang = $('#idbarang').val();
+        $qty = $('#qty').val();
+        if ($idbarang == '') {
+            Swal.fire({
+                title: 'Belum menambahkan barang!',
+                icon: 'warning'
+            })
+        } else if ($qty == '') {
+            Swal.fire({
+                title: 'Belum input Qty!',
+                icon: 'warning'
+            })
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/Transaksi/addcart', //data dikirim dari form
+                data: $("#form_addchart").serialize(),
+                success: function() {
+                    loadcart();
+                    refreshidpj();
+                    $('#qty').val('');
+                    $('#namabarang').val('');
+                    $('#harga').val(0);
+                },
+                error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                }
+            })
+        }
+
+    })
+</script>
+<script type="text/javascript">
+    function deletebrg() {
+        $(".deletelist").click(function(e) {
+            e.preventDefault();
+            // var btnval = $("button").val();
+            var fired_button = $(".deletelist").val();
+            alert(fired_button);
+            // $.ajax({
+            //     type: "GET",
+            //     url: $(this).attr('href'), //data dikirim dari a href
+            //     dataType: "JSON",
+            //     success: function(result) {
+            //         for (var i = 0; i < result.length; i++) {
+            //             $("#idbarang").val(result[i].ID_BARANG);
+            //             $("#namabarang").val(result[i].NAMA_BARANG);
+            //             // $("#id_brg").val(result[i].id_barang);
+            //             $('#exampleModal').modal('hide');
+
+            //         }
+            //     },
+            //     error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+            //         alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            //     }
+            // })
+        })
+    }
+</script>
+<!-- PAGE PENJUALAN-->

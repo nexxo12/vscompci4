@@ -3336,6 +3336,10 @@ body.fixed-left .side-menu.left {
   color: #707070;
 }
 
+.dataTables_filter {
+  float: right !important;
+}
+
 /*
 File: Responsive
 */

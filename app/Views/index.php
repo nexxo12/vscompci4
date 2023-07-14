@@ -590,9 +590,7 @@
 
             </div> <!-- content -->
 
-            <footer class="footer">
-                © 2018 Annex by Mannatthemes.
-            </footer>
+            <?= $this->include('layout/footerc'); ?>
 
         </div>
         <!-- End Right content here -->
