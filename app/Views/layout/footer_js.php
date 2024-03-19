@@ -149,21 +149,19 @@
     $(document).ready(function() {
         loadcart();
         refreshidpj();
-        $('#datatable_list').DataTable({
-            processing: true,
-            serverSide: true,
-            // "bFilter": false,
-            // "bLengthChange": false,
-            // "bPaginate": false,
-            // "bInfo": false,
-            ajax: '/Transaksi/showstok',
-            order: [],
-            columnDefs: [{
-                // targets: 0,
-                orderable: false,
-                "defaultContent": "-",
-                "targets": "_all"
-            }, ]
+        caribarang();
+        $('#datatable_caribarang').DataTable({
+            // processing: true,
+            // serverSide: true,
+            // bFilter: true,
+            // ajax: '/Transaksi/showstok',
+            // order: [],
+            // columnDefs: [{
+            //     // targets: 0,
+            //     orderable: false,
+            //     "defaultContent": "-",
+            //     "targets": "_all"
+            // }, ]
         });
     });
 </script>
@@ -188,35 +186,7 @@
         })
     }
 
-    // function listbarang() {
-    //     $.ajax({
-    //         type: "POST",
-    //         async: false,
-    //         url: '/Transaksi/showstok',
-    //         dataType: "JSON",
-    //         success: function(result) {
-    //             var html = '';
-    //             for (var i = 0; i < result.length; i++) {
-    //                 var no = parseInt(i);
-    //                 no++;
-    //                 html += '<tr>' +
-    //                     '<td>' + result[i].ID_BARANG + '</td>' +
-    //                     '<td>' + result[i].NAMA_BARANG + '</td>' +
-    //                     '<td>' + result[i].STOK + '</td>' +
-    //                     '<td>' + result[i].HARGA_JUAL + '</td>' +
-    //                     '<td><button class="btn btn-danger ti-trash" onclick="deletebrg()" value="' + result[i].ID_BARANG + '" type="button"></button></td>' +
-    //                     '</tr>';
-    //             }
-    //             $('#ajax_listbarang').html(html);
-
-    //         },
-    //         error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-    //             alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-    //         }
-    //     })
-    // }
-</script>
-<script type="text/javascript">
+    // FUNCTION UNTUK MENAMPILKAN BARANG SETELAH KLIK "ADD CART"
     function loadcart() {
         $.ajax({
             type: "POST",
@@ -247,6 +217,37 @@
 
         })
     }
+</script>
+<script type="text/javascript">
+    // FUNCTION UNTUK MENAMPILKAN BARANG SETELAH KLIK "CARI BARANG"
+    function caribarang() {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '/Transaksi/showstok',
+            dataType: "JSON",
+            success: function(result) {
+                var html = '';
+                for (var i = 0; i < result.length; i++) {
+                    var no = parseInt(i);
+                    no++;
+                    html += '<tr>' +
+                        '<td>' + result[i].ID_BARANG + '</td>' +
+                        '<td>' + result[i].NAMA_BARANG + '</td>' +
+                        '<td>' + result[i].STOK + '</td>' +
+                        '<td>' + result[i].HARGA_JUAL + '</td>' +
+                        '<td><button class="btn btn-primary ti-plus" onclick="deletebrg()" value="' + result[i].ID_BARANG + '" type="button"></button></td>' +
+                        '</tr>';
+                }
+                $('#tb_caribarang').html(html).ajax.reload();
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            }
+        })
+    }
+    // JS TOMBOL ADD CHART
     $(".addchart").click(function(e) {
         e.preventDefault();
         $idbarang = $('#idbarang').val();
@@ -267,7 +268,7 @@
                 url: '/Transaksi/addcart', //data dikirim dari form
                 data: $("#form_addchart").serialize(),
                 success: function() {
-                    loadcart();
+                    // loadcart();
                     refreshidpj();
                     $('#qty').val('');
                     $('#namabarang').val('');

@@ -87,9 +87,11 @@ class Transaksi extends BaseController
 	public function showstok()
 	{
 		if ($this->request->isAJAX()) {
-			$db = \Config\Database::connect();
-			$builder = $db->table('master_barang')->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL');
-			return DataTable::of($builder)->toJson();
+			$result = $this->masterbarang->showCariBarang();
+			return json_encode($result);
+			// $db = \Config\Database::connect();
+			// $builder = $db->table('master_barang')->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL');
+			// return DataTable::of($builder)->toJson();
 		}
 	}
 

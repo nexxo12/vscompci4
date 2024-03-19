@@ -93,7 +93,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Modal -->
+                                                            <!-- Modal CARI BARANG-->
                                                             <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                                                     <div class="modal-content">
@@ -105,7 +105,7 @@
                                                                         </div>
                                                                         <div class="modal-body">
                                                                             <div class="table-responsive">
-                                                                                <table id="datatable_list" class="table">
+                                                                                <table id="datatable_caribarang" class="table">
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th>Kode</th>
@@ -115,7 +115,7 @@
                                                                                             <th>Aksi</th>
                                                                                         </tr>
                                                                                     </thead>
-                                                                                    <tbody>
+                                                                                    <tbody id="tb_caribarang">
                                                                                         <tr>
                                                                                             <td></td>
                                                                                             <td></td>
@@ -150,7 +150,7 @@
 
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Diskon (Rp.) :</label>
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">DP (Rp.) :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="number" value="" name="diskon" id="example-text-input">
                                                                 </div>
@@ -213,6 +213,8 @@
                             </div>
 
                         </div> <!-- end row -->
+
+                        <!-- PAGE LIST BARANG CHECKOUT -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card m-b-30">

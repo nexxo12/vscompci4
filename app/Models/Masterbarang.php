@@ -15,6 +15,11 @@ class Masterbarang extends Model
         return $this->select('*')->orderBy('NAMA_BARANG', 'ASC')->findAll();
     }
 
+    public function showCariBarang()
+    {
+        return $this->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL')->findAll();
+    }
+
     public function showbarangbyid($idbarang)
     {
         return $this->select('*')->where('ID_BARANG', $idbarang)->findAll();
