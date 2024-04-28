@@ -20,6 +20,8 @@ use Composer\Semver\VersionParser;
 
 
 
+
+
 class InstalledVersions
 {
 private static $installed = array (
@@ -30,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'fb0e453edcaa93bad13fe850a1064e9f3cb78595',
+    'reference' => '31b95ecf83209860629019c62f8ebcc9e603605f',
     'name' => 'codeigniter4/appstarter',
   ),
   'versions' => 
@@ -42,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'fb0e453edcaa93bad13fe850a1064e9f3cb78595',
+      'reference' => '31b95ecf83209860629019c62f8ebcc9e603605f',
     ),
     'codeigniter4/framework' => 
     array (
@@ -82,12 +84,12 @@ private static $installed = array (
     ),
     'hermawan/codeigniter4-datatables' => 
     array (
-      'pretty_version' => 'v0.6.1',
-      'version' => '0.6.1.0',
+      'pretty_version' => 'v0.7.1',
+      'version' => '0.7.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b3ffc89d449520ce6e0c41a69c8a949302b8dd1a',
+      'reference' => '3c7d9580a9424cc9c552eaa204f86926caaff8ce',
     ),
     'kint-php/kint' => 
     array (
@@ -478,7 +480,6 @@ foreach (self::getInstalled() as $installed) {
 $packages[] = array_keys($installed['versions']);
 }
 
-
 if (1 === \count($packages)) {
 return $packages[0];
 }
@@ -670,6 +671,7 @@ public static function reload($data)
 self::$installed = $data;
 self::$installedByVendor = array();
 }
+
 
 
 

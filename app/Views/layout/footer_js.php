@@ -100,14 +100,14 @@
 
     });
 </script>
-<!-- <script type="text/javascript">
+<script>
     $(document).ready(function() {
-        $('#datatable_list').DataTable();
-    });
-</script> -->
+        loadcart();
+        refreshidpj();
+        caribarang();
+        grandtotal();
+        dtbl_CB = $('#datatable_caribarang').DataTable({});
 
-<script type="text/javascript">
-    $(document).ready(function() {
         $("#input_supp").attr("style", "display: none");
         var select = $('#supp_buy').val();
 
@@ -118,54 +118,113 @@
                 $("#input_supp").attr("style", "display: none");
             }
         });
-
     });
+
+    function rupiah(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
 </script>
 
 <!-- PAGE PENJUALAN-->
 <script type="text/javascript">
-    $(".listbarang").click(function(e) {
-        e.preventDefault();
+    // FUNCTION UNTUK MENAMPILKAN BARANG SETELAH KLIK "CARI BARANG"
+    function caribarang() {
+        // $(document).ready(function() {
         $.ajax({
-            type: "GET",
-            url: $(this).attr('href'), //data dikirim dari a href
+            type: "POST",
+            async: false,
+            url: '/Transaksi/showstok',
             dataType: "JSON",
             success: function(result) {
+                var html = '';
                 for (var i = 0; i < result.length; i++) {
-                    $("#idbarang").val(result[i].ID_BARANG);
-                    $("#namabarang").val(result[i].NAMA_BARANG);
-                    // $("#id_brg").val(result[i].id_barang);
-                    $('#exampleModal').modal('hide');
+                    var no = parseInt(i);
+                    no++;
+                    html += '<tr>' +
+                        '<td>' + result[i].ID_BARANG + '</td>' +
+                        '<td>' + result[i].NAMA_BARANG + ' (' + result[i].STOK + ')</td>' +
+                        '<td>' + result[i].HARGA_JUAL + '</td>' +
+                        '<td><a class="addbrg-fromlist" href="/Transaksi/addbarang?id=' + result[i].ID_BARANG + '"><button id="list-brg" class="btn btn-primary ti-plus" onclick="addbrgfromlist()" type="button"></button></td>' +
+                        '</tr>';
+                }
+
+                $('#tb_caribarang').html(html);
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            },
+
+        })
+        // });
+
+    }
+
+    // FUNGSI MENDAPATKAN ID & NAMA BARANG KETIKA KLIK TOMBOL PLUS PADA DAFTAR BARANG
+    function addbrgfromlist() {
+        $(".addbrg-fromlist").click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: $(this).attr('href'), //data dikirim dari a href
+                dataType: "JSON",
+                success: function(result) {
+                    for (var i = 0; i < result.length; i++) {
+                        $("#idbarang").val(result[i].ID_BARANG);
+                        $("#namabarang").val(result[i].NAMA_BARANG);
+                        $("#stokdb").val(result[i].STOK);
+                        $("#stokinfo").html("<div>Stok: " + result[i].STOK + "</div>");
+                        $('#Modalcaribrg').modal('hide');
+
+
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                }
+            })
+        })
+    }
+
+    function grandtotal() {
+        $.ajax({
+            type: 'POST',
+            async: false,
+            url: '/Transaksi/TotalHarga',
+            dataType: "JSON",
+            data: {
+                id: $("#invoiceid").val()
+            },
+            success: function(result) {
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].TOTAL_HARGA == null) {
+                        $("#gTotal").html("<div>0</div>");
+                        $("#sTotal").html("<div>0</div>");
+                    } else {
+                        $("#gTotal").html("<div>" + rupiah(result[i].TOTAL_HARGA) + "</div>");
+                        $("#sTotal").html("<div>" + rupiah(result[i].TOTAL_HARGA) + "</div>");
+                    }
+
 
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
                 alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
             }
-        })
-    })
-</script>
-<script>
-    $(document).ready(function() {
-        loadcart();
-        refreshidpj();
-        caribarang();
-        $('#datatable_caribarang').DataTable({
-            // processing: true,
-            // serverSide: true,
-            // bFilter: true,
-            // ajax: '/Transaksi/showstok',
-            // order: [],
-            // columnDefs: [{
-            //     // targets: 0,
-            //     orderable: false,
-            //     "defaultContent": "-",
-            //     "targets": "_all"
-            // }, ]
         });
-    });
+    }
 </script>
+
 <script type="text/javascript">
+    //FUNGSI UNTUK MENDAPATKAN UPDATE ID TABLE PENJUALAN
     function refreshidpj() {
         $.ajax({
             type: "POST",
@@ -201,10 +260,10 @@
                     html += '<tr>' +
                         '<th>' + no + '</th>' +
                         '<td>' + result[i].NAMA_BARANG + '</td>' +
-                        '<td>' + result[i].HARGA_JL + '</td>' +
+                        '<td>' + rupiah(result[i].HARGA_JL) + '</td>' +
                         '<td>' + result[i].JUMLAH_BELI + '</td>' +
-                        '<td>' + result[i].TOTAL_HARGA + '</td>' +
-                        '<td><button class="btn btn-danger ti-trash" onclick="deletebrg()" value="' + result[i].ID_PENJUALAN + '" type="button"></button></td>' +
+                        '<td>' + rupiah(result[i].TOTAL_HARGA) + '</td>' +
+                        '<td><a class="delete-loadcart" href="/Transaksi/deletecart?id=' + result[i].ID_PENJUALAN + '"><button class="btn btn-danger ti-trash" onclick="deletebrg()" type="button"></button></td>' +
                         '</tr>';
                 }
                 $('#datachart').html(html);
@@ -219,39 +278,13 @@
     }
 </script>
 <script type="text/javascript">
-    // FUNCTION UNTUK MENAMPILKAN BARANG SETELAH KLIK "CARI BARANG"
-    function caribarang() {
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: '/Transaksi/showstok',
-            dataType: "JSON",
-            success: function(result) {
-                var html = '';
-                for (var i = 0; i < result.length; i++) {
-                    var no = parseInt(i);
-                    no++;
-                    html += '<tr>' +
-                        '<td>' + result[i].ID_BARANG + '</td>' +
-                        '<td>' + result[i].NAMA_BARANG + '</td>' +
-                        '<td>' + result[i].STOK + '</td>' +
-                        '<td>' + result[i].HARGA_JUAL + '</td>' +
-                        '<td><button class="btn btn-primary ti-plus" onclick="deletebrg()" value="' + result[i].ID_BARANG + '" type="button"></button></td>' +
-                        '</tr>';
-                }
-                $('#tb_caribarang').html(html).ajax.reload();
-
-            },
-            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-            }
-        })
-    }
     // JS TOMBOL ADD CHART
     $(".addchart").click(function(e) {
         e.preventDefault();
         $idbarang = $('#idbarang').val();
         $qty = $('#qty').val();
+        $stokdb = $('#stokdb').val();
+        $namabrg = $('#namabarang').val();
         if ($idbarang == '') {
             Swal.fire({
                 title: 'Belum menambahkan barang!',
@@ -262,20 +295,32 @@
                 title: 'Belum input Qty!',
                 icon: 'warning'
             })
+
+        } else if ($stokdb == 0) {
+            Swal.fire({
+                title: 'Stok ' + $namabrg + ' kosong!',
+                icon: 'warning'
+            })
+
         } else {
             $.ajax({
                 type: "GET",
                 url: '/Transaksi/addcart', //data dikirim dari form
                 data: $("#form_addchart").serialize(),
                 success: function() {
-                    // loadcart();
+                    loadcart();
                     refreshidpj();
                     $('#qty').val('');
                     $('#namabarang').val('');
                     $('#harga').val(0);
+                    $("#stokinfo").html("<div>Stok: </div>");
+                    grandtotal();
                 },
                 error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
                     alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                },
+                afterSend: function() {
+
                 }
             })
         }
@@ -284,28 +329,20 @@
 </script>
 <script type="text/javascript">
     function deletebrg() {
-        $(".deletelist").click(function(e) {
+        $(".delete-loadcart").click(function(e) {
             e.preventDefault();
-            // var btnval = $("button").val();
-            var fired_button = $(".deletelist").val();
-            alert(fired_button);
-            // $.ajax({
-            //     type: "GET",
-            //     url: $(this).attr('href'), //data dikirim dari a href
-            //     dataType: "JSON",
-            //     success: function(result) {
-            //         for (var i = 0; i < result.length; i++) {
-            //             $("#idbarang").val(result[i].ID_BARANG);
-            //             $("#namabarang").val(result[i].NAMA_BARANG);
-            //             // $("#id_brg").val(result[i].id_barang);
-            //             $('#exampleModal').modal('hide');
-
-            //         }
-            //     },
-            //     error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-            //         alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-            //     }
-            // })
+            $.ajax({
+                type: "GET",
+                url: $(this).attr('href'), //data dikirim dari a href
+                dataType: "JSON",
+                success: function() {
+                    loadcart();
+                    grandtotal();
+                },
+                error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                }
+            })
         })
     }
 </script>

@@ -120,6 +120,15 @@ class Transaksi extends BaseController
 		}
 	}
 
+	public function TotalHarga()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->list_pj->TotalPJ($id);
+			return json_encode($result);
+		}
+	}
+
 	public function addcart()
 	{
 		if ($this->request->isAJAX()) {
@@ -138,6 +147,9 @@ class Transaksi extends BaseController
 
 	public function deletecart()
 	{
+		$id = $this->request->getVar('id');
+		$result = $this->list_pj->deletelist($id);
+		return json_encode($result);
 	}
 	//  END CONTROLLER PENJUALAN======================================
 	public function serviceReturn()

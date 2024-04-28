@@ -75,7 +75,7 @@
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Invoice :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="INV/<?= date('y'); ?><?= date('m'); ?>/VSC/<?= $autonumPJ; ?>" name="invoice" id="example-text-input" readonly>
+                                                                    <input class="form-control" type="text" value="INV/<?= date('y'); ?><?= date('m'); ?>/VSC/<?= $autonumPJ; ?>" name="invoice" id="invoiceid" readonly>
                                                                 </div>
 
                                                             </div>
@@ -85,16 +85,18 @@
                                                                     <div class="input-group mt-2">
                                                                         <input type="text" width="10%" value="" id="idpenjualan" name="idpenjualan" hidden>
                                                                         <input type="text" width="10%" value="" id="idbarang" name="idbarang" hidden>
+                                                                        <input type="text" width="10%" value="" id="stokdb" hidden>
                                                                         <input type="text" class="form-control" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
                                                                         <span class="input-group-append">
-                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#exampleModal"></button>
+                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#Modalcaribrg"></button>
+                                                                            <!-- data-toggle="modal" data-target="#exampleModal" -->
                                                                         </span>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                             <!-- Modal CARI BARANG-->
-                                                            <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal fade" id="Modalcaribrg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                 <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
@@ -110,14 +112,12 @@
                                                                                         <tr>
                                                                                             <th>Kode</th>
                                                                                             <th>Nama Barang</th>
-                                                                                            <th>Stok</th>
                                                                                             <th>Modal Rp.</th>
                                                                                             <th>Aksi</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody id="tb_caribarang">
                                                                                         <tr>
-                                                                                            <td></td>
                                                                                             <td></td>
                                                                                             <td></td>
                                                                                             <td></td>
@@ -137,21 +137,28 @@
                                                             <!-- End Modal -->
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Qty :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" name="qty" id="qty" required>
+                                                                <div class="col-sm-5">
+                                                                    <input class="form-control" type="number" value="" name="qty" id="qty" required>
                                                                 </div>
+                                                                <label for="example-text-input" class="col-sm-4 col-form-label">
+                                                                    <div id="stokinfo">Stok: </div>
+                                                                </label>
 
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Harga (Rp.) :</label>
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Harga :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="number" value="0" name="harga" id="harga">
                                                                 </div>
 
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">DP (Rp.) :</label>
-                                                                <div class="col-sm-10">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">DP :</label>
+                                                                <div class="col-sm-4">
+                                                                    <input class="form-control" type="number" value="" name="dp" id="example-text-input">
+                                                                </div>
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Diskon :</label>
+                                                                <div class="col-sm-4">
                                                                     <input class="form-control" type="number" value="" name="diskon" id="example-text-input">
                                                                 </div>
 
@@ -173,7 +180,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Type CS :</label>
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Cust :</label>
                                                                 <div class="col-sm-10">
                                                                     <select class="form-control" name="typecustomer">
                                                                         <?php foreach ($showcustomer as $sc) : ?>
@@ -183,7 +190,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Customer :</label>
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Nama :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="text" value="" name="namacustomer" id="example-text-input" required>
                                                                 </div>
@@ -195,7 +202,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Catatan :</label>
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Note :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="text" value="" placeholder="Optional..." name="catatan" id="example-text-input">
                                                                 </div>
@@ -220,7 +227,7 @@
                                 <div class="card m-b-30">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table" id="table_listbarang">
+                                            <table class="table table-responsive-sm" id="table_listbarang">
                                                 <thead class="thead-default">
                                                     <tr>
                                                         <th>No.</th>
@@ -240,18 +247,36 @@
                                                             <h6>Catatan:</h6>
                                                         </td>
                                                         <td style="text-align:right;">
-                                                            <h6>Diskon</h6>
+                                                            <div>Diskon</div>
                                                         </td>
                                                         <td>
-                                                            <h6>Rp.</h6>
+                                                            <div>Rp.</div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="text-align:right;">
-                                                            <h3>Total</h3>
+                                                            <div>Subtotal Rp.</div>
                                                         </td>
                                                         <td>
-                                                            <h3>Rp.</h3>
+                                                            <div id="sTotal"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="text-align:right;">
+                                                            <div>DP</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>Rp.</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="text-align:right;">
+                                                            <h5>Total Rp.</h5>
+                                                        </td>
+                                                        <td>
+                                                            <h5>
+                                                                <div id="gTotal"></div>
+                                                            </h5>
                                                         </td>
                                                     </tr>
                                                 </tfoot>

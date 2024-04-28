@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Hermawan\DataTables;
 
 
@@ -79,7 +79,7 @@ class DataTableQuery
             $data    = [];
             $columns = $this->columnDefs->getColumns();
 
-            foreach ($columns as $column) 
+            foreach ($columns as $index => $column) 
             {
                 switch ($column->type) {
                     case 'numbering':
@@ -93,12 +93,25 @@ class DataTableQuery
                     
                     case 'edit':
                         $callback = $column->callback;
-                        $value    = $callback($row);
+
+                        $value = $callback($row, [
+                            'index'      => $index,
+                            'key'        => $column->key,
+                            'alias'      => $column->alias,
+                            'searchable' => $column->searchable,
+                            'orderable'  => $column->orderable,
+                        ]);
                         break;
                     
                     case 'format':
                         $callback = $column->callback;
-                        $value    = $callback($row->{$column->alias});
+                        $value    = $callback($row->{$column->alias}, [
+                            'index'      => $index,
+                            'key'        => $column->key,
+                            'alias'      => $column->alias,
+                            'searchable' => $column->searchable,
+                            'orderable'  => $column->orderable,
+                        ]);
                         break;
                     
                     default:

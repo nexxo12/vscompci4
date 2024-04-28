@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Hermawan\DataTables;
 
 use \Config\Services;
@@ -97,7 +97,7 @@ class DataTable
      * @param String $column
      * @param Closure $callback
      */
-    public function edit($column, $callback)
+    public function edit($column, $callback) 
     {
         $this->columnDefs->edit($column, $callback);
         return $this;

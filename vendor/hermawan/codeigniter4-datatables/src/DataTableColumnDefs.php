@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Hermawan\DataTables;
 
 class DataTableColumnDefs

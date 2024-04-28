@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df270c9ecb8e52ad6cf4d1ce9abc3452",
+    "content-hash": "27f9b497380596015a775e7372279acd",
     "packages": [
         {
             "name": "codeigniter4/framework",
@@ -125,16 +125,16 @@
         },
         {
             "name": "hermawan/codeigniter4-datatables",
-            "version": "v0.6.1",
+            "version": "v0.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hermawanramadhan/CodeIgniter4-DataTables.git",
-                "reference": "b3ffc89d449520ce6e0c41a69c8a949302b8dd1a"
+                "reference": "3c7d9580a9424cc9c552eaa204f86926caaff8ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hermawanramadhan/CodeIgniter4-DataTables/zipball/b3ffc89d449520ce6e0c41a69c8a949302b8dd1a",
-                "reference": "b3ffc89d449520ce6e0c41a69c8a949302b8dd1a",
+                "url": "https://api.github.com/repos/hermawanramadhan/CodeIgniter4-DataTables/zipball/3c7d9580a9424cc9c552eaa204f86926caaff8ce",
+                "reference": "3c7d9580a9424cc9c552eaa204f86926caaff8ce",
                 "shasum": ""
             },
             "require": {
@@ -161,9 +161,9 @@
             "description": "Serverside Datatables library for CodeIgniter4",
             "support": {
                 "issues": "https://github.com/hermawanramadhan/CodeIgniter4-DataTables/issues",
-                "source": "https://github.com/hermawanramadhan/CodeIgniter4-DataTables/tree/v0.6.1"
+                "source": "https://github.com/hermawanramadhan/CodeIgniter4-DataTables/tree/v0.7.1"
             },
-            "time": "2022-05-25T15:13:25+00:00"
+            "time": "2024-02-17T04:23:14+00:00"
         },
         {
             "name": "kint-php/kint",

@@ -15,4 +15,14 @@ class Listpenjualan extends Model
         return $this->table('list_penjualan')->select('*')
             ->join('master_barang', 'master_barang.ID_BARANG = list_penjualan.ID_BARANG')->findAll();
     }
+
+    public function deletelist($id)
+    {
+        return $this->where('ID_PENJUALAN', $id)->delete();
+    }
+
+    public function TotalPJ($id)
+    {
+        return $this->selectSum('TOTAL_HARGA')->where('INV_PENJUALAN', $id)->findAll();
+    }
 }
