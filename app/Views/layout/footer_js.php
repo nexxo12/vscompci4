@@ -118,6 +118,23 @@
                 $("#input_supp").attr("style", "display: none");
             }
         });
+
+        $("#refmp").attr("style", "display: none");
+        $('#customer').on('change', function() {
+            if (this.value == 8 || this.value == 5 || this.value == 10) {
+                $("#refmp").attr("style", "visibility: visible");
+                $("#alamat").attr("style", "display: none");
+                $("#nama").attr("style", "visibility: visible");
+            } else if (this.value == 1) {
+                $("#alamat").attr("style", "visibility: visible");
+                $("#refmp").attr("style", "display: none");
+                $("#nama").attr("style", "visibility: visible");
+            } else {
+                $("#refmp").attr("style", "display: none");
+                $("#alamat").attr("style", "display: none");
+                $("#nama").attr("style", "display: none");
+            }
+        });
     });
 
     function rupiah(nStr) {
@@ -292,9 +309,15 @@
             })
         } else if ($qty == '') {
             Swal.fire({
-                title: 'Belum input Qty!',
+                title: 'Belum input Qty / Barang!',
                 icon: 'warning'
             })
+
+            // } else if ($qty > $stokdb) {
+            //     Swal.fire({
+            //         title: 'Input QTY terlalu banyak dari Stok!',
+            //         icon: 'warning'
+            //     })
 
         } else if ($stokdb == 0) {
             Swal.fire({

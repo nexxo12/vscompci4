@@ -160,6 +160,7 @@
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Diskon :</label>
                                                                 <div class="col-sm-4">
                                                                     <input class="form-control" type="number" value="" name="diskon" id="example-text-input">
+
                                                                 </div>
 
                                                             </div>
@@ -174,6 +175,12 @@
                                                             <h4 class="mt-0 header-title">Info Customer</h4>
                                                             <br><br>
                                                             <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Date:</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="date" value="" name="tanggal" id="tanggal">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Kasir :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="text" value="" name="kasir" id="example-text-input" readonly>
@@ -182,20 +189,26 @@
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Cust :</label>
                                                                 <div class="col-sm-10">
-                                                                    <select class="form-control" name="typecustomer">
+                                                                    <select class="form-control" name="typecustomer" id="customer">
                                                                         <?php foreach ($showcustomer as $sc) : ?>
                                                                             <option value="<?= $sc['ID_PELANGGAN']; ?>"><?= $sc['NAMA']; ?></option>
                                                                         <?php endforeach; ?>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group row">
+                                                            <div class="form-group row" id="nama">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Nama :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="text" value="" name="namacustomer" id="example-text-input" required>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group row">
+                                                            <div class="form-group row" id="alamat">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Alamat :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" name="alamat" id="example-text-input">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row" id="refmp">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Ref MP :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv" id="example-text-input">
@@ -226,6 +239,8 @@
                             <div class="col-lg-12">
                                 <div class="card m-b-30">
                                     <div class="card-body">
+                                        <div id="custname1">Customer:</div>
+                                        <div id="custname2">Nama:</div>
                                         <div class="table-responsive">
                                             <table class="table table-responsive-sm" id="table_listbarang">
                                                 <thead class="thead-default">
