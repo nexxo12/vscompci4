@@ -129,6 +129,25 @@ class Transaksi extends BaseController
 		}
 	}
 
+	public function GetCatatan()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->list_pj->GetCatatan($id);
+			return json_encode($result);
+		}
+	}
+
+	public function GetNamaCustomer()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->list_pj->GetNamaCustomer($id);
+			return json_encode($result);
+		}
+	}
+
+
 	public function addcart()
 	{
 		if ($this->request->isAJAX()) {
@@ -136,9 +155,19 @@ class Transaksi extends BaseController
 				'ID_PENJUALAN' => $this->request->getVar('idpenjualan'),
 				'INV_PENJUALAN' => $this->request->getVar('invoice'),
 				'ID_BARANG' => $this->request->getVar('idbarang'),
+				'ID_PELANGGAN' => $this->request->getVar('typecustomer'),
+				'TANGGAL_TRANSAKSI' => $this->request->getVar('tanggal'),
+				'NAMACUST' => $this->request->getVar('namacustomer'),
+				'ALAMAT' => $this->request->getVar('alamat'),
+				'REFMP' => $this->request->getVar('refinv_mp'),
+				'CATATAN' => $this->request->getVar('catatan'),
 				'JUMLAH_BELI' => $this->request->getVar('qty'),
+				'HARGA_AWAL' => $this->request->getVar('modalbarang'),
 				'HARGA_JL' => $this->request->getVar('harga'),
-				'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty')
+				'DP' => $this->request->getVar('dp'),
+				'DISKON' => $this->request->getVar('diskon'),
+				'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty'),
+				'LABA' => $this->request->getVar('harga') - $this->request->getVar('modalbarang')
 
 			]);
 			// return redirect()->to('index');

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class Masterbarang extends Model
 {
     protected $table      = 'master_barang';
-    protected $allowedFields = ['ID_BARANG', 'ID_KATEGORI', 'NAMA_BARANG', 'STOK', 'SATUAN', 'HARGA_JUAL', 'G_TOTAL'];
+    protected $allowedFields = ['ID_BARANG', 'ID_KATEGORI', 'NAMA_BARANG', 'STOK', 'SATUAN', 'HARGA_BELI', 'HARGA_JUAL', 'G_TOTAL'];
 
 
     public function ShowBarang()
@@ -17,7 +17,7 @@ class Masterbarang extends Model
 
     public function showCariBarang()
     {
-        return $this->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL')->findAll();
+        return $this->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_BELI')->findAll();
     }
 
     public function showbarangbyid($idbarang)

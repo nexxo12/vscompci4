@@ -85,6 +85,7 @@
                                                                     <div class="input-group mt-2">
                                                                         <input type="text" width="10%" value="" id="idpenjualan" name="idpenjualan" hidden>
                                                                         <input type="text" width="10%" value="" id="idbarang" name="idbarang" hidden>
+                                                                        <input type="text" width="10%" value="" id="modalbarang" name="modalbarang" hidden>
                                                                         <input type="text" width="10%" value="" id="stokdb" hidden>
                                                                         <input type="text" class="form-control" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
                                                                         <span class="input-group-append">
@@ -211,7 +212,7 @@
                                                             <div class="form-group row" id="refmp">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Ref MP :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv" id="example-text-input">
+                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv_mp" id="example-text-input">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -259,7 +260,8 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <h6>Catatan:</h6>
+                                                            <h6>Catatan: <div id="catatan"></div>
+                                                            </h6>
                                                         </td>
                                                         <td style="text-align:right;">
                                                             <div>Diskon</div>
