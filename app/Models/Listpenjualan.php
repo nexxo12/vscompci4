@@ -52,4 +52,9 @@ class Listpenjualan extends Model
     {
         return $this->select('*')->join('pelanggan', 'pelanggan.ID_PELANGGAN = list_penjualan.ID_PELANGGAN')->where('INV_PENJUALAN', $id)->findAll();
     }
+
+    public function ClearListPenjualan()
+    {
+        return $this->truncate();
+    }
 }

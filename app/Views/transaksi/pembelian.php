@@ -79,7 +79,7 @@
                                             <div class="form-group row">
                                                 <label for="example-text-input" class="col-sm-2 col-form-label">ID Transaksi</label>
                                                 <div class="col-sm-10">
-                                                    <input class="form-control" name="id_pembelian" type="text" id="id_buy" value="BL-<?= date("d-m"); ?>-<?= $autonum; ?>" readonly>
+                                                    <input class="form-control" name="id_pembelian" type="text" id="id_buy" value="BL<?= date("dm"); ?>-<?= $autonum; ?>" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group row">

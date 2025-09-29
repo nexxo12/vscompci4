@@ -239,7 +239,7 @@
                 alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
             }
         });
-        // MENAMPILKAN customer dan nama DI PAGE PENJUALAN
+        // MENAMPILKAN customer, nama, DP, Diskon DI PAGE PENJUALAN
         $.ajax({
             type: 'POST',
             async: false,
@@ -257,6 +257,8 @@
                     } else {
                         $("#custname1").html("<div>Customer: " + result[i].NAMA + "</div>");
                         $("#custname2").html("<div>Nama: " + result[i].NAMACUST + "</div>");
+                        $("#diskon").html("<div>" + rupiah(result[i].DISKON) + "</div>");
+                        $("#dp").html("<div>" + rupiah(result[i].DP) + "</div>");
                     }
 
 
@@ -406,7 +408,9 @@
 
     })
 </script>
+
 <script type="text/javascript">
+    // FUNCTION untuk DELETE table CHART
     function deletebrg() {
         $(".delete-loadcart").click(function(e) {
             e.preventDefault();
@@ -424,5 +428,73 @@
             })
         })
     }
+</script>
+
+<script type="text/javascript">
+    // FUNCTION CHECKOUT untuk CLEAR CHART & PRINT
+    $(".checkout").click(function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Apakah semua item, qty, dan harga sudah benar?",
+            icon: "question",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Simpan & Print",
+            denyButtonText: `Simpan`
+        }).then((result) => {
+            //Script untuk save ke DB INV_Penjualan
+            $.ajax({
+                type: 'GET',
+                url: '/Transaksi/InserttoinvPJ',
+                data: {
+                    id: $("#invoiceid").val()
+                },
+                success: function(result) {},
+                error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                }
+            });
+            //end Script
+
+            //TOMBOL SIMPAN DAN PRINT
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Data berhasil disimpan & nota siap di cetak!",
+                    icon: "success",
+                    confirmButtonText: '<i class="mdi mdi-printer"></i><a href="/transaksi/penjualan/print/' + $("#invoiceid").val() + '" target="_blank"><span style="color:white"> Print</span></a>',
+                }).then((oke) => {
+                    $.ajax({
+                        type: "GET",
+                        url: '/Transaksi/ClearListPenjualan',
+                        dataType: "JSON",
+                        success: function() {
+                            location.reload();
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                        }
+                    })
+                });
+
+                //TOMBOL SIMPAN
+            } else if (result.isDenied) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Transaksi/ClearListPenjualan',
+                    dataType: "JSON",
+                    success: function() {
+                        Swal.fire("Data berhasil disimpan!", "", "success").then((oke) => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                        alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                    }
+                })
+
+            }
+        });
+
+    })
 </script>
 <!-- PAGE PENJUALAN-->

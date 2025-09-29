@@ -102,6 +102,18 @@ class Transaksi extends BaseController
 		return json_encode($result);
 	}
 
+	public function printnota($inv)
+	{
+		// $invnota = $this->request->getVar('inv');
+		$nota_inv = $this->penjualanID->where('INV_PENJUALAN', $inv)->findAll();
+		$data = [
+			'tittle' => 'Print Nota ' . $inv,
+			'viewnota' => $nota_inv,
+
+		];
+		return view('/transaksi/print', $data);
+	}
+
 	public function showlistbarang()
 	{
 		if ($this->request->isAJAX()) {
@@ -138,6 +150,16 @@ class Transaksi extends BaseController
 		}
 	}
 
+	public function InserttoinvPJ()
+	{
+		if ($this->request->isAJAX()) {
+			$this->inv_pj->insert([
+				'id_inv' => $this->request->getVar('id'),
+
+			]);
+		}
+	}
+
 	public function GetNamaCustomer()
 	{
 		if ($this->request->isAJAX()) {
@@ -171,6 +193,14 @@ class Transaksi extends BaseController
 
 			]);
 			// return redirect()->to('index');
+		}
+	}
+
+	public function ClearListPenjualan()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->list_pj->ClearListPenjualan();
+			return json_encode($result);
 		}
 	}
 

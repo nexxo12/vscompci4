@@ -37,6 +37,7 @@ $routes->get('/transaksi/pembelian/deletePembelian/(:segment)', 'Transaksi::dele
 
 $routes->get('/transaksi/penjualan', 'Transaksi::penjualan');
 $routes->get('/transaksi/penjualan/addbarang', 'Transaksi::addbarang');
+$routes->get('/transaksi/penjualan/print/(:segment)', 'Transaksi::printnota/$1');
 
 $routes->get('/transaksi/return_service', 'Transaksi::serviceReturn');
 

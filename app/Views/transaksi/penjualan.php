@@ -75,7 +75,7 @@
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Invoice :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="INV/<?= date('y'); ?><?= date('m'); ?>/VSC/<?= $autonumPJ; ?>" name="invoice" id="invoiceid" readonly>
+                                                                    <input class="form-control" type="text" value="VSC<?= date('dm'); ?><?= date('y'); ?>-<?= $autonumPJ; ?>" name="invoice" id="invoiceid" readonly>
                                                                 </div>
 
                                                             </div>
@@ -264,18 +264,18 @@
                                                             </h6>
                                                         </td>
                                                         <td style="text-align:right;">
-                                                            <div>Diskon</div>
+                                                            <div>Subtotal Rp.</div>
                                                         </td>
                                                         <td>
-                                                            <div>Rp.</div>
+                                                            <div id="sTotal">Rp.</div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="text-align:right;">
-                                                            <div>Subtotal Rp.</div>
+                                                            <div>Diskon</div>
                                                         </td>
                                                         <td>
-                                                            <div id="sTotal"></div>
+                                                            <div id="diskon"></div>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -283,7 +283,7 @@
                                                             <div>DP</div>
                                                         </td>
                                                         <td>
-                                                            <div>Rp.</div>
+                                                            <div id="dp"></div>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -300,7 +300,7 @@
                                             </table>
                                         </div>
                                         <div class="text-center">
-                                            <button type="button" class="btn btn-primary waves-effect waves-light" id="liveToastBtn">Checkout</button>
+                                            <button type="button" class="btn btn-primary waves-effect waves-light checkout" id="liveToastBtn">Checkout</button>
                                         </div>
                                     </div>
                                 </div>
