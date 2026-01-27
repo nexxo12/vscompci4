@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\Listpenjualan;
 use App\Models\PenjualanModel;
 use \Hermawan\DataTables\DataTable;
+use PhpParser\Node\Stmt\Echo_;
 
 class Transaksi extends BaseController
 {
@@ -102,7 +103,7 @@ class Transaksi extends BaseController
 		return json_encode($result);
 	}
 
-	public function printnota($inv)
+	public function printnota($inv) //FUNCTICON DI ROUTE
 	{
 		// $invnota = $this->request->getVar('inv');
 		$nota_inv = $this->penjualanID->where('INV_PENJUALAN', $inv)->findAll();
@@ -141,11 +142,38 @@ class Transaksi extends BaseController
 		}
 	}
 
+	public function Subtotal()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->list_pj->Subtotal($id);
+			return json_encode($result);
+		}
+	}
+
 	public function GetCatatan()
 	{
 		if ($this->request->isAJAX()) {
 			$id = $this->request->getVar('id');
 			$result = $this->list_pj->GetCatatan($id);
+			return json_encode($result);
+		}
+	}
+
+	public function GetDP()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->list_pj->GetDP($id);
+			return json_encode($result);
+		}
+	}
+
+	public function GetDiskon()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->list_pj->GetDiskon($id);
 			return json_encode($result);
 		}
 	}
@@ -186,10 +214,12 @@ class Transaksi extends BaseController
 				'JUMLAH_BELI' => $this->request->getVar('qty'),
 				'HARGA_AWAL' => $this->request->getVar('modalbarang'),
 				'HARGA_JL' => $this->request->getVar('harga'),
-				'DP' => $this->request->getVar('dp'),
-				'DISKON' => $this->request->getVar('diskon'),
-				'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty'),
-				'LABA' => $this->request->getVar('harga') - $this->request->getVar('modalbarang')
+				'DP' => $this->request->getVar('input-dp'),
+				'DISKON' => $this->request->getVar('input-diskon'),
+				'SUBTOTAL' => $this->request->getVar('harga') * $this->request->getVar('qty'),
+				'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-diskon'),
+				'TOTAL_NETT' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-dp') - $this->request->getVar('input-diskon'),
+				'LABA' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-diskon') - $this->request->getVar('modalbarang') * $this->request->getVar('qty')
 
 			]);
 			// return redirect()->to('index');

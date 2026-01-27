@@ -23,7 +23,9 @@ class Listpenjualan extends Model
         'HARGA_JL',
         'DP',
         'DISKON',
+        'SUBTOTAL',
         'TOTAL_HARGA',
+        'TOTAL_NETT',
         'LABA',
     ];
 
@@ -40,12 +42,36 @@ class Listpenjualan extends Model
 
     public function TotalPJ($id)
     {
-        return $this->selectSum('TOTAL_HARGA')->where('INV_PENJUALAN', $id)->findAll();
+        return $this->selectSum('TOTAL_NETT')->where('INV_PENJUALAN', $id)->findAll();
+    }
+
+    // // public function TotalPJ($id)
+    // // {
+    // //     $this->selectSum('TOTAL_HARGA', 'total_col_harga')->where('INV_PENJUALAN', $id)->findAll();
+    // //     $this->selectMAX('DP', 'total_col_dp')->where('INV_PENJUALAN', $id)->findAll();
+    // //     $this->selectMAX('DISKON', 'total_col_diskon')->where('INV_PENJUALAN', $id)->findAll();
+    // //     $query = $this->get();
+    // //     return $query->getRow();
+    // }
+
+    public function Subtotal($id)
+    {
+        return $this->selectSum('SUBTOTAL')->where('INV_PENJUALAN', $id)->findAll();
     }
 
     public function GetCatatan($id)
     {
         return $this->selectMAX('CATATAN')->where('INV_PENJUALAN', $id)->findAll();
+    }
+
+    public function GetDP($id)
+    {
+        return $this->selectMAX('DP')->where('INV_PENJUALAN', $id)->findAll();
+    }
+
+    public function GetDiskon($id)
+    {
+        return $this->selectMAX('DISKON')->where('INV_PENJUALAN', $id)->findAll();
     }
 
     public function GetNamaCustomer($id)

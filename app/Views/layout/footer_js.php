@@ -213,89 +213,150 @@
     }
 
     function grandtotal() {
-        // MENAMPILKAN GRANDTOTAL DI PAGE PENJUALAN
-        $.ajax({
+        // MENAMPILKAN GRANDTOTAL, SUBTOTAL, DP, DISKON DI PAGE PENJUALAN (CHART)
+
+        var subtotal = $.ajax({
+            url: '/Transaksi/Subtotal',
             type: 'POST',
-            async: false,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            data: {
+                id: $("#invoiceid").val()
+            },
+
+        });
+
+        var total = $.ajax({
             url: '/Transaksi/TotalHarga',
-            dataType: "JSON",
-            data: {
-                id: $("#invoiceid").val()
-            },
-            success: function(result) {
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i].TOTAL_HARGA == null) {
-                        $("#gTotal").html("<div>0</div>");
-                        $("#sTotal").html("<div>0</div>");
-                    } else {
-                        $("#gTotal").html("<div>" + rupiah(result[i].TOTAL_HARGA) + "</div>");
-                        $("#sTotal").html("<div>" + rupiah(result[i].TOTAL_HARGA) + "</div>");
-                    }
-
-
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-            }
-        });
-        // MENAMPILKAN customer, nama, DP, Diskon DI PAGE PENJUALAN
-        $.ajax({
             type: 'POST',
-            async: false,
-            url: '/Transaksi/GetNamaCustomer',
-            dataType: "JSON",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
             data: {
                 id: $("#invoiceid").val()
             },
-            success: function(result) {
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i].NAMACUST && result[i].NAMA == null) {
-                        $("#custname1").html("<div>Customer:</div>");
-                        $("#custname2").html("<div>Nama:</div>");
-
-                    } else {
-                        $("#custname1").html("<div>Customer: " + result[i].NAMA + "</div>");
-                        $("#custname2").html("<div>Nama: " + result[i].NAMACUST + "</div>");
-                        $("#diskon").html("<div>" + rupiah(result[i].DISKON) + "</div>");
-                        $("#dp").html("<div>" + rupiah(result[i].DP) + "</div>");
-                    }
-
-
-
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-            }
         });
 
-        $.ajax({
+        var dp = $.ajax({
+            url: '/Transaksi/GetDP',
             type: 'POST',
-            async: false,
-            url: '/Transaksi/GetCatatan',
-            dataType: "JSON",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
             data: {
                 id: $("#invoiceid").val()
             },
-            success: function(result) {
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i].CATATAN == null) {
-                        $("#catatan").html("<div></div>");
-
-                    } else {
-                        $("#catatan").html("<div>" + result[i].CATATAN + "</div>");
-                    }
-
-
-
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-            }
         });
+
+        var diskon = $.ajax({
+            url: '/Transaksi/GetDiskon',
+            type: 'POST',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            data: {
+                id: $("#invoiceid").val()
+            },
+        });
+
+        $.when(subtotal, total, dp, diskon).done(function(res_sub, res_tot, res_dp, res_diskon) {
+            // console.log(res_sub);
+            // console.log(res_tot);
+            var json_sub = res_sub[0];
+            var decoded_sub = JSON.parse(json_sub);
+            var json_tot = res_tot[0];
+            var decoded_tot = JSON.parse(json_tot);
+            var json_dp = res_dp[0];
+            var decoded_dp = JSON.parse(json_dp);
+            var json_diskon = res_diskon[0];
+            var decoded_diskon = JSON.parse(json_diskon);
+            // console.log(decoded_sub[0]['SUBTOTAL']);
+            if (decoded_tot[0]['TOTAL_NETT'] == null) {
+                $("#gTotal").html("<div>0</div>");
+                $("#sTotal").html("<div>0</div>");
+            } else {
+                $("#sTotal").html("<div>" + rupiah(decoded_sub[0]['SUBTOTAL']) + "</div>");
+                $("#gTotal").html("<div>" + rupiah(decoded_tot[0]['TOTAL_NETT']) + "</div>");
+            }
+
+            if (decoded_dp[0].DP == null) {
+                $("#dp").html("<div>0</div>");
+
+            } else {
+                $("#dp").html("<div>" + rupiah(decoded_dp[0].DP) + "</div>");
+            }
+
+            if (decoded_diskon[0].DISKON == null) {
+                $("#diskon").html("<div>0</div>");
+
+            } else {
+                $("#diskon").html("<div>" + rupiah(decoded_diskon[0].DISKON) + "</div>");
+            }
+
+
+        }).fail(function(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        });
+
     }
+
+
+    // MENAMPILKAN customer & nama DI PAGE PENJUALAN (CHART)
+    $.ajax({
+        type: 'POST',
+        async: true,
+        url: '/Transaksi/GetNamaCustomer',
+        dataType: "JSON",
+        data: {
+            id: $("#invoiceid").val()
+        },
+        success: function(result) {
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].NAMACUST && result[i].NAMA == null) {
+                    $("#custname1").html("<div>Customer:</div>");
+                    $("#custname2").html("<div>Nama:</div>");
+
+                } else {
+                    $("#custname1").html("<div>Customer: " + result[i].NAMA + "</div>");
+                    $("#custname2").html("<div>Nama: " + result[i].NAMACUST + "</div>");
+                }
+
+
+
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+        }
+    });
+
+    // MENAMPILKAN CATATAN BERDASARKAN INVOICE DI PAGE PENJUALAN (CHART)
+    $.ajax({
+        type: 'POST',
+        async: true,
+        url: '/Transaksi/GetCatatan',
+        dataType: "JSON",
+        data: {
+            id: $("#invoiceid").val()
+        },
+        success: function(result) {
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].CATATAN == null) {
+                    $("#catatan").html("<div></div>");
+
+                } else {
+                    $("#catatan").html("<div>" + result[i].CATATAN + "</div>");
+                }
+
+
+
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+        }
+    });
 </script>
 
 <script type="text/javascript">
@@ -324,7 +385,9 @@
     function loadcart() {
         $.ajax({
             type: "POST",
-            async: false,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
             url: '/Transaksi/showlistbarang',
             dataType: "JSON",
             success: function(result) {
@@ -337,7 +400,7 @@
                         '<td>' + result[i].NAMA_BARANG + '</td>' +
                         '<td>' + rupiah(result[i].HARGA_JL) + '</td>' +
                         '<td>' + result[i].JUMLAH_BELI + '</td>' +
-                        '<td>' + rupiah(result[i].TOTAL_HARGA) + '</td>' +
+                        '<td>' + rupiah(result[i].SUBTOTAL) + '</td>' +
                         '<td><a class="delete-loadcart" href="/Transaksi/deletecart?id=' + result[i].ID_PENJUALAN + '"><button class="btn btn-danger ti-trash" onclick="deletebrg()" type="button"></button></td>' +
                         '</tr>';
                 }
@@ -360,22 +423,24 @@
         $qty = $('#qty').val();
         $stokdb = $('#stokdb').val();
         $namabrg = $('#namabarang').val();
+
+
+
         if ($idbarang == '') {
             Swal.fire({
                 title: 'Belum menambahkan barang!',
                 icon: 'warning'
             })
-        } else if ($qty == '') {
-            Swal.fire({
-                title: 'Belum input Qty / Barang!',
-                icon: 'warning'
-            })
-
-            // } else if ($qty > $stokdb) {
+            // } else if ($qty !== $stokdb) {
             //     Swal.fire({
-            //         title: 'Input QTY terlalu banyak dari Stok!',
+            //         title: '' + $namabrg + '<br>QTY [' + $qty + '] > Stok [' + $stokdb + ']',
             //         icon: 'warning'
             //     })
+        } else if ($qty == '') {
+            Swal.fire({
+                title: 'Belum input Qty!',
+                icon: 'warning'
+            })
 
         } else if ($stokdb == 0) {
             Swal.fire({
@@ -388,10 +453,15 @@
                 type: "GET",
                 url: '/Transaksi/addcart', //data dikirim dari form
                 data: $("#form_addchart").serialize(),
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 success: function() {
                     loadcart();
                     refreshidpj();
                     $('#qty').val('');
+                    $('#input-dp').val(0);
+                    $('#input-diskon').val(0);
                     $('#namabarang').val('');
                     $('#harga').val(0);
                     $("#stokinfo").html("<div>Stok: </div>");
@@ -417,6 +487,9 @@
             $.ajax({
                 type: "GET",
                 url: $(this).attr('href'), //data dikirim dari a href
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 dataType: "JSON",
                 success: function() {
                     loadcart();

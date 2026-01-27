@@ -156,11 +156,11 @@
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">DP :</label>
                                                                 <div class="col-sm-4">
-                                                                    <input class="form-control" type="number" value="" name="dp" id="example-text-input">
+                                                                    <input class="form-control" type="number" value="0" name="input-dp" id="input-dp">
                                                                 </div>
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Diskon :</label>
                                                                 <div class="col-sm-4">
-                                                                    <input class="form-control" type="number" value="" name="diskon" id="example-text-input">
+                                                                    <input class="form-control" type="number" value="0" name="input-diskon" id="input-diskon">
 
                                                                 </div>
 
