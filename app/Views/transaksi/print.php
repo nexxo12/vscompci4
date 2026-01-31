@@ -57,13 +57,12 @@
             </td>
             <td style="width: 35%;">
                 <p>
-                    <?php foreach ($viewnota as $nota) : ?>
-                        <strong>NO. INVOICE : <?= $nota['INV_PENJUALAN']; ?></strong> <br>
-                    <?php endforeach; ?>
-                    Kepada: Vinorious Comp <br>
-                    Alamat: Jl. Semampir Barat Gg. VIII No.25, Medokan Semampir, Kec. Sukolilo, Surabaya, Jawa Timur 60119<br>
-                    Telp: 083853525037<br>
-                    Tanggal: 23-06-2024<br>
+                    <?php foreach ($viewnota as $nota) : ?><?php endforeach; ?>
+                    <strong>NO. INVOICE : <?= $nota['INV_PENJUALAN']; ?></strong> <br>
+                    Ref: <?= $nota['NAMA']; ?> <?= $nota['REFMP']; ?> <br>
+                    Kepada: <?= $nota['NAMACUST']; ?> <br>
+                    Alamat: <?= $nota['ALAMAT']; ?><br>
+                    Tanggal: <?= date('d-m-Y', strtotime($nota['TANGGAL_TRANSAKSI'])); ?><br>
                 </p>
             </td>
         </tr>
@@ -79,21 +78,15 @@
             </tr>
         </thead>
         <tbody>
-
-            <tr>
-                <td style="text-align: left;">BR002</td>
-                <td>Kingstone HyperX 8GB DDR3-12800</td>
-                <td style="text-align: right;">50.000</td>
-                <td align="center">1</td>
-                <td style="text-align: right;">50.000</td>
-            </tr>
-            <tr>
-                <td style="text-align: left;">BR002</td>
-                <td>Kingstone HyperX 8GB DDR3-12800</td>
-                <td style="text-align: right;">50.000</td>
-                <td align="center">1</td>
-                <td style="text-align: right;">50.000</td>
-            </tr>
+            <?php foreach ($viewnota as $nota) : ?>
+                <tr>
+                    <td style="text-align: left;"><?= $nota['ID_BARANG']; ?></td>
+                    <td><?= $nota['NAMA_BARANG']; ?></td>
+                    <td style="text-align: right;"><?= number_format($nota['HARGA_JL'], 0, ',', '.'); ?></td>
+                    <td align="center"><?= $nota['JUMLAH_BELI']; ?></td>
+                    <td style="text-align: right;"><?= number_format($nota['TOTAL_HARGA'], 0, ',', '.'); ?></td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
         <tr style="height: 15px; border-top: 1px solid black;">
             <td></td>
@@ -104,7 +97,7 @@
         </tr>
         <tr style="vertical-align: top;">
             <td colspan="2" style="border: 1px solid black">
-                <strong>Catatan : Barang yang dibeli tidak dapat dikembalikan / ditukar</strong>
+                <strong>Catatan : <?= $nota['CATATAN']; ?></strong>
             </td>
             <td rowspan="2">
                 <p style="text-align:right;"><br>
@@ -116,19 +109,54 @@
                 </p>
             </td>
             <td rowspan="2">
+                <?php foreach ($sum_qty as $qty) : ?><?php endforeach; ?>
                 <p style="text-align:center;"><br>
-                    2 <br>
+                    <?= $qty['JUMLAH_BELI']; ?> <br>
                     <br>
                     <br><br>
-                    <b>2</b>
+                    <b><?= $qty['JUMLAH_BELI']; ?></b>
                 </p>
             </td>
             <td rowspan="2">
                 <p style="text-align:right;"><br>
-                    Rp. 100.000 <br>
-                    Rp. 0 <br>
-                    Rp. 20.000 <br><br>
-                    <b>Rp. 80.000</b>
+                    <?php foreach ($sum_subtotal as $subtotal) : ?><?php endforeach; ?>
+                    <?php foreach ($sum_totalharga as $totalharga) : ?><?php endforeach; ?>
+                    <?php foreach ($sum_diskon as $disskon) : ?><?php endforeach; ?>
+                    <?php foreach ($sum_dp as $dp) : ?><?php endforeach; ?>
+                    <?php foreach ($sum_nett as $net) : ?><?php endforeach; ?>
+                    <?php
+                    if ($subtotal['SUBTOTAL'] == null) {
+                        echo "Rp. " . number_format($totalharga['TOTAL_HARGA'], 0, ',', '.');
+                    } else {
+                        echo "Rp. " . number_format($subtotal['SUBTOTAL'], 0, ',', '.');
+                    }
+                    ?>
+                    <br>
+                    <?php
+                    if ($disskon['DISKON'] == null) {
+                        echo "Rp. 0";
+                    } else {
+                        echo "Rp. " . number_format($disskon['DISKON'], 0, ',', '.');
+                    }
+                    ?>
+                    <br>
+                    <?php
+                    if ($dp['DP'] == null) {
+                        echo "Rp. 0";
+                    } else {
+                        echo "Rp. " . number_format($dp['DP'], 0, ',', '.');
+                    }
+                    ?>
+                    <br><br>
+                    <b><?php
+                        if ($net['TOTAL_NETT'] == null) {
+                            echo "Rp. " . number_format($totalharga['TOTAL_HARGA'], 0, ',', '.');
+                        } else {
+                            echo "Rp. " . number_format($net['TOTAL_NETT'], 0, ',', '.');
+                        }
+                        ?>
+
+                    </b>
                 </p>
             </td>
         </tr>
@@ -157,9 +185,9 @@
     </table>
 
 
-    <!-- <script type="text/javascript">
+    <script type="text/javascript">
         window.print();
-    </script> -->
+    </script>
 </body>
 
 </html>

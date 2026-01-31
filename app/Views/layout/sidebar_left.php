@@ -31,6 +31,7 @@
                         <li><a href="/transaksi/pembelian"><i class="mdi mdi-currency-usd"></i>Pembelian</a></li>
                         <li><a href="/transaksi/penjualan"><i class="mdi mdi-cart"></i>Penjualan</a></li>
                         <li><a href="/transaksi/return_service"><i class="mdi mdi-wrench"></i>Return / Service</a></li>
+                        <li><a href="/transaksi/surat_jalan"><i class="mdi mdi-truck-delivery"></i>Surat Jalan</a></li>
                         <li><a href="/transaksi/garansi"><i class="mdi mdi-timer"></i>Garansi</a></li>
                     </ul>
                 </li>

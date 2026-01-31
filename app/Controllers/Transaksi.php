@@ -106,12 +106,25 @@ class Transaksi extends BaseController
 	public function printnota($inv) //FUNCTICON DI ROUTE
 	{
 		// $invnota = $this->request->getVar('inv');
-		$nota_inv = $this->penjualanID->where('INV_PENJUALAN', $inv)->findAll();
+		$nota_inv = $this->penjualanID->GetListNota($inv);
+		$sum_qty = $this->penjualanID->JumlahQTY($inv);
+		$sum_subtotal = $this->penjualanID->JumlahSubtotal($inv);
+		$sum_totalharga = $this->penjualanID->JumlahTotalHarga($inv);
+		$sum_dp = $this->penjualanID->JumlahDP($inv);
+		$sum_diskon = $this->penjualanID->JumlahDiskon($inv);
+		$sum_nett = $this->penjualanID->JumlahNett($inv);
 		$data = [
 			'tittle' => 'Print Nota ' . $inv,
 			'viewnota' => $nota_inv,
+			'sum_qty' => $sum_qty,
+			'sum_subtotal' => $sum_subtotal,
+			'sum_totalharga' => $sum_totalharga,
+			'sum_dp' => $sum_dp,
+			'sum_diskon' => $sum_diskon,
+			'sum_nett' => $sum_nett
 
 		];
+		// var_dump($data['viewnota']);
 		return view('/transaksi/print', $data);
 	}
 

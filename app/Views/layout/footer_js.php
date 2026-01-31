@@ -260,7 +260,29 @@
             },
         });
 
-        $.when(subtotal, total, dp, diskon).done(function(res_sub, res_tot, res_dp, res_diskon) {
+        var customer = $.ajax({
+            url: '/Transaksi/GetNamaCustomer',
+            type: 'POST',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            data: {
+                id: $("#invoiceid").val()
+            },
+        });
+
+        var catatan = $.ajax({
+            url: '/Transaksi/GetCatatan',
+            type: 'POST',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            data: {
+                id: $("#invoiceid").val()
+            },
+        });
+
+        $.when(subtotal, total, dp, diskon, customer, catatan).done(function(res_sub, res_tot, res_dp, res_diskon, res_cust, res_catatan) {
             // console.log(res_sub);
             // console.log(res_tot);
             var json_sub = res_sub[0];
@@ -271,6 +293,10 @@
             var decoded_dp = JSON.parse(json_dp);
             var json_diskon = res_diskon[0];
             var decoded_diskon = JSON.parse(json_diskon);
+            var json_cust = res_cust[0];
+            var decoded_cust = JSON.parse(json_cust);
+            var json_catatan = res_catatan[0];
+            var decoded_catatan = JSON.parse(json_catatan);
             // console.log(decoded_sub[0]['SUBTOTAL']);
             if (decoded_tot[0]['TOTAL_NETT'] == null) {
                 $("#gTotal").html("<div>0</div>");
@@ -294,69 +320,27 @@
                 $("#diskon").html("<div>" + rupiah(decoded_diskon[0].DISKON) + "</div>");
             }
 
+            if (decoded_cust[0].NAMA == null) {
+                $("#custname1").html("<div>Customer:</div>");
+                $("#custname2").html("<div>Nama:</div>");
+
+            } else {
+                $("#custname1").html("<div>Customer: " + decoded_cust[0].NAMA + "</div>");
+                $("#custname2").html("<div>Nama: " + decoded_cust[0].NAMACUST + "</div>");
+            }
+            if (decoded_catatan[0].CATATAN == null) {
+                $("#catatan").html("<div></div>");
+
+            } else {
+                $("#catatan").html("<div>" + decoded_catatan[0].CATATAN + "</div>");
+            }
+
 
         }).fail(function(xhr, ajaxOptions, thrownError) {
             alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
         });
 
     }
-
-
-    // MENAMPILKAN customer & nama DI PAGE PENJUALAN (CHART)
-    $.ajax({
-        type: 'POST',
-        async: true,
-        url: '/Transaksi/GetNamaCustomer',
-        dataType: "JSON",
-        data: {
-            id: $("#invoiceid").val()
-        },
-        success: function(result) {
-            for (var i = 0; i < result.length; i++) {
-                if (result[i].NAMACUST && result[i].NAMA == null) {
-                    $("#custname1").html("<div>Customer:</div>");
-                    $("#custname2").html("<div>Nama:</div>");
-
-                } else {
-                    $("#custname1").html("<div>Customer: " + result[i].NAMA + "</div>");
-                    $("#custname2").html("<div>Nama: " + result[i].NAMACUST + "</div>");
-                }
-
-
-
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-        }
-    });
-
-    // MENAMPILKAN CATATAN BERDASARKAN INVOICE DI PAGE PENJUALAN (CHART)
-    $.ajax({
-        type: 'POST',
-        async: true,
-        url: '/Transaksi/GetCatatan',
-        dataType: "JSON",
-        data: {
-            id: $("#invoiceid").val()
-        },
-        success: function(result) {
-            for (var i = 0; i < result.length; i++) {
-                if (result[i].CATATAN == null) {
-                    $("#catatan").html("<div></div>");
-
-                } else {
-                    $("#catatan").html("<div>" + result[i].CATATAN + "</div>");
-                }
-
-
-
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
-            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
-        }
-    });
 </script>
 
 <script type="text/javascript">
@@ -519,6 +503,9 @@
             $.ajax({
                 type: 'GET',
                 url: '/Transaksi/InserttoinvPJ',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 data: {
                     id: $("#invoiceid").val()
                 },
@@ -539,6 +526,9 @@
                     $.ajax({
                         type: "GET",
                         url: '/Transaksi/ClearListPenjualan',
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        },
                         dataType: "JSON",
                         success: function() {
                             location.reload();
@@ -554,6 +544,9 @@
                 $.ajax({
                     type: "GET",
                     url: '/Transaksi/ClearListPenjualan',
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
                     dataType: "JSON",
                     success: function() {
                         Swal.fire("Data berhasil disimpan!", "", "success").then((oke) => {
