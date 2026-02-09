@@ -75,7 +75,7 @@
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Invoice :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="VSC<?= date('dm'); ?><?= date('y'); ?>-<?= $autonumPJ; ?>" name="invoice" id="invoiceid" readonly>
+                                                                    <input class="form-control" type="text" value="VSC<?= date('dm'); ?><?= date('y'); ?>-<?= $autonumPJ; ?>" name="invoice" id="invoiceid">
                                                                 </div>
 
                                                             </div>
@@ -200,7 +200,7 @@
                                                             <div class="form-group row" id="nama">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Nama :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" name="namacustomer" id="example-text-input" required>
+                                                                    <input class="form-control" type="text" value="" name="namacustomer" id="namacustomer" required>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row" id="alamat">
@@ -212,7 +212,7 @@
                                                             <div class="form-group row" id="refmp">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Ref MP :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv_mp" id="example-text-input">
+                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv_mp" id="refinv_mp">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -284,6 +284,8 @@
                                                         </td>
                                                         <td>
                                                             <div id="dp"></div>
+                                                            <input type="number" id="summodal" name="summodal" hidden>
+                                                            <input type="number" id="sumtotal" name="sumtotal" hidden>
                                                         </td>
                                                     </tr>
                                                     <tr>

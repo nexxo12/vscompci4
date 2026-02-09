@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of vfsStream.
  *
@@ -7,18 +8,20 @@
  *
  * @package  org\bovigo\vfs
  */
+
 namespace org\bovigo\vfs;
+
 /**
  * Test for org\bovigo\vfs\vfsStreamWrapper in conjunction with ext/zip.
  *
  * @group  zip
  */
-class vfsStreamZipTestCase extends \BC_PHPUnit_Framework_TestCase
+class vfsStreamZipTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * set up test environment
      */
-    public function setUp()
+    public function setUp(): void
     {
         if (extension_loaded('zip') === false) {
             $this->markTestSkipped('No ext/zip installed, skipping test.');
@@ -28,7 +31,6 @@ class vfsStreamZipTestCase extends \BC_PHPUnit_Framework_TestCase
 
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(vfsStream::newDirectory('root'));
-
     }
 
     /**
@@ -36,8 +38,8 @@ class vfsStreamZipTestCase extends \BC_PHPUnit_Framework_TestCase
      */
     public function createZipArchive()
     {
-        $zip = new ZipArchive();
-        $this->assertTrue($zip->open(vfsStream::url('root/test.zip'), ZipArchive::CREATE));
+        $zip = new \ZipArchive();
+        $this->assertTrue($zip->open(vfsStream::url('root/test.zip'), \ZipArchive::CREATE));
         $this->assertTrue($zip->addFromString("testfile1.txt", "#1 This is a test string added as testfile1.txt.\n"));
         $this->assertTrue($zip->addFromString("testfile2.txt", "#2 This is a test string added as testfile2.txt.\n"));
         $zip->setArchiveComment('a test');

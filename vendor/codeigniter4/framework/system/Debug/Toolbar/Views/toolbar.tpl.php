@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \CodeIgniter\Debug\Toolbar $this
  * @var int                        $totalTime
@@ -28,7 +29,10 @@
 </script>
 <div id="debug-icon" class="debug-bar-ndisplay">
 	<a id="debug-icon-link" href="javascript:void(0)">
-		<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 155 200"><defs/><path fill="#dd4814" d="M73.7 3.7c2.2 7.9-.7 18.5-7.8 29-1.8 2.6-10.7 12.2-19.7 21.3-23.9 24-33.6 37.1-40.3 54.4-7.9 20.6-7.8 40.8.5 58.2C12.8 180 27.6 193 42.5 198l6 2-3-2.2c-21-15.2-22.9-38.7-4.8-58.8 2.5-2.7 4.8-5 5.1-5 .4 0 .7 2.7.7 6.1 0 5.7.2 6.2 3.7 9.5 3 2.7 4.6 3.4 7.8 3.4 5.6 0 9.9-2.4 11.6-6.5 2.9-6.9 1.6-12-5-20.5-10.5-13.4-11.7-23.3-4.3-34.7l3.1-4.8.7 4.7c1.3 8.2 5.8 12.9 25 25.8 20.9 14.1 30.6 26.1 32.8 40.5 1.1 7.2-.1 16.1-3.1 21.8-2.7 5.3-11.2 14.3-16.5 17.4-2.4 1.4-4.3 2.6-4.3 2.8 0 .2 2.4-.4 5.3-1.4 24.1-8.3 42.7-27.1 48.2-48.6 1.9-7.6 1.9-20.2-.1-28.5-3.5-15.2-14.6-30.5-29.9-41.2l-7-4.9-.6 3.3c-.8 4.8-2.6 7.6-5.9 9.3-4.5 2.3-10.3 1.9-13.8-1-6.7-5.7-7.8-14.6-3.7-30.5 3-11.6 3.2-20.6.5-29.1C88.3 18 80.6 6.3 74.8 2.2 73.1.9 73 1 73.7 3.7z"/></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 155 200">
+			<defs />
+			<path fill="#dd4814" d="M73.7 3.7c2.2 7.9-.7 18.5-7.8 29-1.8 2.6-10.7 12.2-19.7 21.3-23.9 24-33.6 37.1-40.3 54.4-7.9 20.6-7.8 40.8.5 58.2C12.8 180 27.6 193 42.5 198l6 2-3-2.2c-21-15.2-22.9-38.7-4.8-58.8 2.5-2.7 4.8-5 5.1-5 .4 0 .7 2.7.7 6.1 0 5.7.2 6.2 3.7 9.5 3 2.7 4.6 3.4 7.8 3.4 5.6 0 9.9-2.4 11.6-6.5 2.9-6.9 1.6-12-5-20.5-10.5-13.4-11.7-23.3-4.3-34.7l3.1-4.8.7 4.7c1.3 8.2 5.8 12.9 25 25.8 20.9 14.1 30.6 26.1 32.8 40.5 1.1 7.2-.1 16.1-3.1 21.8-2.7 5.3-11.2 14.3-16.5 17.4-2.4 1.4-4.3 2.6-4.3 2.8 0 .2 2.4-.4 5.3-1.4 24.1-8.3 42.7-27.1 48.2-48.6 1.9-7.6 1.9-20.2-.1-28.5-3.5-15.2-14.6-30.5-29.9-41.2l-7-4.9-.6 3.3c-.8 4.8-2.6 7.6-5.9 9.3-4.5 2.3-10.3 1.9-13.8-1-6.7-5.7-7.8-14.6-3.7-30.5 3-11.6 3.2-20.6.5-29.1C88.3 18 80.6 6.3 74.8 2.2 73.1.9 73 1 73.7 3.7z" />
+		</svg>
 	</a>
 </div>
 <div id="debug-bar">
@@ -68,7 +72,10 @@
 		<h1>
 			<span class="ci-label">
 				<a href="javascript: void(0)" data-tab="ci-config">
-					<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 155 200"><defs/><path fill="#dd4814" d="M73.7 3.7c2.2 7.9-.7 18.5-7.8 29-1.8 2.6-10.7 12.2-19.7 21.3-23.9 24-33.6 37.1-40.3 54.4-7.9 20.6-7.8 40.8.5 58.2C12.8 180 27.6 193 42.5 198l6 2-3-2.2c-21-15.2-22.9-38.7-4.8-58.8 2.5-2.7 4.8-5 5.1-5 .4 0 .7 2.7.7 6.1 0 5.7.2 6.2 3.7 9.5 3 2.7 4.6 3.4 7.8 3.4 5.6 0 9.9-2.4 11.6-6.5 2.9-6.9 1.6-12-5-20.5-10.5-13.4-11.7-23.3-4.3-34.7l3.1-4.8.7 4.7c1.3 8.2 5.8 12.9 25 25.8 20.9 14.1 30.6 26.1 32.8 40.5 1.1 7.2-.1 16.1-3.1 21.8-2.7 5.3-11.2 14.3-16.5 17.4-2.4 1.4-4.3 2.6-4.3 2.8 0 .2 2.4-.4 5.3-1.4 24.1-8.3 42.7-27.1 48.2-48.6 1.9-7.6 1.9-20.2-.1-28.5-3.5-15.2-14.6-30.5-29.9-41.2l-7-4.9-.6 3.3c-.8 4.8-2.6 7.6-5.9 9.3-4.5 2.3-10.3 1.9-13.8-1-6.7-5.7-7.8-14.6-3.7-30.5 3-11.6 3.2-20.6.5-29.1C88.3 18 80.6 6.3 74.8 2.2 73.1.9 73 1 73.7 3.7z"/></svg>
+					<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 155 200">
+						<defs />
+						<path fill="#dd4814" d="M73.7 3.7c2.2 7.9-.7 18.5-7.8 29-1.8 2.6-10.7 12.2-19.7 21.3-23.9 24-33.6 37.1-40.3 54.4-7.9 20.6-7.8 40.8.5 58.2C12.8 180 27.6 193 42.5 198l6 2-3-2.2c-21-15.2-22.9-38.7-4.8-58.8 2.5-2.7 4.8-5 5.1-5 .4 0 .7 2.7.7 6.1 0 5.7.2 6.2 3.7 9.5 3 2.7 4.6 3.4 7.8 3.4 5.6 0 9.9-2.4 11.6-6.5 2.9-6.9 1.6-12-5-20.5-10.5-13.4-11.7-23.3-4.3-34.7l3.1-4.8.7 4.7c1.3 8.2 5.8 12.9 25 25.8 20.9 14.1 30.6 26.1 32.8 40.5 1.1 7.2-.1 16.1-3.1 21.8-2.7 5.3-11.2 14.3-16.5 17.4-2.4 1.4-4.3 2.6-4.3 2.8 0 .2 2.4-.4 5.3-1.4 24.1-8.3 42.7-27.1 48.2-48.6 1.9-7.6 1.9-20.2-.1-28.5-3.5-15.2-14.6-30.5-29.9-41.2l-7-4.9-.6 3.3c-.8 4.8-2.6 7.6-5.9 9.3-4.5 2.3-10.3 1.9-13.8-1-6.7-5.7-7.8-14.6-3.7-30.5 3-11.6 3.2-20.6.5-29.1C88.3 18 80.6 6.3 74.8 2.2 73.1.9 73 1 73.7 3.7z" />
+					</svg>
 					<?= $CI_VERSION ?>
 				</a>
 			</span>
@@ -84,18 +91,23 @@
 	<div id="ci-timeline" class="tab">
 		<table class="timeline">
 			<thead>
-			<tr>
-				<th class="debug-bar-width30">NAME</th>
-				<th class="debug-bar-width10">COMPONENT</th>
-				<th class="debug-bar-width10">DURATION</th>
-				<?php for ($i = 0; $i < $segmentCount; $i++) : ?>
-					<th><?= $i * $segmentDuration ?> ms</th>
-				<?php endfor ?>
-			</tr>
+				<tr>
+					<th class="debug-bar-width30">NAME</th>
+					<th class="debug-bar-width10">COMPONENT</th>
+					<th class="debug-bar-width10">DURATION</th>
+					<?php for ($i = 0; $i < $segmentCount; $i++) : ?>
+						<th><?= $i * $segmentDuration ?> ms</th>
+					<?php endfor ?>
+				</tr>
 			</thead>
 			<tbody>
-			<?= $this->renderTimeline($collectors, $startTime, $segmentCount, $segmentDuration,
-				$styles) ?>
+				<?= $this->renderTimeline(
+					$collectors,
+					$startTime,
+					$segmentCount,
+					$segmentDuration,
+					$styles
+				) ?>
 			</tbody>
 		</table>
 	</div>
@@ -120,8 +132,11 @@
 		<?php if (isset($vars['varData'])) : ?>
 			<?php foreach ($vars['varData'] as $heading => $items) : ?>
 
-				<a href="javascript:void(0)" onclick="ciDebugBar.toggleDataTable('<?= strtolower(str_replace(' ',
-					'-', $heading)) ?>'); return false;">
+				<a href="javascript:void(0)" onclick="ciDebugBar.toggleDataTable('<?= strtolower(str_replace(
+																						' ',
+																						'-',
+																						$heading
+																					)) ?>'); return false;">
 					<h2><?= $heading ?></h2>
 				</a>
 
@@ -129,12 +144,12 @@
 
 					<table id="<?= strtolower(str_replace(' ', '-', $heading . '_table')) ?>">
 						<tbody>
-						<?php foreach ($items as $key => $value) : ?>
-							<tr>
-								<td><?= $key ?></td>
-								<td><?= $value ?></td>
-							</tr>
-						<?php endforeach ?>
+							<?php foreach ($items as $key => $value) : ?>
+								<tr>
+									<td><?= $key ?></td>
+									<td><?= $value ?></td>
+								</tr>
+							<?php endforeach ?>
 						</tbody>
 					</table>
 
@@ -153,12 +168,12 @@
 			<?php if (! empty($vars['session'])) : ?>
 				<table id="session_table">
 					<tbody>
-					<?php foreach ($vars['session'] as $key => $value) : ?>
-						<tr>
-							<td><?= $key ?></td>
-							<td><?= $value ?></td>
-						</tr>
-					<?php endforeach ?>
+						<?php foreach ($vars['session'] as $key => $value) : ?>
+							<tr>
+								<td><?= $key ?></td>
+								<td><?= $value ?></td>
+							</tr>
+						<?php endforeach ?>
 					</tbody>
 				</table>
 			<?php else : ?>
@@ -177,12 +192,12 @@
 
 			<table id="get_table">
 				<tbody>
-				<?php foreach ($get as $name => $value) : ?>
-					<tr>
-						<td><?= $name ?></td>
-						<td><?= $value ?></td>
-					</tr>
-				<?php endforeach ?>
+					<?php foreach ($get as $name => $value) : ?>
+						<tr>
+							<td><?= $name ?></td>
+							<td><?= $value ?></td>
+						</tr>
+					<?php endforeach ?>
 				</tbody>
 			</table>
 		<?php endif ?>
@@ -194,12 +209,12 @@
 
 			<table id="post_table">
 				<tbody>
-				<?php foreach ($post as $name => $value) : ?>
-					<tr>
-						<td><?= $name ?></td>
-						<td><?= $value ?></td>
-					</tr>
-				<?php endforeach ?>
+					<?php foreach ($post as $name => $value) : ?>
+						<tr>
+							<td><?= $name ?></td>
+							<td><?= $value ?></td>
+						</tr>
+					<?php endforeach ?>
 				</tbody>
 			</table>
 		<?php endif ?>
@@ -211,12 +226,12 @@
 
 			<table id="request_headers_table">
 				<tbody>
-				<?php foreach ($headers as $header => $value) : ?>
-					<tr>
-						<td><?= $header ?></td>
-						<td><?= $value ?></td>
-					</tr>
-				<?php endforeach ?>
+					<?php foreach ($headers as $header => $value) : ?>
+						<tr>
+							<td><?= $header ?></td>
+							<td><?= $value ?></td>
+						</tr>
+					<?php endforeach ?>
 				</tbody>
 			</table>
 		<?php endif ?>
@@ -228,12 +243,12 @@
 
 			<table id="cookie_table">
 				<tbody>
-				<?php foreach ($cookies as $name => $value) : ?>
-					<tr>
-						<td><?= $name ?></td>
-						<td><?= is_array($value) ? print_r($value, true) : $value ?></td>
-					</tr>
-				<?php endforeach ?>
+					<?php foreach ($cookies as $name => $value) : ?>
+						<tr>
+							<td><?= $name ?></td>
+							<td><?= is_array($value) ? print_r($value, true) : $value ?></td>
+						</tr>
+					<?php endforeach ?>
 				</tbody>
 			</table>
 		<?php endif ?>
@@ -249,12 +264,12 @@
 
 			<table id="response_headers_table">
 				<tbody>
-				<?php foreach ($headers as $header => $value) : ?>
-					<tr>
-						<td><?= $header ?></td>
-						<td><?= $value ?></td>
-					</tr>
-				<?php endforeach ?>
+					<?php foreach ($headers as $header => $value) : ?>
+						<tr>
+							<td><?= $header ?></td>
+							<td><?= $value ?></td>
+						</tr>
+					<?php endforeach ?>
 				</tbody>
 			</table>
 		<?php endif ?>
@@ -268,8 +283,7 @@
 	</div>
 </div>
 <style type="text/css">
-	<?php foreach($styles as $name => $style) : ?>
-	.<?= $name ?> {
+	<?php foreach ($styles as $name => $style) : ?>.<?= $name ?> {
 		<?= $style ?>
 	}
 

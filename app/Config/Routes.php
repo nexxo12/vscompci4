@@ -51,7 +51,9 @@ $routes->get('/karyawan/add', 'Finance::add');
 $routes->get('/karyawan/pengaturan', 'Finance::setting');
 $routes->get('/karyawan/gaji', 'Finance::gaji');
 
-$routes->get('/laporan/penjualan', 'Finance::laporanpj');
+$routes->get('/laporan/penjualan', 'Finance::laporan_penjualan');
+$routes->get('/laporan/penjualan', 'Finance::view_invoice');
+$routes->get('/laporan/penjualan/delete-invoice/(:segment)', 'Finance::deleteInvoicePenjualan/$1');
 $routes->get('/laporan/pembelian', 'Finance::laporanbl');
 $routes->get('/laporan/laba', 'Finance::laba');
 

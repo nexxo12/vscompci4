@@ -57,6 +57,24 @@ class PenjualanModel extends Model
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
+    public function JumlahHargaAwal($invoice)
+    {
+        return $this->table('penjualan')->selectSum('HARGA_AWAL')
+            ->where('INV_PENJUALAN', $invoice)->findAll();
+    }
+
+    public function JumlahHargaJual($invoice)
+    {
+        return $this->table('penjualan')->selectSum('HARGA_JL')
+            ->where('INV_PENJUALAN', $invoice)->findAll();
+    }
+
+    public function JumlahLaba($invoice)
+    {
+        return $this->table('penjualan')->selectSum('LABA')
+            ->where('INV_PENJUALAN', $invoice)->findAll();
+    }
+
     public function JumlahTotalHarga($invoice)
     {
         return $this->table('penjualan')->selectSum('TOTAL_HARGA')
@@ -78,5 +96,10 @@ class PenjualanModel extends Model
     {
         return $this->table('penjualan')->selectSum('TOTAL_NETT')
             ->where('INV_PENJUALAN', $invoice)->findAll();
+    }
+
+    public function deletelist($id)
+    {
+        return $this->where('ID_PENJUALAN', $id)->delete();
     }
 }

@@ -9,6 +9,8 @@ use App\Models\InvPenjualan;
 use App\Models\Customer;
 use App\Models\Listpenjualan;
 use App\Models\PenjualanModel;
+use App\Models\Garansi;
+use CodeIgniter\Exceptions\AlertError;
 use \Hermawan\DataTables\DataTable;
 use PhpParser\Node\Stmt\Echo_;
 
@@ -22,6 +24,7 @@ class Transaksi extends BaseController
 	protected $customer;
 	protected $list_pj;
 	protected $penjualanID;
+	protected $garansi;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();
@@ -31,6 +34,7 @@ class Transaksi extends BaseController
 		$this->customer = new Customer();
 		$this->list_pj = new Listpenjualan();
 		$this->penjualanID = new PenjualanModel();
+		$this->garansi = new Garansi();
 	}
 
 	// CONTROLLER PAGE PEMBELIAN===================================
@@ -173,6 +177,15 @@ class Transaksi extends BaseController
 		}
 	}
 
+	public function GetSumModal()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$result = $this->penjualanID->JumlahHargaAwal($id);
+			return json_encode($result);
+		}
+	}
+
 	public function GetDP()
 	{
 		if ($this->request->isAJAX()) {
@@ -194,12 +207,37 @@ class Transaksi extends BaseController
 	public function InserttoinvPJ()
 	{
 		if ($this->request->isAJAX()) {
-			$this->inv_pj->insert([
-				'id_inv' => $this->request->getVar('id'),
-
-			]);
+			$id = $this->request->getVar('id');
+			$existing = $this->inv_pj->where('id_inv', $id)->first();
+			if ($existing) {
+				echo '<script>alert("Tambah barang pada! ' . $id . ' Sukses Diupdate");</script>';
+				// $data = [
+				// 	'id_inv'   => $this->request->getVar('id'),
+				// ];
+				// $this->inv_pj->replace($data);
+			} else {
+				$this->inv_pj->insert([
+					'id_inv' => $this->request->getVar('id'),
+					'TGL_TRX' => $this->request->getVar('tanggal'),
+					'BARANG' => $this->request->getVar('namabarang'),
+					'GRAND_TOTAL' => $this->request->getVar('grandtotal'),
+					'inv_ol' => $this->request->getVar('keterangan'),
+					'modal' => $this->request->getVar('summodal'),
+				]);
+			}
 		}
 	}
+
+	// public function view_invoice()
+	// {
+	// 	$id = $this->request->getVar('id');
+	// 	$result = $this->penjualanID->table('penjualan')->select('*')
+	// 		->join('master_barang', 'master_barang.ID_BARANG = penjualan.ID_BARANG')
+	// 		->join('pelanggan', 'pelanggan.ID_PELANGGAN = penjualan.ID_PELANGGAN')
+	// 		// ->join('login', 'login.ID_LOGIN = penjualan.ID_LOGIN')
+	// 		->where('INV_PENJUALAN', $id);
+	// 	return DataTable::of($result)->toJson(true);
+	// }
 
 	public function GetNamaCustomer()
 	{
@@ -251,6 +289,16 @@ class Transaksi extends BaseController
 	{
 		$id = $this->request->getVar('id');
 		$result = $this->list_pj->deletelist($id);
+		return json_encode($result);
+	}
+
+	public function delete_barang()
+	{
+		$id = $this->request->getVar('id');
+		$result = [
+			'delete' => $this->penjualanID->deletelist($id),
+			'delete_garansi' => $this->garansi->delete_garansi($id)
+		];
 		return json_encode($result);
 	}
 	//  END CONTROLLER PENJUALAN======================================
