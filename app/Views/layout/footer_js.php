@@ -200,6 +200,7 @@
                 url: $(this).attr('href'), //data dikirim dari a href
                 dataType: "JSON",
                 success: function(result) {
+                    // console.log(result);
                     for (var i = 0; i < result.length; i++) {
                         $("#idbarang").val(result[i].ID_BARANG);
                         $("#namabarang").val(result[i].NAMA_BARANG);

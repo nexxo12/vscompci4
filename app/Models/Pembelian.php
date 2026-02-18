@@ -37,4 +37,13 @@ class Pembelian extends Model
         return $this->table('pembelian_barang')->selectSum('HARGA_BELI')
             ->where('month(TGL_BELI)', date('m'))->where('year(TGL_BELI)', date('Y'))->findAll();
     }
+
+    public function showbarangbyid($idbarang)
+    {
+        return $this->select('master_barang.ID_BARANG, master_barang.STOK, pembelian_barang.HARGA_BELI')
+            ->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
+            ->where('pembelian_barang.ID_BARANG', $idbarang)
+            ->orderBy('pembelian_barang.TGL_BELI', 'DESC')
+            ->first();
+    }
 }

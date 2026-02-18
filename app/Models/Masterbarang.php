@@ -22,20 +22,24 @@ class Masterbarang extends Model
 
     public function showCariBarang()
     {
-        return $this->select('master_barang.ID_BARANG, master_barang.NAMA_BARANG, master_barang.STOK, HARGA_BELI')
+        return $this->select('master_barang.ID_BARANG, master_barang.NAMA_BARANG, master_barang.STOK, pembelian_barang.HARGA_BELI')
             ->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')
             ->groupBy('master_barang.ID_BARANG')
-            ->orderBy('pembelian_barang.HARGA_BELI', 'DESC')
+            ->orderBy('pembelian_barang.TGL_BELI', 'ASC')
             ->findAll();
+    }
+
+    public function showbarangbyid($idbarang)
+    {
+        return $this->select('*')->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')->where('master_barang.ID_BARANG', $idbarang)->orderBy('pembelian_barang.TGL_BELI', 'ASC')->findAll();
     }
 
     // public function showbarangbyid($idbarang)
     // {
-    //     return $this->select('*')->where('ID_BARANG', $idbarang)->findAll();
+    //     return $this->select('master_barang.ID_BARANG, master_barang.STOK, MAX(pembelian_barang.HARGA_BELI) as HARGA_BELI')
+    //         ->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')
+    //         ->where('master_barang.ID_BARANG', $idbarang)
+    //         ->groupBy('master_barang.ID_BARANG')
+    //         ->findAll();
     // }
-
-    public function showbarangbyid($idbarang)
-    {
-        return $this->select('master_barang.ID_BARANG, master_barang.STOK, pembelian_barang.HARGA_BELI')->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')->where('master_barang.ID_BARANG', $idbarang)->distinct()->findAll();
-    }
 }

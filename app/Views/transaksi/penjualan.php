@@ -179,6 +179,13 @@
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Date:</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="date" value="" name="tanggal" id="tanggal">
+                                                                    <script>
+                                                                        // Mendapatkan tanggal hari ini (format YYYY-MM-DD)
+                                                                        const today = new Date().toISOString().split('T')[0];
+
+                                                                        // Mengisi nilai input dengan tanggal hari ini
+                                                                        document.getElementById('tanggal').value = today;
+                                                                    </script>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">

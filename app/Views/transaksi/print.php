@@ -82,7 +82,7 @@
                 <tr>
                     <td style="text-align: left;"><?= $nota['ID_BARANG']; ?></td>
                     <td><?= $nota['NAMA_BARANG']; ?></td>
-                    <td style="text-align: right;"><?= number_format($nota['HARGA_JL'], 0, ',', '.'); ?></td>
+                    <td style="text-align: right;"><?= number_format($nota['HARGA_JL'] / $nota['JUMLAH_BELI'], 0, ',', '.'); ?></td>
                     <td align="center"><?= $nota['JUMLAH_BELI']; ?></td>
                     <td style="text-align: right;"><?= number_format($nota['TOTAL_HARGA'], 0, ',', '.'); ?></td>
                 </tr>
@@ -97,7 +97,7 @@
         </tr>
         <tr style="vertical-align: top;">
             <td colspan="2" style="border: 1px solid black">
-                <strong>Catatan : <?= $nota['CATATAN']; ?></strong>
+                <strong style="color: red;">Catatan : <?= $nota['CATATAN']; ?></strong>
             </td>
             <td rowspan="2">
                 <p style="text-align:right;"><br>
