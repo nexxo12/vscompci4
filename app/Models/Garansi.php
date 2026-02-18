@@ -15,4 +15,10 @@ class Garansi extends Model
     {
         return $this->where('ID_PENJUALAN', $id)->delete();
     }
+
+    public function show_garansi($id)
+    {
+        return $this->select('*')->join('master_barang', 'garansi.ID_BARANG = master_barang.ID_BARANG')
+            ->where('INV_PENJUALAN', $id)->findAll();
+    }
 }

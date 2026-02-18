@@ -126,7 +126,7 @@
                                         <label for="exampleInputEmail1">Keterangan</label>
                                         <input type="text" class="form-control" name="keterangan-laporan-edit" id="keterangan-laporan-edit" value="">
                                         <label for="exampleInputEmail1">Modal</label>
-                                        <input type="number" class="form-control" name="modal-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="modal-laporan-edit" value="">
+                                        <input type="number" class="form-control" name="modal-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="modal-laporan-edit" value="0">
                                         <input type="number" class="form-control" name="gtotal-laporan-edit" id="gtotal-laporan-edit" value="" hidden>
 
                                     </div>
@@ -140,7 +140,7 @@
                                         <label for="exampleInputEmail1">Biaya Admin</label>
                                         <input type="number" class="form-control" name="biayaadm-laporan-edit" id="biayaadm-laporan-edit" value="0">
                                         <label for="exampleInputEmail1">Laba</label>
-                                        <input type="number" class="form-control" name="laba-laporan-edit" id="laba-laporan-edit" value="">
+                                        <input type="number" class="form-control" name="laba-laporan-edit" id="laba-laporan-edit" value="" readonly>
 
                                         <br>
                                     </div>

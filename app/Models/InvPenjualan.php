@@ -28,4 +28,22 @@ class InvPenjualan extends Model
     {
         return $this->select('*')->where('id_inv', $id)->findAll();
     }
+
+    public function JumlahPotonganbyDate()
+    {
+        return $this->table('inv_penjualan')->selectSum('potongan')
+            ->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function JumlahBiayaMinbyDate()
+    {
+        return $this->table('inv_penjualan')->selectSum('ongkir')
+            ->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function JumlahBiayaPlusbyDate()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_ongkir')
+            ->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
 }

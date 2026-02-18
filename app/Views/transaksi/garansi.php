@@ -65,41 +65,55 @@
                             <div class="col-lg-6">
                                 <div class="card m-b-30">
                                     <div class="card-body">
-
-                                        <h4 class="mt-0 header-title">HTML Highlight</h4>
-                                        <p class="text-muted m-b-30 font-14">Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
-
-                                        <pre class=" language-markup"><code class=" language-markup">
-&lt;html&gt;
-    &lt;!-- this is a comment --&gt;
-    &lt;head&gt;
-        &lt;title&gt;HTML Example&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        The indentation tries to be &lt;em&gt;somewhat &amp;quot;do what
-        I mean&amp;quot;&lt;/em&gt;... but might not match your style.
-    &lt;/body&gt;
-&lt;/html&gt;
-                                            </code></pre>
+                                        <h4 class="mt-0 header-title">Daftar Garansi</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped" id="tbl-garansi">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Invoice</th>
+                                                        <th>Tanggal Order</th>
+                                                        <th>Keterangan</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="">
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- end col -->
-
                             <div class="col-lg-6">
                                 <div class="card m-b-30">
                                     <div class="card-body">
-
-                                        <h4 class="mt-0 header-title">Css Highlight</h4>
-                                        <p class="text-muted m-b-30 font-14">Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
-
-                                        <pre class="line-numbers">
-            <code class="language-css">
-.example {
-    font-family: Georgia, Times, serif;
-    color: #555;
-    text-align: center;
-}</code>
-            </pre>
+                                        <h4 class="mt-0 header-title">Data Garansi</h4>
+                                        <div class="spinner-border text-primary " role="status" id="loading-data-garansi" style="display:none;">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <form action="" id="data-garansi">
+                                                <table class="table table-bordered" id="">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 16%;">ID</th>
+                                                            <th style="width: 20%;">Invoice</th>
+                                                            <th>Barang</th>
+                                                            <th>Tanggal Order</th>
+                                                            <th style="width: 20%;">Tanggal Habis</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbl-data-garansi">
+                                                    </tbody>
+                                                </table>
+                                            </form>
+                                            <div style="display: flex; justify-content: center;">
+                                                <button type="button" class="btn btn-primary waves-effect waves-light" id="button-save-garansi" onclick="update_garansi()">
+                                                    <span id="text-simpan">Save</span>
+                                                    <span id="loading-simpan" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- end col -->

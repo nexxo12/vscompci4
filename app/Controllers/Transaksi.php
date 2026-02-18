@@ -228,17 +228,6 @@ class Transaksi extends BaseController
 		}
 	}
 
-	// public function view_invoice()
-	// {
-	// 	$id = $this->request->getVar('id');
-	// 	$result = $this->penjualanID->table('penjualan')->select('*')
-	// 		->join('master_barang', 'master_barang.ID_BARANG = penjualan.ID_BARANG')
-	// 		->join('pelanggan', 'pelanggan.ID_PELANGGAN = penjualan.ID_PELANGGAN')
-	// 		// ->join('login', 'login.ID_LOGIN = penjualan.ID_LOGIN')
-	// 		->where('INV_PENJUALAN', $id);
-	// 	return DataTable::of($result)->toJson(true);
-	// }
-
 	public function GetNamaCustomer()
 	{
 		if ($this->request->isAJAX()) {
@@ -302,6 +291,50 @@ class Transaksi extends BaseController
 		return json_encode($result);
 	}
 	//  END CONTROLLER PENJUALAN======================================
+	// CONTROLLER GARANSI===================================
+
+	public function viewdata_garansi()
+	{
+		$viewdata = $this->inv_pj->table('inv_penjualan')->select('id_inv, TGL_TRX, inv_ol');
+		// $viewdata = $this->garansi->table('garansi')->select('id_inv, TGL_TRX, garansi.TGL_HABIS, garansi.STATUS')->join('inv_penjualan', 'garansi.INV_PENJUALAN = inv_penjualan.id_inv');
+		return DataTable::of($viewdata)->add('edit', function ($row) {
+			return '<a href="/transaksi/garansi_detail?invoice=' . $row->id_inv . '" class="view-garansi"><button class="btn btn-warning btn-sm ti-pencil-alt " type="button" onclick="show_garansi()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function garansi_detail()
+	{
+		if ($this->request->isAJAX()) {
+			$invoice = $this->request->getVar('invoice');
+			$result = $this->garansi->show_garansi($invoice);
+			return json_encode($result);
+		}
+		// var_dump($invoice);
+	}
+
+	public function update_garansi()
+	{
+		$tgl_habis = $this->request->getVar('tgl_habis');
+		$inv_penjualan = $this->request->getVar('inv_penjualan');
+		$id_penjualan = $this->request->getVar('id_penjualan');
+		// var_dump(count($tgl_habis));
+		$data = [];
+		for ($i = 0; $i < count($tgl_habis); $i++) {
+			$data[] = [
+				'ID_PENJUALAN' => $id_penjualan[$i],
+				'INV_PENJUALAN' => $inv_penjualan[$i],
+				'TGL_HABIS' => $tgl_habis[$i],
+				// 'STATUS' => $this->request->getVar('status')[$i],
+			];
+		}
+		if (!empty($data)) {
+			$this->garansi->updateBatch($data, 'ID_PENJUALAN');
+		}
+
+		return json_encode(['status' => 'success']);
+	}
+
+	// END CONTROLLER GARANSI======================================
 	public function serviceReturn()
 	{
 		$data = [

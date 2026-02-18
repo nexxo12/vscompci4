@@ -31,4 +31,10 @@ class Pembelian extends Model
     {
         return $this->where('ID_BELI', $id)->delete();
     }
+
+    public function JumlahPembelianbyDate()
+    {
+        return $this->table('pembelian_barang')->selectSum('HARGA_BELI')
+            ->where('month(TGL_BELI)', date('m'))->where('year(TGL_BELI)', date('Y'))->findAll();
+    }
 }

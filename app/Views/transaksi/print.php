@@ -14,8 +14,8 @@
 
         /* Set page margins to zero for all pages */
         @page {
-            margin: 1mm !important;
-            padding: 1mm !important;
+            margin: 2mm !important;
+            padding: 2mm !important;
             size: auto;
             /* Let browser determine size or set a specific size like A4 */
         }

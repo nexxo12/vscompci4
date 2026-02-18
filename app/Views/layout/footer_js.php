@@ -21,6 +21,9 @@
 <!-- Required datatable js -->
 <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/assets/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script> -->
 
 <!-- Buttons examples -->
 <script src="/assets/plugins/datatables/dataTables.buttons.min.js"></script>
@@ -108,6 +111,8 @@
         grandtotal();
         dtbl_CB = $('#datatable_caribarang').DataTable({});
 
+        $("#button-save-garansi").prop('disabled', true);
+
         $("#input_supp").attr("style", "display: none");
         var select = $('#supp_buy').val();
 
@@ -151,8 +156,9 @@
 </script>
 
 <!-- PAGE PENJUALAN-->
+
+<!-- FUNCTION UNTUK MENAMPILKAN BARANG SETELAH KLIK "CARI BARANG" -->
 <script type="text/javascript">
-    // FUNCTION UNTUK MENAMPILKAN BARANG SETELAH KLIK "CARI BARANG"
     function caribarang() {
         // $(document).ready(function() {
         $.ajax({
@@ -212,6 +218,7 @@
         })
     }
 
+    //FUNGSI UNTUK MENDAPATKAN NILAI NAMA CUSTOMER, TOTAL HARGA, DP, DISKON, DLL-->
     function grandtotal() {
         // MENAMPILKAN GRANDTOTAL, SUBTOTAL, DP, DISKON DI PAGE PENJUALAN (CHART)
 
@@ -363,9 +370,10 @@
 
     }
 </script>
+<!-- END FUNGSI UNTUK MENDAPATKAN NILAI NAMA CUSTOMER, TOTAL HARGA, DP, DISKON, DLL -->
 
+<!-- //FUNGSI UNTUK MENDAPATKAN UPDATE ID TABLE PENJUALAN -->
 <script type="text/javascript">
-    //FUNGSI UNTUK MENDAPATKAN UPDATE ID TABLE PENJUALAN
     function refreshidpj() {
         $.ajax({
             type: "POST",
@@ -420,8 +428,10 @@
         })
     }
 </script>
+<!-- //END FUNGSI UNTUK MENDAPATKAN UPDATE ID TABLE PENJUALAN -->
+
+<!-- // JS FUNGSI TOMBOL ADD CHART -->
 <script type="text/javascript">
-    // JS TOMBOL ADD CHART
     $(".addchart").click(function(e) {
         e.preventDefault();
         $idbarang = $('#idbarang').val();
@@ -483,9 +493,10 @@
 
     })
 </script>
+<!-- // END JS FUNGSI TOMBOL ADD CHART -->
 
+<!-- // FUNCTION untuk DELETE table CHART -->
 <script type="text/javascript">
-    // FUNCTION untuk DELETE table CHART
     function deletebrg() {
         $(".delete-loadcart").click(function(e) {
             e.preventDefault();
@@ -509,9 +520,10 @@
         })
     }
 </script>
+<!-- // END FUNCTION untuk DELETE table CHART -->
 
+<!-- // FUNCTION CHECKOUT untuk CLEAR CHART & PRINT -->
 <script type="text/javascript">
-    // FUNCTION CHECKOUT untuk CLEAR CHART & PRINT
     $(".checkout").click(function(e) {
         e.preventDefault();
         Swal.fire({
@@ -591,7 +603,152 @@
 
     })
 </script>
-<!-- PAGE PENJUALAN-->
+<!-- // END FUNCTION CHECKOUT untuk CLEAR CHART & PRINT -->
+
+<!-- SCRIPT DATATABLE DATA GARANSI -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        table_garansi = $('#tbl-garansi').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '<?= base_url("/transaksi/viewdata_garansi") ?>',
+            type: 'POST',
+            // columnDefs: [{
+            //         targets: [3, 4, 5, 6, 7, 8],
+            //         render: $.fn.dataTable.render.number(',', '.', 0, 'Rp ')
+            //     },
+            //     {
+            //         render: function(data, type, row) {
+            //             return row.view + ' ' + row.action + ' ' + row.print + ' ' + row.delete;
+            //         },
+            //         targets: 9 // Target kolom indeks
+            //     }
+            // ],
+            columns: [{
+                    data: 'id_inv',
+                },
+                {
+                    data: 'TGL_TRX'
+                },
+                {
+                    data: 'inv_ol'
+                },
+
+                {
+                    data: 'edit'
+                },
+            ]
+        });
+    });
+</script>
+
+<!-- SCRIPT SHOW DATA GARANSI WHERE INVOICE -->
+<script type="text/javascript">
+    function show_garansi() {
+        $(".view-garansi").click(function(e) {
+            e.preventDefault();
+            $("#button-save-garansi").prop('disabled', false);
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $(this).attr('href'),
+                dataType: "JSON",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                beforeSend: function() {
+                    $('#loading-data-garansi').show(0);
+                },
+                success: function(result) {
+                    // console.log(result);
+                    var html = '';
+                    for (var i = 0; i < result.length; i++) {
+                        var today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        var tgl_habis = new Date(result[i].TGL_HABIS);
+                        var timeDiff = tgl_habis.getTime() - today.getTime();
+                        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                        console.log(diffDays);
+                        html += '<tr>' +
+                            '<td><input type="text" name="id_penjualan[]" style="border: none; outline: none; width: 100%; box-sizing: border-box;" value="' + result[i].ID_PENJUALAN + '" readonly></td>' +
+                            '<td ><input type="text" name="inv_penjualan[]" style="border: none; outline: none; width: 110%;" value="' + result[i].INV_PENJUALAN + '" readonly></td>' +
+                            '<td>' + result[i].NAMA_BARANG + '</td>' +
+                            '<td>' + result[i].TGL_BELI + '</td>' +
+                            '<td><input type="text" name="tgl_habis[]" style="border: none; outline: none; width: 100%; box-sizing: border-box;" value="' + result[i].TGL_HABIS + '"></td>' +
+                            '<td>' + (diffDays < 0 || isNaN(diffDays) ? '<span class="badge badge-danger">Garansi OFF</span>' : '<span class="badge badge-success">Garansi ON</span>') + '</td>' +
+                            '</tr>';
+                    }
+                    $('#tbl-data-garansi').html(html);
+                },
+                error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+                },
+
+                complete: function() {
+                    $('#loading-data-garansi').hide(0);
+                }
+
+            })
+        })
+
+    }
+</script>
+<!-- END SCRIPT SHOW DATA GARANSI WHERE INVOICE -->
+
+<!-- SCRIPT UPDATE DATA GARANSI -->
+<script type="text/javascript">
+    function update_garansi() {
+        // $('data-garansi').submit(function(e) {
+        //     e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: '/transaksi/update_garansi',
+            data: $('#data-garansi').serializeArray(),
+            dataType: "JSON",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            beforeSend: function() {
+                // 1. Tampilkan loading, sembunyikan teks
+                $('#loading-simpan').show();
+                $('#text-simpan').hide();
+                // 2. Nonaktifkan tombol
+                $('#save-edit-invoice').prop('disabled', true);
+            },
+            success: function(result) {
+                // console.log(result);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Perubahan berhasil disimpan",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                $('#loading-simpan').hide();
+                $('#text-simpan').show();
+                $('#save-edit-invoice').prop('disabled', false);
+                table_laporan.ajax.reload(null, false); //reload datatable tanpa reset paging
+            },
+            error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
+            },
+            complete: function() {
+                // Proses selesai
+                $('#save-edit-invoice').removeAttr('disabled'); // Aktifkan kembali
+                $('#text-simpan').show(); // Tampilkan teks simpan
+                $('#loading-simpan').hide(); // Sembunyikan loader
+            }
+        })
+        // });
+
+
+    }
+</script>
+<!-- END SCRIPT UPDATE DATA GARANSI -->
+
+<!-- END PAGE GARANSI -->
+
+<!-- END PAGE PENJUALAN-->
 
 <!-- PAGE LAPORAN-->
 
@@ -724,11 +881,36 @@
                     $('#tangal-laporan-edit').val(moment(result[0].TGL_TRX).format('YYYY-MM-DD'));
                     $('#gtotal-laporan-edit').val(result[0].GRAND_TOTAL);
                     $('#keterangan-laporan-edit').val(result[0].inv_ol);
-                    $('#modal-laporan-edit').val(result[0].modal);
-                    $('#biayamin-laporan-edit').val(result[0].ongkir);
-                    $('#biayaplus-laporan-edit').val(result[0].laba_ongkir);
-                    $('#biayaadm-laporan-edit').val(result[0].potongan);
-                    $('#laba-laporan-edit').val(result[0].laba);
+                    if (result[0].modal == null) {
+                        $('#modal-laporan-edit').val(0);
+
+                    } else {
+                        $('#modal-laporan-edit').val(result[0].modal);
+                    }
+                    if (result[0].potongan == null) {
+                        $('#biayaadm-laporan-edit').val(0);
+
+                    } else {
+                        $('#biayaadm-laporan-edit').val(result[0].potongan);
+                    }
+                    if (result[0].ongkir == null) {
+                        $('#biayamin-laporan-edit').val(0);
+
+                    } else {
+                        $('#biayamin-laporan-edit').val(result[0].ongkir);
+                    }
+                    if (result[0].laba_ongkir == null) {
+                        $('#biayaplus-laporan-edit').val(0);
+
+                    } else {
+                        $('#biayaplus-laporan-edit').val(result[0].laba_ongkir);
+                    }
+                    if (result[0].laba == null) {
+                        $('#laba-laporan-edit').val(0);
+
+                    } else {
+                        $('#laba-laporan-edit').val(result[0].laba);
+                    }
                     view_edit_invoice($invoiceid)
                 },
                 error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
@@ -808,6 +990,20 @@
                     targets: 9 // Target kolom indeks
                 }
             ],
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'excelHtml5',
+                autoFilter: true,
+                text: ' Export',
+                className: 'ti-export btn btn-success',
+                title: 'Data Laporan', // Judul file excel
+                exportOptions: {
+                    modifier: {
+                        search: 'applied', // 'applied' atau 'none'
+                        // order: 'applied'
+                    }
+                }
+            }],
             columns: [{
                     data: 'id_inv'
                 },
@@ -838,7 +1034,6 @@
                 {
                     data: 'action'
                 },
-                // 
                 // {
                 //     data: 'delete'
                 // },

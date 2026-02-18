@@ -63,16 +63,34 @@ class PenjualanModel extends Model
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
+    public function JumlahHargaAwalbyDate()
+    {
+        return $this->table('penjualan')->selectSum('HARGA_AWAL')
+            ->where('month(TANGGAL_TRANSAKSI)', date('m'))->where('year(TANGGAL_TRANSAKSI)', date('Y'))->findAll();
+    }
+
     public function JumlahHargaJual($invoice)
     {
         return $this->table('penjualan')->selectSum('HARGA_JL')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
+    public function JumlahPenjualanbyDate()
+    {
+        return $this->table('penjualan')->selectSum('HARGA_JL')
+            ->where('month(TANGGAL_TRANSAKSI)', date('m'))->where('year(TANGGAL_TRANSAKSI)', date('Y'))->findAll();
+    }
+
     public function JumlahLaba($invoice)
     {
         return $this->table('penjualan')->selectSum('LABA')
             ->where('INV_PENJUALAN', $invoice)->findAll();
+    }
+
+    public function JumlahLababyDate()
+    {
+        return $this->table('penjualan')->selectSum('LABA')
+            ->where('month(TANGGAL_TRANSAKSI)', date('m'))->where('year(TANGGAL_TRANSAKSI)', date('Y'))->findAll();
     }
 
     public function JumlahTotalHarga($invoice)

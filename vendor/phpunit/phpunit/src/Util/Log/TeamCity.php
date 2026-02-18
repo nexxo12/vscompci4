@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -7,6 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PHPUnit\Util\Log;
 
 use function class_exists;
@@ -275,9 +278,7 @@ final class TeamCity extends DefaultResultPrinter
         );
     }
 
-    protected function writeProgress(string $progress): void
-    {
-    }
+    protected function writeProgress(string $progress): void {}
 
     private function printEvent(string $eventName, array $params = []): void
     {
