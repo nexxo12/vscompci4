@@ -7,7 +7,7 @@
     <!-- LOGO -->
     <div class="topbar-left">
         <div class="text-center">
-            <a href="<?= base_url() ?>" class="logo">VSKomputer</a>
+            <a href="/" class="logo">VSKomputer</a>
             <!-- <a href="index.html" class="logo"><img src="assets/images/logo.png" height="24" alt="logo"></a> -->
         </div>
     </div>

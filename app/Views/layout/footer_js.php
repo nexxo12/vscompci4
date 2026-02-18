@@ -174,7 +174,7 @@
                     html += '<tr>' +
                         '<td>' + result[i].ID_BARANG + '</td>' +
                         '<td>' + result[i].NAMA_BARANG + ' (' + result[i].STOK + ')</td>' +
-                        '<td>' + result[i].HARGA_BELI + '</td>' +
+                        '<td>' + result[i].STOK + '</td>' +
                         '<td><a class="addbrg-fromlist" href="/Transaksi/addbarang?id=' + result[i].ID_BARANG + '"><button id="list-brg" class="btn btn-primary ti-plus" onclick="addbrgfromlist()" type="button"></button></td>' +
                         '</tr>';
                 }

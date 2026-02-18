@@ -70,7 +70,7 @@
     <table class="table-responsive" border="0" width="100%">
         <thead>
             <tr style="border: 1px solid black;">
-                <th scope="col" width="8%" style="border-bottom: 1px;">Kode</th>
+                <th scope="col" width="10%" style="border-bottom: 1px;">Kode</th>
                 <th scope="col">Nama Barang</th>
                 <th style="text-align: center;" scope="col" width="15%">Harga (Rp.)</th>
                 <th scope="col" width="7%" class="text-center">Jumlah</th>
@@ -166,7 +166,15 @@
                     <li>Simpan kardus komponen untuk administrasi garansi</li>
                     <li>Barang yang dibeli tidak dapat dikembalikan / ditukar (kecuali ada perjanjian)</li>
                     <li>Cek info garansi silahkan kunjungi www.vskomputer.com/garansi.html</li>
-                    <li class="bca">Pembayaran lunas / DP silahkan ditransfer ke: <br> <strong>BCA 8980464289 a/n. Ravino Rahman</strong></li>
+                    <?php foreach ($viewnota as $nota) : ?><?php endforeach; ?>
+                    <?php
+                    if ($nota['ID_PELANGGAN'] == 1) {
+                        echo "<li class='bca'>Pembayaran lunas / DP silahkan ditransfer ke: <br> <strong>BCA 8980464289 a/n. Ravino Rahman</strong></li>";
+                    } else {
+                        echo "";
+                    }
+                    ?>
+
                 </ul>
             </td>
         </tr>

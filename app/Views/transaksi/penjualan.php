@@ -85,9 +85,9 @@
                                                                     <div class="input-group mt-2">
                                                                         <input type="text" width="10%" value="" id="idpenjualan" name="idpenjualan" hidden>
                                                                         <input type="text" width="10%" value="" id="idbarang" name="idbarang" hidden>
-                                                                        <input type="text" width="10%" value="" id="modalbarang" name="modalbarang" hidden>
+                                                                        <input type="text" style="width: 12%;" value="" id="modalbarang" name="modalbarang" readonly>
                                                                         <input type="text" width="10%" value="" id="stokdb" hidden>
-                                                                        <input type="text" class="form-control" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
+                                                                        <input type="text" class="form-control" value="" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
                                                                         <span class="input-group-append">
                                                                             <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#Modalcaribrg"></button>
                                                                             <!-- data-toggle="modal" data-target="#exampleModal" -->
@@ -113,7 +113,7 @@
                                                                                         <tr>
                                                                                             <th>Kode</th>
                                                                                             <th>Nama Barang</th>
-                                                                                            <th>Modal Rp.</th>
+                                                                                            <th>STOK</th>
                                                                                             <th>Aksi</th>
                                                                                         </tr>
                                                                                     </thead>
