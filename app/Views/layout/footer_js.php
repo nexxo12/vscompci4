@@ -161,6 +161,7 @@
 <script type="text/javascript">
     function caribarang() {
         // $(document).ready(function() {
+        // $('#Modalcaribrg').modal('show');
         $.ajax({
             type: "POST",
             async: false,
@@ -175,7 +176,7 @@
                         '<td>' + result[i].ID_BARANG + '</td>' +
                         '<td>' + result[i].NAMA_BARANG + ' (' + result[i].STOK + ')</td>' +
                         '<td>' + result[i].STOK + '</td>' +
-                        '<td><a class="addbrg-fromlist" href="/Transaksi/addbarang?id=' + result[i].ID_BARANG + '"><button id="list-brg" class="btn btn-primary ti-plus" onclick="addbrgfromlist()" type="button"></button></td>' +
+                        '<td><a class="addbrg-fromlist" href="/Transaksi/addbarang?id=' + result[i].ID_BARANG + '"><button id="list-brg" class="btn btn-primary ti-plus" onclick="addbrgfromlist()" type="button"' + (result[i].STOK == 0 ? ' disabled' : '') + '></button></td>' +
                         '</tr>';
                 }
 

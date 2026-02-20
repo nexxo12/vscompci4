@@ -22,11 +22,7 @@ class Masterbarang extends Model
 
     public function showCariBarang()
     {
-        return $this->select('master_barang.ID_BARANG, master_barang.NAMA_BARANG, master_barang.STOK, pembelian_barang.HARGA_BELI')
-            ->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')
-            ->groupBy('master_barang.ID_BARANG')
-            ->orderBy('pembelian_barang.TGL_BELI', 'ASC')
-            ->findAll();
+        return $this->select('*')->findAll();
     }
 
     public function showbarangbyid($idbarang)

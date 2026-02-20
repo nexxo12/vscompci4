@@ -89,7 +89,7 @@
                                                                         <input type="text" width="10%" value="" id="stokdb" hidden>
                                                                         <input type="text" class="form-control" value="" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
                                                                         <span class="input-group-append">
-                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#Modalcaribrg"></button>
+                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#Modalcaribrg" onclick=""></button>
                                                                             <!-- data-toggle="modal" data-target="#exampleModal" -->
                                                                         </span>
                                                                     </div>
