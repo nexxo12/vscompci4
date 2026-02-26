@@ -111,10 +111,7 @@
 
             </div> <!-- content -->
 
-            <footer class="footer">
-                © 2021 - VSKomputer.
-            </footer>
-
+            <?= $this->include('layout/footerc'); ?>
         </div>
         <!-- End Right content here -->
 

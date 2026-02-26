@@ -11,6 +11,7 @@
 <script src="/assets/js/waves.js"></script>
 <script src="/assets/js/jquery.nicescroll.js"></script>
 <script src="/assets/js/jquery.scrollTo.min.js"></script>
+<script src="/assets/js/masterbarang.js"></script>
 
 <script src="/assets/plugins/skycons/skycons.min.js"></script>
 <script src="/assets/plugins/raphael/raphael-min.js"></script>

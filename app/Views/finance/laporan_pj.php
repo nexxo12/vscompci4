@@ -138,7 +138,7 @@
                                         <label for="exampleInputEmail1">Biaya Lebih (+)</label>
                                         <input type="number" class="form-control" name="biayaplus-laporan-edit" id="biayaplus-laporan-edit" value="0">
                                         <label for="exampleInputEmail1">Biaya Admin</label>
-                                        <input type="number" class="form-control" name="biayaadm-laporan-edit" id="biayaadm-laporan-edit" value="0">
+                                        <input type="number" class="form-control" name="biayaadm-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="biayaadm-laporan-edit" value="0">
                                         <label for="exampleInputEmail1">Laba</label>
                                         <input type="number" class="form-control" name="laba-laporan-edit" id="laba-laporan-edit" value="" readonly>
 

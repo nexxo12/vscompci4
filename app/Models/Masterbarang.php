@@ -7,8 +7,13 @@ use CodeIgniter\Model;
 class Masterbarang extends Model
 {
     protected $table      = 'master_barang';
+    protected $primaryKey = 'ID_BARANG';
     protected $allowedFields = ['ID_BARANG', 'ID_KATEGORI', 'NAMA_BARANG', 'STOK', 'SATUAN', 'HARGA_BELI_MASTER', 'HARGA_JUAL', 'G_TOTAL'];
 
+    public function MasterBarangID()
+    {
+        return $this->selectCount('ID_BARANG')->findAll();
+    }
 
     public function ShowBarang()
     {

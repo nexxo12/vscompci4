@@ -114,7 +114,7 @@
                                             <div class="form-group row">
                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Harga Beli</label>
                                                 <div class="col-sm-10">
-                                                    <input class="form-control" type="text" id="price_buy" name="hargabeli" required>
+                                                    <input class="form-control" type="text" id="price_buy" oninput="this.value = this.value.replace(/[.,]/g, '')" name="hargabeli" required>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
