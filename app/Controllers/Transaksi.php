@@ -207,25 +207,16 @@ class Transaksi extends BaseController
 	public function InserttoinvPJ()
 	{
 		if ($this->request->isAJAX()) {
-			$id = $this->request->getVar('id');
-			$existing = $this->inv_pj->where('id_inv', $id)->first();
-			if ($existing) {
-				echo '<script>alert("Tambah barang pada! ' . $id . ' Sukses Diupdate");</script>';
-				// $data = [
-				// 	'id_inv'   => $this->request->getVar('id'),
-				// ];
-				// $this->inv_pj->replace($data);
-			} else {
-				$this->inv_pj->insert([
-					'id_inv' => $this->request->getVar('id'),
-					'TGL_TRX' => $this->request->getVar('tanggal'),
-					'BARANG' => $this->request->getVar('namabarang'),
-					'GRAND_TOTAL' => $this->request->getVar('grandtotal'),
-					'inv_ol' => $this->request->getVar('keterangan'),
-					'modal' => $this->request->getVar('summodal'),
-				]);
-			}
+			$this->inv_pj->insert([
+				'id_inv' => $this->request->getVar('id'),
+				'TGL_TRX' => $this->request->getVar('tanggal'),
+				'BARANG' => $this->request->getVar('namabarang'),
+				'GRAND_TOTAL' => $this->request->getVar('grandtotal'),
+				'inv_ol' => $this->request->getVar('keterangan'),
+				'modal' => $this->request->getVar('summodal'),
+			]);
 		}
+		return json_encode(['status' => 'success']);
 	}
 
 	public function GetNamaCustomer()

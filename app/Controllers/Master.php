@@ -54,6 +54,7 @@ class Master extends BaseController
 				'ID_KATEGORI' => $this->request->getVar('kategori'),
 				'NAMA_BARANG' => $this->request->getVar('namabarang'),
 				'STOK' => 0,
+				'SATUAN' => 'unit',
 			]);
 			$result = ['status' => 'success'];
 			return json_encode($result);
@@ -94,6 +95,7 @@ class Master extends BaseController
 				'ID_KATEGORI' => $this->request->getVar('kategori-barang-edit'),
 				'NAMA_BARANG' => $this->request->getVar('nama-barang-edit'),
 				'STOK' => $this->request->getVar('stok-barang-edit'),
+				'SATUAN' => $this->request->getVar('satuan-barang-edit'),
 				'HARGA_BELI_MASTER' => $this->request->getVar('harga-beli-terbaru-edit'),
 				'HARGA_JUAL' => $this->request->getVar('harga-jual-rekomendasi-edit'),
 				'G_TOTAL' => $this->request->getVar('stok-barang-edit') * $this->request->getVar('harga-beli-terbaru-edit'),

@@ -115,7 +115,7 @@ class Finance extends BaseController
 
 	public function viewdata_invoice_penjualan()
 	{
-		$viewdata = $this->inv_pj->select('id_inv, TGL_TRX, inv_ol, GRAND_TOTAL, ongkir, laba_ongkir, potongan, modal, laba_bersih');
+		$viewdata = $this->inv_pj->select('id_inv, TGL_TRX, inv_ol, GRAND_TOTAL, ongkir, laba_ongkir, potongan, modal, laba_bersih')->orderBy('TGL_TRX', 'DESC');
 		return DataTable::of($viewdata)->addNumbering('no')->add('view', function ($row) {
 			return '<a href="/finance/view_invoice?invoice=' . $row->id_inv . '" class="view-invoice"><button class="btn btn-primary btn-sm ti-list " type="button" onclick="view_inv()"></button></a>';
 		})->add('action', function ($row) {

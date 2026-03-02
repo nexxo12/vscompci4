@@ -104,6 +104,8 @@ function edit_barang() {
                         if (response.status === 'success') {
                             Swal.fire('Berhasil!', 'Data berhasil dihapus!', 'success');
                             $('#tbl-masterbarang').DataTable().ajax.reload(); // Reload DataTable
+                            $('#form-masterbarang')[0].reset(); // Reset form
+                            refreshid_masterbarang(); // Refresh ID dengan data terbaru
                         } else {
                             alert('Gagal menghapus data!');
                         }       
@@ -158,7 +160,7 @@ function refreshid_masterbarang() {
                 for (var i = 0; i < result.length; i++) {
                     var idpj = parseInt(result[i].ID_BARANG);
                     idpj++;
-                    $("#idbarang").val("BR" + idpj);
+                    $("#idbarang").val("BRG" + idpj);
 
                 }
             },
@@ -191,7 +193,6 @@ $("#btn-masterbarang").click(function(e) {
                     alert('Data berhasil disimpan!');
                     $('#form-masterbarang')[0].reset(); // Reset form
                     refreshid_masterbarang(); // Refresh ID dengan data terbaru
-                    location.reload();
                     
                 }  else {
                     alert('Gagal menyimpan data!');

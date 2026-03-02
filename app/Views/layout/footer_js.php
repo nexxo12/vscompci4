@@ -552,7 +552,9 @@
                     grandtotal: $("#sumtotal").val(),
                     summodal: $("#summodal").val(),
                 },
-                success: function(result) {},
+                success: function(result) {
+                    // alert("Data berhasil disimpan!"); // Munculkan alert sukses
+                },
                 error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
                     alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
                 }

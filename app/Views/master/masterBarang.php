@@ -174,6 +174,7 @@
                                                                 <option value="<?= $k['ID_KATEGORI']; ?>"><?= $k['KATEGORI']; ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
+                                                        <input type="text" class="form-control" name="satuan-barang-edit" id="satuan-barang-edit" value="Unit" hidden>
                                                         <label for="exampleInputEmail1">Stok</label>
                                                         <input type="number" class="form-control" name="stok-barang-edit" id="stok-barang-edit" value="0">
                                                         <label for="exampleInputEmail1">Harga Beli Terbaru</label>
