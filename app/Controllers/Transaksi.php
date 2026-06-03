@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\Listpenjualan;
 use App\Models\PenjualanModel;
 use App\Models\Garansi;
+use App\Models\Service;
 use CodeIgniter\Exceptions\AlertError;
 use \Hermawan\DataTables\DataTable;
 use PhpParser\Node\Stmt\Echo_;
@@ -25,6 +26,7 @@ class Transaksi extends BaseController
 	protected $list_pj;
 	protected $penjualanID;
 	protected $garansi;
+	protected $service;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();
@@ -35,6 +37,7 @@ class Transaksi extends BaseController
 		$this->list_pj = new Listpenjualan();
 		$this->penjualanID = new PenjualanModel();
 		$this->garansi = new Garansi();
+		$this->service = new Service();
 	}
 
 	// CONTROLLER PAGE PEMBELIAN===================================
@@ -286,7 +289,7 @@ class Transaksi extends BaseController
 
 	public function viewdata_garansi()
 	{
-		$viewdata = $this->inv_pj->table('inv_penjualan')->select('id_inv, TGL_TRX, inv_ol');
+		$viewdata = $this->inv_pj->table('inv_penjualan')->select('id_inv, TGL_TRX, inv_ol')->orderBy('TGL_TRX', 'ASC');
 		// $viewdata = $this->garansi->table('garansi')->select('id_inv, TGL_TRX, garansi.TGL_HABIS, garansi.STATUS')->join('inv_penjualan', 'garansi.INV_PENJUALAN = inv_penjualan.id_inv');
 		return DataTable::of($viewdata)->add('edit', function ($row) {
 			return '<a href="/transaksi/garansi_detail?invoice=' . $row->id_inv . '" class="view-garansi"><button class="btn btn-warning btn-sm ti-pencil-alt " type="button" onclick="show_garansi()"></button></a>';
@@ -326,13 +329,46 @@ class Transaksi extends BaseController
 	}
 
 	// END CONTROLLER GARANSI======================================
+
+	// CONTROLLER SERVICE & RETURN===================================
 	public function serviceReturn()
 	{
 		$data = [
-			'tittle' => 'Service & Return - VSKomputer'
+			'tittle' => 'Service & Return - VSKomputer',
+			'nonota' => $this->service->getNextInvoiceNota(),
 		];
 		return view('/transaksi/return', $data);
 	}
+
+	public function saveService()
+	{
+		if ($this->request->isAJAX()) {
+			$this->service->insert([
+				'NOSURAT' => $this->request->getVar('no_surat'),
+				'TGL_INPUT' => $this->request->getVar('tanggal'),
+				'INVOICE_NOTA' => $this->request->getVar('invoice'),
+				'REF_MP' => $this->request->getVar('ref'),
+				'TGL_BELI' => $this->request->getVar('garansi'),
+				'NAMA' => $this->request->getVar('diterima_dari'),
+				'NOHP' => $this->request->getVar('no_hp'),
+				'BARANG' => $this->request->getVar('namabarang'),
+				'KELENGKAPAN' => $this->request->getVar('kelengkapan'),
+				'KERUSAKAN' => $this->request->getVar('kerusakan'),
+				'KETERANGAN' => $this->request->getVar('keterangan')
+			]);
+			return json_encode(['status' => 'success']);
+		}
+	}
+
+	public function noNota()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->service->getNextInvoiceNota();
+			return json_encode($result);
+		}
+	}
+	// END CONTROLLER SERVICE & RETURN===================================
+
 
 	public function garansi()
 	{

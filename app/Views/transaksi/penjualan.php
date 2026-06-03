@@ -181,7 +181,7 @@
                                                                     <input class="form-control" type="date" value="" name="tanggal" id="tanggal">
                                                                     <script>
                                                                         // Mendapatkan tanggal hari ini (format YYYY-MM-DD)
-                                                                        const today = new Date().toISOString().split('T')[0];
+                                                                        const today = new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().split('T')[0];
 
                                                                         // Mengisi nilai input dengan tanggal hari ini
                                                                         document.getElementById('tanggal').value = today;
