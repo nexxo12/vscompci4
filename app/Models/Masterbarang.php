@@ -30,7 +30,7 @@ class Masterbarang extends Model
         return $this->select('*')->findAll();
     }
 
-    public function showbarangbyid($idbarang)
+    public function showbarangbyid(mixed $idbarang)
     {
         return $this->select('*')->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')->where('master_barang.ID_BARANG', $idbarang)->orderBy('pembelian_barang.TGL_BELI', 'ASC')->findAll();
     }

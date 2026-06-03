@@ -1,3 +1,9 @@
+<?php
+
+/**
+ * @var string $tittle
+ */
+?>
 <!DOCTYPE html>
 <html>
 

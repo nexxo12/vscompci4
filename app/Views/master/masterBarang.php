@@ -1,5 +1,14 @@
+<?php
+
+/**
+ * @var string $tittle
+ * @var array $kategori
+ */
+?>
 <!DOCTYPE html>
 <html>
+
+asdasd
 
 <head>
     <meta charset="utf-8" />

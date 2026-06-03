@@ -27,7 +27,7 @@ class Pembelian extends Model
             ->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')->orderBy('ID_BELI', 'DESC')->findAll();
     }
 
-    public function deletebuy($id)
+    public function deletebuy(mixed $id)
     {
         return $this->where('ID_BELI', $id)->delete();
     }
@@ -38,7 +38,7 @@ class Pembelian extends Model
             ->where('month(TGL_BELI)', date('m'))->where('year(TGL_BELI)', date('Y'))->findAll();
     }
 
-    public function showbarangbyid($idbarang)
+    public function showbarangbyid(mixed $idbarang)
     {
         return $this->select('master_barang.ID_BARANG, master_barang.STOK, pembelian_barang.HARGA_BELI')
             ->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')

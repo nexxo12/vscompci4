@@ -16,15 +16,15 @@ use \Hermawan\DataTables\DataTable;
 
 class Master extends BaseController
 {
-	protected $pembelian;
-	protected $masterbarang;
-	protected $supplier;
-	protected $inv_pj;
-	protected $customer;
-	protected $list_pj;
-	protected $penjualanID;
-	protected $garansi;
-	protected $kategori;
+	protected Pembelian $pembelian;
+	protected Masterbarang $masterbarang;
+	protected Supplier $supplier;
+	protected InvPenjualan $inv_pj;
+	protected Customer $customer;
+	protected Listpenjualan $list_pj;
+	protected PenjualanModel $penjualanID;
+	protected Garansi $garansi;
+	protected Kategori $kategori;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();

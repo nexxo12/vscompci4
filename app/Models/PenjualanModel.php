@@ -36,7 +36,7 @@ class PenjualanModel extends Model
         // return $id_n;
     }
 
-    public function GetListNota($invoice)
+    public function GetListNota(mixed $invoice)
     {
         return $this->table('penjualan')->select('*')
             ->join('master_barang', 'master_barang.ID_BARANG = penjualan.ID_BARANG')
@@ -45,19 +45,19 @@ class PenjualanModel extends Model
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
-    public function JumlahQTY($invoice)
+    public function JumlahQTY(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('JUMLAH_BELI')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
-    public function JumlahSubtotal($invoice)
+    public function JumlahSubtotal(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('SUBTOTAL')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
-    public function JumlahHargaAwal($invoice)
+    public function JumlahHargaAwal(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('HARGA_AWAL')
             ->where('INV_PENJUALAN', $invoice)->findAll();
@@ -69,7 +69,7 @@ class PenjualanModel extends Model
             ->where('month(TANGGAL_TRANSAKSI)', date('m'))->where('year(TANGGAL_TRANSAKSI)', date('Y'))->findAll();
     }
 
-    public function JumlahHargaJual($invoice)
+    public function JumlahHargaJual(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('HARGA_JL')
             ->where('INV_PENJUALAN', $invoice)->findAll();
@@ -81,7 +81,7 @@ class PenjualanModel extends Model
             ->where('month(TANGGAL_TRANSAKSI)', date('m'))->where('year(TANGGAL_TRANSAKSI)', date('Y'))->findAll();
     }
 
-    public function JumlahLaba($invoice)
+    public function JumlahLaba(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('LABA')
             ->where('INV_PENJUALAN', $invoice)->findAll();
@@ -93,30 +93,30 @@ class PenjualanModel extends Model
             ->where('month(TANGGAL_TRANSAKSI)', date('m'))->where('year(TANGGAL_TRANSAKSI)', date('Y'))->findAll();
     }
 
-    public function JumlahTotalHarga($invoice)
+    public function JumlahTotalHarga(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('TOTAL_HARGA')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
-    public function JumlahDP($invoice)
+    public function JumlahDP(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('DP')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
-    public function JumlahDiskon($invoice)
+    public function JumlahDiskon(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('DISKON')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
-    public function JumlahNett($invoice)
+    public function JumlahNett(mixed $invoice)
     {
         return $this->table('penjualan')->selectSum('TOTAL_NETT')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 
-    public function deletelist($id)
+    public function deletelist(mixed $id)
     {
         return $this->where('ID_PENJUALAN', $id)->delete();
     }

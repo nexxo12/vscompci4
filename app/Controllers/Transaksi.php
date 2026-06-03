@@ -18,15 +18,15 @@ use PhpParser\Node\Stmt\Echo_;
 class Transaksi extends BaseController
 {
 
-	protected $pembelian;
-	protected $masterbarang;
-	protected $supplier;
-	protected $inv_pj;
-	protected $customer;
-	protected $list_pj;
-	protected $penjualanID;
-	protected $garansi;
-	protected $service;
+	protected Pembelian $pembelian;
+	protected Masterbarang $masterbarang;
+	protected Supplier $supplier;
+	protected InvPenjualan $inv_pj;
+	protected Customer $customer;
+	protected Listpenjualan $list_pj;
+	protected PenjualanModel $penjualanID;
+	protected Garansi $garansi;
+	protected Service $service;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();

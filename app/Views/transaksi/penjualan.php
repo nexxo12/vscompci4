@@ -1,5 +1,11 @@
 <!DOCTYPE html>
+<?php
+/** @var string $tittle */
+/** @var string $autonumPJ */
+/** @var array $showcustomer */
+?>
 <html>
+.
 
 <head>
     <meta charset="utf-8" />

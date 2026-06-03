@@ -35,12 +35,12 @@ class Listpenjualan extends Model
             ->join('master_barang', 'master_barang.ID_BARANG = list_penjualan.ID_BARANG')->findAll();
     }
 
-    public function deletelist($id)
+    public function deletelist(mixed $id)
     {
         return $this->where('ID_PENJUALAN', $id)->delete();
     }
 
-    public function TotalPJ($id)
+    public function TotalPJ(mixed $id)
     {
         return $this->selectSum('TOTAL_NETT')->where('INV_PENJUALAN', $id)->findAll();
     }
@@ -54,27 +54,27 @@ class Listpenjualan extends Model
     // //     return $query->getRow();
     // }
 
-    public function Subtotal($id)
+    public function Subtotal(mixed $id)
     {
         return $this->selectSum('SUBTOTAL')->where('INV_PENJUALAN', $id)->findAll();
     }
 
-    public function GetCatatan($id)
+    public function GetCatatan(mixed $id)
     {
         return $this->selectMAX('CATATAN')->where('INV_PENJUALAN', $id)->findAll();
     }
 
-    public function GetDP($id)
+    public function GetDP(mixed $id)
     {
         return $this->selectMAX('DP')->where('INV_PENJUALAN', $id)->findAll();
     }
 
-    public function GetDiskon($id)
+    public function GetDiskon(mixed $id)
     {
         return $this->selectMAX('DISKON')->where('INV_PENJUALAN', $id)->findAll();
     }
 
-    public function GetNamaCustomer($id)
+    public function GetNamaCustomer(mixed $id)
     {
         return $this->select('*')->join('pelanggan', 'pelanggan.ID_PELANGGAN = list_penjualan.ID_PELANGGAN')->where('INV_PENJUALAN', $id)->findAll();
     }

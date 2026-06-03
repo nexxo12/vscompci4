@@ -1,3 +1,23 @@
+<?php
+
+/**
+ * @var string $tittle
+ * @var array<int, array<string, mixed>> $viewnota
+ * @var array<int, array<string, mixed>> $sum_qty
+ * @var array<int, array<string, mixed>> $sum_subtotal
+ * @var array<int, array<string, mixed>> $sum_totalharga
+ * @var array<int, array<string, mixed>> $sum_diskon
+ * @var array<int, array<string, mixed>> $sum_dp
+ * @var array<int, array<string, mixed>> $sum_nett
+ * @var array<string, mixed> $nota
+ * @var array<string, mixed> $qty
+ * @var array<string, mixed> $subtotal
+ * @var array<string, mixed> $totalharga
+ * @var array<string, mixed> $disskon
+ * @var array<string, mixed> $dp
+ * @var array<string, mixed> $net
+ */
+?>
 <title><?= $tittle; ?></title>
 <?= $this->include('layout/header_head'); ?>
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous"> -->

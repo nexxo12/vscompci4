@@ -1,3 +1,22 @@
+<?php
+
+/**
+ * @var string $tittle
+ * @var array $totalpenjualan
+ * @var array $totalpembelian
+ * @var string $totalsupplier
+ * @var string $totalbarang
+ * @var array $totalhargaawal
+ * @var array $totalpotongan
+ * @var array $totalbiayamin
+ * @var array $totalbiayaplus
+ * @var array $penjualan
+ * @var array $hargaawal
+ * @var array $potongan
+ * @var array $biayamin
+ * @var array $biayaplus
+ */
+?>
 <!DOCTYPE html>
 <html>
 

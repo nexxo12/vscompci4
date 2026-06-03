@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<?php
+/**
+ * @var string $tittle
+ * @var string $autonum
+ * @var array $showbarang
+ * @var array $supplier
+ * @var array $showpembelian
+ */
+?>
 <html>
 
 <head>

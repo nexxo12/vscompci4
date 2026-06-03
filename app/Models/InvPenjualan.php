@@ -24,7 +24,7 @@ class InvPenjualan extends Model
         return $this->select('id_inv')->findAll();
     }
 
-    public function show_edit_inv($id)
+    public function show_edit_inv(mixed $id)
     {
         return $this->select('*')->where('id_inv', $id)->findAll();
     }
