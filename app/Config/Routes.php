@@ -31,27 +31,41 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
-$routes->get('/transaksi/pembelian', 'Transaksi::pembelian');
+
+// Route yang WAJIB login (Diproteksi Filter)
+$routes->group('', ['filter' => 'auth'], function ($routes) {
+	$routes->get('/', 'Home::index');
+	$routes->get('/transaksi/penjualan', 'Transaksi::penjualan');
+	$routes->get('/master_customer', 'Master::customer');
+	$routes->get('/master_supplier', 'Master::supplier');
+	$routes->get('/laporan/penjualan', 'Finance::laporan_penjualan');
+	$routes->get('/transaksi/garansi', 'Transaksi::garansi');
+	$routes->get('/transaksi/pembelian', 'Transaksi::pembelian');
+	// Tambahkan route admin lainnya di sini...
+});
+
+$routes->get('/login', 'Auth::index');
+$routes->post('Auth/login', 'Auth::proses_login');
+$routes->get('Auth/logout', 'Auth::logout');
+// $routes->get('/', 'Home::index');
+// $routes->get('/transaksi/pembelian', 'Transaksi::pembelian');
 $routes->get('/transaksi/pembelian/deletePembelian/(:segment)', 'Transaksi::deletePembelian/$1');
 
-$routes->get('/transaksi/penjualan', 'Transaksi::penjualan');
+// $routes->get('/transaksi/penjualan', 'Transaksi::penjualan');
 $routes->get('/transaksi/penjualan/addbarang', 'Transaksi::addbarang');
 $routes->get('/transaksi/penjualan/print/(:segment)', 'Transaksi::printnota/$1');
-
 $routes->get('/transaksi/return_service', 'Transaksi::serviceReturn');
-
-$routes->get('/transaksi/garansi', 'Transaksi::garansi');
+// $routes->get('/transaksi/garansi', 'Transaksi::garansi');
 
 $routes->get('/master_barang', 'Master::barang');
-$routes->get('/master_customer', 'Master::customer');
-$routes->get('/master_supplier', 'Master::supplier');
+// $routes->get('/master_customer', 'Master::customer');
+// $routes->get('/master_supplier', 'Master::supplier');
 
 $routes->get('/karyawan/add', 'Finance::add');
 $routes->get('/karyawan/pengaturan', 'Finance::setting');
 $routes->get('/karyawan/gaji', 'Finance::gaji');
 
-$routes->get('/laporan/penjualan', 'Finance::laporan_penjualan');
+// $routes->get('/laporan/penjualan', 'Finance::laporan_penjualan');
 $routes->get('/laporan/penjualan', 'Finance::view_invoice');
 $routes->get('/laporan/penjualan/delete-invoice/(:segment)', 'Finance::deleteInvoicePenjualan/$1');
 $routes->get('/laporan/pembelian', 'Finance::laporanbl');

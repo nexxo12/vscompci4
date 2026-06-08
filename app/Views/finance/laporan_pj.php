@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+<?php
+/**
+ * @var string $tittle
+ */
+?>
 
 <head>
     <meta charset="utf-8" />
