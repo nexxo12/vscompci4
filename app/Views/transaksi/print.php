@@ -211,9 +211,87 @@
             </td>
         </tr>
     </table>
-
+    <br>
+    <button type="button" id="toggle-checklist" style="margin-bottom: 12px;">Hide Checklist</button>
+    <div class="tbl-check ">
+        <p style="font-size: 12px;">===============================================================potong bagian ini================================================================</p>
+        <p style="font-size: 32px;">Item Check: <b><?= $nota['NAMACUST']; ?> <?= $nota['NAMA']; ?> <?= $nota['REFMP']; ?><b></p>
+        <table class="table-responsive" border="0" width="100%" style="font-size: 25px;">
+            <thead>
+                <tr style="border: 1px solid black;">
+                    <th scope="col">No.</th>
+                    <th scope="col">Nama Barang</th>
+                    <th scope="col" width="7%" class="text-center">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $no = 1;
+                foreach ($viewnota as $nota) : ?>
+                    <tr>
+                        <td><?= $no++; ?></td>
+                        <td><?= $nota['NAMA_BARANG']; ?></td>
+                        <td align="center"><?= $nota['JUMLAH_BELI']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <p style="font-size: 25px;">Note : <?= $nota['CATATAN']; ?></p>
+        <div style="font-size: 25px;">
+            Pengiriman:
+            <select name="pengiriman" id="pengiriman" style="font-size: 25px; border: none; outline: none;" border="none;">
+                <option value="">Instant</option>
+                <option value="">Kirim Sendiri</option>
+                <option value="">J&T Cargo</option>
+                <option value="">J&T Biasa</option>
+                <option value="">JNE</option>
+                <option value="">SPX</option>
+                <option value="">Sicepat</option>
+                <option value="">Anteraja</option>
+            </select>
+        </div>
+    </div>
 
     <script type="text/javascript">
+        function toggleChecklist() {
+            const tbl = document.querySelector('.tbl-check');
+            const button = document.getElementById('toggle-checklist');
+            if (!tbl || !button) return;
+            const isHidden = tbl.style.display === 'none' || getComputedStyle(tbl).display === 'none';
+            if (isHidden) {
+                tbl.style.display = '';
+                button.textContent = 'Hide Checklist';
+            } else {
+                tbl.style.display = 'none';
+                button.textContent = 'Show Checklist';
+            }
+        }
+
+        function hideToggleButton() {
+            const button = document.getElementById('toggle-checklist');
+            if (button) button.style.display = 'none';
+        }
+
+        function showToggleButton() {
+            const button = document.getElementById('toggle-checklist');
+            if (button) button.style.display = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tbl = document.querySelector('.tbl-check');
+            if (tbl) tbl.style.display = '';
+            const button = document.getElementById('toggle-checklist');
+            if (button) button.addEventListener('click', toggleChecklist);
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                    hideToggleButton();
+                }
+            });
+
+            window.addEventListener('beforeprint', hideToggleButton);
+            window.addEventListener('afterprint', showToggleButton);
+        });
+
         window.print();
     </script>
 </body>
