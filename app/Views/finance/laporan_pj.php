@@ -131,8 +131,8 @@
                                         <label for="exampleInputEmail1">Keterangan</label>
                                         <input type="text" class="form-control" name="keterangan-laporan-edit" id="keterangan-laporan-edit" value="">
                                         <label for="exampleInputEmail1">Modal</label>
-                                        <input type="number" class="form-control" name="modal-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="modal-laporan-edit" value="0">
-                                        <input type="number" class="form-control" name="gtotal-laporan-edit" id="gtotal-laporan-edit" value="" hidden>
+                                        <input type="number" class="form-control" name="modal-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="modal-laporan-edit" value="0" readonly>
+
 
                                     </div>
                                 </div>
@@ -144,8 +144,10 @@
                                         <input type="number" class="form-control" name="biayaplus-laporan-edit" id="biayaplus-laporan-edit" value="0">
                                         <label for="exampleInputEmail1">Biaya Admin</label>
                                         <input type="number" class="form-control" name="biayaadm-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="biayaadm-laporan-edit" value="0">
-                                        <label for="exampleInputEmail1">Laba</label>
-                                        <input type="number" class="form-control" name="laba-laporan-edit" id="laba-laporan-edit" value="" readonly>
+                                        <label for="exampleInputEmail1">Total Penjualan</label>
+                                        <input type="number" class="form-control" name="gtotal-laporan-edit" id="gtotal-laporan-edit" value="" readonly>
+                                        <!-- <label for="exampleInputEmail1">Laba</label> -->
+                                        <input type="number" class="form-control" name="laba-laporan-edit" id="laba-laporan-edit" value="" readonly hidden>
 
                                         <br>
                                     </div>
@@ -198,7 +200,8 @@
                         Ref: <span id="ref-invoice" style="font-size: medium;"></span> <br>
                         Nama: <span id="nama-invoice" style="font-size: medium;"></span> <br>
                         Alamat: <span id="alamat-invoice" style="font-size: medium;"></span> <br>
-                        Tanggal: <span id="tgl-invoice" style="font-size: medium;"></span>
+                        Tanggal: <span id="tgl-invoice" style="font-size: medium;"></span><br>
+                        Kasir: <span id="kasir" style="font-size: medium;"></span>
                         <br>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped" id="">

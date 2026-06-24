@@ -442,9 +442,6 @@
         $qty = $('#qty').val();
         $stokdb = $('#stokdb').val();
         $namabrg = $('#namabarang').val();
-
-
-
         if ($idbarang == '') {
             Swal.fire({
                 title: 'Belum menambahkan barang!',
@@ -760,6 +757,7 @@
 
 <!-- SCRIPT DATATABLE LAPORAN PENJUALAN > VIEW NOTA -->
 <script type="text/javascript">
+    //untuk menampilkan data invoice ketika klik tombol view (icon list) di datatable laporan
     function view_inv() {
         $(".view-invoice").click(function(e) {
             e.preventDefault();
@@ -800,7 +798,7 @@
                     $('#nama-invoice').html(result.listnota[0].NAMACUST);
                     $('#alamat-invoice').html(result.listnota[0].ALAMAT);
                     $('#tgl-invoice').html(moment(result.listnota[0].TANGGAL_TRANSAKSI).format('DD-MM-YYYY'));
-
+                    $('#kasir').html(result.listnota[0].NAMA_LOGIN);
                     $('#total-qty').html(result.qty[0].JUMLAH_BELI);
                     $('#total-modal').html(rupiah(result.hargaawal[0].HARGA_AWAL));
                     $('#total-harga').html(rupiah(result.hargajual[0].HARGA_JL));
@@ -814,6 +812,7 @@
     }
 
     function view_edit_invoice($invoiceid) {
+        //untuk menampilkan data (tabel bawah) ketika klik tombol edit (icon pencil) di datatable laporan
         $.ajax({
             type: "POST",
             url: '/finance/view_invoice?invoice=' + $invoiceid,
@@ -839,6 +838,9 @@
                         '</tr>';
                 }
                 $('#view-edit-invoice-laporan').html(html);
+                console.log(result.hargajual[0]);
+                $('#modal-laporan-edit').val(result.hargaawal[0].HARGA_AWAL);
+                $('#gtotal-laporan-edit').val(result.hargajual[0].HARGA_JL);
             },
             error: function(xhr, ajaxOptions, thrownError) { // Ketika ada error
                 alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError); // Munculkan alert error
@@ -846,6 +848,7 @@
         })
     }
 
+    //FUNGSI UNTUK DELETE BARANG DI MODAL EDIT INVOICE (icon pencil)
     function delete_view_edit_invoice() {
         $(".delete").click(function(e) {
             e.preventDefault();
@@ -869,13 +872,14 @@
 
     }
 
+    //fungsi untuk menampilkan data & edit invoice ketika klik tombol edit (icon pencil) di datatable laporan
     function edit_invoice() {
         $(".edit-invoice").click(function(e) {
             e.preventDefault();
             $('#modal-edit').modal('show');
             $.ajax({
                 type: "POST",
-                url: $(this).attr('href'), //data dikirim dari a href
+                url: $(this).attr('href'), //data dikirim dari finance/viewdata_invoice_penjualan
                 dataType: "JSON",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest"
@@ -926,6 +930,7 @@
         })
     }
 
+    //fungsi untuk menyimpan perubahan data invoice pada modal edit invoice (icon pencil) di datatable laporan
     function save_edit_invoice() {
         // $("#form-info-invoice").submit(function(e) {
         // e.preventDefault();

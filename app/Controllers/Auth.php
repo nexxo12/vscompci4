@@ -35,7 +35,7 @@ class Auth extends BaseController
                 $session->set([
                     'ID_LOGIN' => $user['ID_LOGIN'],
                     'USERNAME' => $user['USERNAME'],
-                    'NAMA' => $user['NAMA'],
+                    'NAMA_LOGIN' => $user['NAMA_LOGIN'],
                     'LEVEL' => $user['LEVEL'],
                     'isLoggedIn' => true
                 ]);

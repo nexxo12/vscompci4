@@ -41,7 +41,7 @@ class PenjualanModel extends Model
         return $this->table('penjualan')->select('*')
             ->join('master_barang', 'master_barang.ID_BARANG = penjualan.ID_BARANG')
             ->join('pelanggan', 'pelanggan.ID_PELANGGAN = penjualan.ID_PELANGGAN')
-            // ->join('login', 'login.ID_LOGIN = penjualan.ID_LOGIN')
+            ->join('login', 'login.ID_LOGIN = penjualan.ID_LOGIN', 'left')
             ->where('INV_PENJUALAN', $invoice)->findAll();
     }
 

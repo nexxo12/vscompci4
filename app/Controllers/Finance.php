@@ -86,7 +86,7 @@ class Finance extends BaseController
 		return json_encode($result);
 	}
 
-	public function edit_invoice()
+	public function edit_invoice() //pertimbangkan perlu diganti short by invoice dari db penjualan (on proses)
 	{
 		$invoice = $this->request->getVar('invoice');
 		$result = $this->inv_pj->show_edit_inv($invoice);
@@ -100,6 +100,7 @@ class Finance extends BaseController
 			// var_dump($invoice);
 			$data = [
 				'TGL_TRX' => $this->request->getVar('tangal-laporan-edit'),
+				'GRAND_TOTAL' => $this->request->getVar('gtotal-laporan-edit'),
 				'inv_ol' => $this->request->getVar('keterangan-laporan-edit'),
 				'ongkir' => $this->request->getVar('biayamin-laporan-edit'),
 				'laba_ongkir' => $this->request->getVar('biayaplus-laporan-edit'),

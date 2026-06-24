@@ -76,6 +76,70 @@
                                                     <div class="card m-b-30">
                                                         <div class="card-body">
 
+                                                            <h4 class="mt-0 header-title">Info Customer</h4>
+                                                            <br><br>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Date:</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="date" value="" name="tanggal" id="tanggal">
+                                                                    <script>
+                                                                        // Mendapatkan tanggal hari ini (format YYYY-MM-DD)
+                                                                        const today = new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+                                                                        // Mengisi nilai input dengan tanggal hari ini
+                                                                        document.getElementById('tanggal').value = today;
+                                                                    </script>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Kasir :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="<?php echo session('NAMA'); ?>" name="kasir" id="example-text-input" readonly>
+                                                                    <input class="form-control" type="text" value="<?php echo session('ID_LOGIN'); ?>" name="idkasir" id="idkasir" hidden>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Cust :</label>
+                                                                <div class="col-sm-10">
+                                                                    <select class="form-control" name="typecustomer" id="customer">
+                                                                        <?php foreach ($showcustomer as $sc) : ?>
+                                                                            <option value="<?= $sc['ID_PELANGGAN']; ?>"><?= $sc['NAMA']; ?></option>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row" id="nama">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Nama :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" name="namacustomer" id="namacustomer" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row" id="alamat">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Alamat :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" name="alamat" id="example-text-input">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row" id="refmp">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Ref MP :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv_mp" id="refinv_mp">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Note :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="catatan" id="example-text-input">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- end col -->
+
+                                                <div class="col-lg-6">
+                                                    <div class="card m-b-30">
+                                                        <div class="card-body">
+
                                                             <h4 class="mt-0 header-title">Detail Barang</h4>
                                                             <br><br>
                                                             <div class="form-group row">
@@ -175,68 +239,7 @@
                                                     </div>
                                                 </div> <!-- end col -->
 
-                                                <div class="col-lg-6">
-                                                    <div class="card m-b-30">
-                                                        <div class="card-body">
 
-                                                            <h4 class="mt-0 header-title">Info Customer</h4>
-                                                            <br><br>
-                                                            <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Date:</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="date" value="" name="tanggal" id="tanggal">
-                                                                    <script>
-                                                                        // Mendapatkan tanggal hari ini (format YYYY-MM-DD)
-                                                                        const today = new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-                                                                        // Mengisi nilai input dengan tanggal hari ini
-                                                                        document.getElementById('tanggal').value = today;
-                                                                    </script>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Kasir :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" name="kasir" id="example-text-input" readonly>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Cust :</label>
-                                                                <div class="col-sm-10">
-                                                                    <select class="form-control" name="typecustomer" id="customer">
-                                                                        <?php foreach ($showcustomer as $sc) : ?>
-                                                                            <option value="<?= $sc['ID_PELANGGAN']; ?>"><?= $sc['NAMA']; ?></option>
-                                                                        <?php endforeach; ?>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row" id="nama">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Nama :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" name="namacustomer" id="namacustomer" required>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row" id="alamat">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Alamat :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" name="alamat" id="example-text-input">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row" id="refmp">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Ref MP :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="refinv_mp" id="refinv_mp">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label for="example-text-input" class="col-sm-2 col-form-label">Note :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="" placeholder="Optional..." name="catatan" id="example-text-input">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> <!-- end col -->
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit" class="addchart btn btn-primary waves-effect waves-light" id="liveToastBtn">Add Chart</button>

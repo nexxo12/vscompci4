@@ -240,6 +240,7 @@ class Transaksi extends BaseController
 				'INV_PENJUALAN' => $this->request->getVar('invoice'),
 				'ID_BARANG' => $this->request->getVar('idbarang'),
 				'ID_PELANGGAN' => $this->request->getVar('typecustomer'),
+				'ID_LOGIN' => $this->request->getVar('idkasir'),
 				'TANGGAL_TRANSAKSI' => $this->request->getVar('tanggal'),
 				'NAMACUST' => $this->request->getVar('namacustomer'),
 				'ALAMAT' => $this->request->getVar('alamat'),

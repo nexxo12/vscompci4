@@ -13,6 +13,7 @@ class Listpenjualan extends Model
         'INV_PENJUALAN',
         'ID_BARANG',
         'ID_PELANGGAN',
+        'ID_LOGIN',
         'TANGGAL_TRANSAKSI',
         'NAMACUST',
         'ALAMAT',
