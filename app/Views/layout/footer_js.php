@@ -13,7 +13,7 @@
 <script src="/assets/js/jquery.scrollTo.min.js"></script>
 <script src="/assets/js/masterbarang.js"></script>
 <script src="/assets/js/returnservice.js"></script>
-
+<script src="/assets/js/suratjalan.js"></script>
 <script src="/assets/plugins/skycons/skycons.min.js"></script>
 <script src="/assets/plugins/raphael/raphael-min.js"></script>
 <script src="/assets/plugins/morris/morris.min.js"></script>

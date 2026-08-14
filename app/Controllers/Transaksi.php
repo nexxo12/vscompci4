@@ -11,6 +11,7 @@ use App\Models\Listpenjualan;
 use App\Models\PenjualanModel;
 use App\Models\Garansi;
 use App\Models\Service;
+use App\Models\SuratJalan;
 use CodeIgniter\Exceptions\AlertError;
 use \Hermawan\DataTables\DataTable;
 use PhpParser\Node\Stmt\Echo_;
@@ -27,6 +28,7 @@ class Transaksi extends BaseController
 	protected PenjualanModel $penjualanID;
 	protected Garansi $garansi;
 	protected Service $service;
+	protected SuratJalan $suratjalan;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();
@@ -38,6 +40,7 @@ class Transaksi extends BaseController
 		$this->penjualanID = new PenjualanModel();
 		$this->garansi = new Garansi();
 		$this->service = new Service();
+		$this->suratjalan = new SuratJalan();
 	}
 
 	// CONTROLLER PAGE PEMBELIAN===================================
@@ -378,4 +381,122 @@ class Transaksi extends BaseController
 		];
 		return view('/transaksi/garansi', $data);
 	}
+
+	// CONTROLLER SURAT JALAN===================================
+	public function suratJalan()
+	{
+		$data = [
+			'tittle' => 'Surat Jalan - VSKomputer'
+		];
+		return view('/transaksi/surat_jalan', $data);
+	}
+
+	public function NoSuratJalanService()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->suratjalan->RandomNumber();
+			return json_encode($result);
+		}
+	}
+
+	public function NoSuratJalanPengiriman()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->suratjalan->RandomNumber();
+			return json_encode($result);
+		}
+	}
+
+	public function getBarangService()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->masterbarang->showCariBarang();
+			return json_encode($result);
+		}
+	}
+
+	public function saveSuratJalanService()
+	{
+		if ($this->request->isAJAX()) {
+			$this->suratjalan->insert([
+				'SURAT_NOMOR' => $this->request->getVar('no_suratservice'),
+				'SURAT_TYPE' => 'Service',
+				'SURAT_TANGGAL' => $this->request->getVar('tanggal-surat-service'),
+				'SURAT_KEPADA' => $this->request->getVar('kepada-suratjalan-service'),
+				'SURAT_BARANG' => $this->request->getVar('sj-service-namabarang'),
+				'SURAT_QTY' => $this->request->getVar('sj-service-qty'),
+				'SURAT_KETERANGAN' => $this->request->getVar('kelengkapan-suratjalan-service'),
+				'SURAT_SERIAL' => $this->request->getVar('serialnumber-suratjalan-service'),
+				'SURAT_KERUSAKAN' => $this->request->getVar('kerusakan-suratjalan-service'),
+				'SURAT_STATUS' => 'Proses'
+			]);
+			return json_encode(['status' => 'success']);
+		}
+	}
+
+	public function Ctrl_showSuratJalanService()
+	{
+		if ($this->request->isAJAX()) {
+			$nomor = $this->request->getVar('no_suratservice');
+			$result = $this->suratjalan->showSuratJalanService($nomor);
+			return json_encode($result);
+		}
+	}
+
+	public function printsurat(mixed $no) //FUNCTICON DI ROUTE
+	{
+		// $invnota = $this->request->getVar('inv');
+		$nomor_surat = $this->suratjalan->printSuratJalanService($no);
+		$data = [
+			'tittle' => 'Print Surat Jalan ' . $no,
+			'viewsuratjalan' => $nomor_surat,
+		];
+		// var_dump($data['viewnota']);
+		return view('/transaksi/printsj', $data);
+	}
+
+	public function view_daftar_suratjalan()
+	{
+		$viewdata = $this->suratjalan->table('surat_jalan')->select('ID_SURAT, SURAT_NOMOR, SURAT_TANGGAL, SURAT_KEPADA, SURAT_BARANG, SURAT_KERUSAKAN, SURAT_STATUS')->orderBy('SURAT_TANGGAL', 'DSC')->groupBy('SURAT_NOMOR');
+		return DataTable::of($viewdata)->add('edit', function ($row) {
+			return '<a href="/Transaksi/edit?id=' . $row->SURAT_NOMOR . '" class="edit_SJ"><button class="btn btn-warning btn-sm ti-pencil-alt" type="button" onclick="edit_sj_service()"></button></a>';
+		})->add('print', function ($row) {
+			return '<a href="/Transaksi/printsurat/' . $row->SURAT_NOMOR . '" class="print_SJ" target="_blank"><button class="btn btn-info btn-sm ti-printer" type="button"></button></a>';
+		})->add('delete', function ($row) {
+			return '<a href="/Transaksi/delete?id=' . $row->SURAT_NOMOR . '" class="delete_SJ"><button class="btn btn-danger btn-sm ti-trash" type="button" onclick="delete_sj_service()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function delete()
+	{
+		if ($this->request->isAJAX()) {
+			$id = $this->request->getVar('id');
+			$this->suratjalan->deleteSuratJalanService($id);
+			$result = ['status' => 'success'];
+			return json_encode($result);
+		}
+	}
+
+	public function edit()
+	{
+		if ($this->request->isAJAX()) {
+			$nomor = $this->request->getVar('id');
+			$result = $this->suratjalan->showSuratJalanService($nomor);
+			return json_encode($result);
+		}
+	}
+
+	public function save_edit_suratjalan_service()
+	{
+		if ($this->request->isAJAX()) {
+			$nomor = $this->request->getVar('edit_suratjalan_id');
+			$data = [
+				'SURAT_STATUS' => $this->request->getVar('edit_suratjalan_status'),
+			];
+			$this->suratjalan->updateSuratJalanService($nomor, $data);
+			return json_encode(['status' => 'success']);
+		}
+	}
+
+	// END CONTROLLER SURAT JALAN===================================
 }
