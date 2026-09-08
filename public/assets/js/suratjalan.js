@@ -5,8 +5,8 @@ $(document).ready(function() {
 
 $("#btn-suratjalan-service").click(function(event) {
         event.preventDefault();
-        // // alert("oke");
         $("#ModalSuratJalan").modal("show");
+        $('#tbl-daftar-suratjalan').DataTable().destroy();
         $('#tbl-daftar-suratjalan').DataTable({
             autoWidth: true,
             processing: true,

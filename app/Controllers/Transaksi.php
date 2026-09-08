@@ -356,9 +356,10 @@ class Transaksi extends BaseController
 				'NAMA' => $this->request->getVar('diterima_dari'),
 				'NOHP' => $this->request->getVar('no_hp'),
 				'BARANG' => $this->request->getVar('namabarang'),
+				'RETURN_QTY' => $this->request->getVar('qty_barang_return'),
 				'KELENGKAPAN' => $this->request->getVar('kelengkapan'),
 				'KERUSAKAN' => $this->request->getVar('kerusakan'),
-				'KETERANGAN' => $this->request->getVar('keterangan')
+				'KETERANGAN' => 'on process'
 			]);
 			return json_encode(['status' => 'success']);
 		}
@@ -368,6 +369,79 @@ class Transaksi extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$result = $this->service->getNextInvoiceNota();
+			return json_encode($result);
+		}
+	}
+
+	public function TampilBarangReturn()
+	{
+		$viewdata = $this->inv_pj->table('inv_penjualan')->select('id_inv, TGL_TRX, inv_ol');
+		return DataTable::of($viewdata)->add('tambah', function ($row) {
+			return '<a href="/Transaksi/addreturn?invoice=' . $row->id_inv . '" class="add_return"><button class="btn btn-primary btn-sm mdi mdi-plus" type="button" onclick="tambahBarangReturn()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function ListBarangReturn()
+	{
+		$viewdata = $this->service->table('service')->select('NOSURAT, TGL_INPUT, INVOICE_NOTA, NAMA, NOHP, KETERANGAN')->orderBy('TGL_INPUT', 'ASC')->groupBy('NOSURAT');
+		return DataTable::of($viewdata)->add('view', function ($row) {
+			return '<a href="/Transaksi/viewreturn?nota=' . $row->NOSURAT . '" class="view_return"><button class="btn btn-primary btn-sm mdi mdi-view-list" type="button" onclick="viewReturn()"></button></a>';
+		})->add('edit', function ($row) {
+			return '<a href="/Transaksi/editreturn?nota=' . $row->NOSURAT . '" class="edit_return"><button class="btn btn-warning btn-sm mdi mdi-pencil" type="button" onclick="editReturn()"></button></a>';
+		})->add('print', function ($row) {
+			return '<a href="/transaksi/return_service/print/' . $row->NOSURAT . '" class="print_return" target="_blank"><button class="btn btn-info btn-sm mdi mdi-printer" type="button" onclick=""></button></a>';
+		})->add('delete', function ($row) {
+			return '<a href="/Transaksi/deletereturn?nota=' . $row->NOSURAT . '" class="delete_return"><button class="btn btn-danger btn-sm mdi mdi-delete" type="button" onclick="deletelistReturn()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function save_editreturn()
+	{
+		if ($this->request->isAJAX()) {
+			$nomor = $this->request->getVar('edit_return_id');
+			$data = [
+				'KETERANGAN' => $this->request->getVar('edit_return_status'),
+			];
+			$this->service->updateStatusReturn($nomor, $data);
+			return json_encode(['status' => 'success']);
+		}
+	}
+
+	public function deletereturn()
+	{
+		if ($this->request->isAJAX()) {
+			$invoice = $this->request->getVar('nota');
+			$result = $this->service->where('NOSURAT', $invoice)->delete();
+			return json_encode($result);
+		}
+	}
+
+	public function addreturn()
+	{
+		if ($this->request->isAJAX()) {
+			$invoice = $this->request->getVar('invoice');
+			$result = $this->inv_pj->show_edit_inv($invoice);
+			return json_encode($result);
+		}
+	}
+
+	public function printreturn(mixed $no) //FUNCTICON DI ROUTE
+	{
+		// $invnota = $this->request->getVar('inv');
+		$invoice_surat = $this->service->printSuratReturn($no);
+		$data = [
+			'tittle' => 'Print Return ' . $no,
+			'viewsuratreturn' => $invoice_surat,
+		];
+		// var_dump($data['viewnota']);
+		return view('/transaksi/printreturn', $data);
+	}
+
+	public function showService()
+	{
+		if ($this->request->isAJAX()) {
+			$nomor = $this->request->getVar('no_surat');
+			$result = $this->service->showSuratReturn($nomor);
 			return json_encode($result);
 		}
 	}

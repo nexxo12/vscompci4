@@ -99,8 +99,8 @@
                                                 <div class="col-sm-10">
                                                     <select class="form-control" name="jenis_service" id="jenis_service">
                                                         <option value="">--Pilih Jenis Service--</option>
-                                                        <option value="service-marketplace">Transaksi Marketplace</option>
-                                                        <option value="service-offline">Transaksi Offline</option>
+                                                        <option value="service-marketplace">Transaksi Marketplace / Pembelian Vinorious</option>
+                                                        <option value="service-offline">Transaksi Non Pembelian Vinorious</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -108,9 +108,9 @@
                                             <div class="form-group row" id="input-invoice">
                                                 <label for="invoice" class="col-sm-2 col-form-label">Invoice :</label>
                                                 <div class="input-group mt-2 col-sm-10">
-                                                    <input type="text" class="form-control" value="" id="invoice" name="invoice" placeholder="Cari Invoice.." aria-label="Search for...">
+                                                    <input type="text" class="form-control" value="" id="invoice" name="invoice" placeholder="Cari Invoice.." aria-label="Search for..." readonly>
                                                     <span class="input-group-append">
-                                                        <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#Modalcaribrg" onclick=""></button>
+                                                        <button class="btn btn-primary ti-search" type="button" data-toggle="modal" id="btn-cari-barang-return" data-target="" onclick="addinvoice_return()"></button>
                                                         <!-- data-toggle="modal" data-target="#exampleModal" -->
                                                     </span>
                                                 </div>
@@ -141,7 +141,7 @@
                                             <div class="form-group row" id="input-no-hp">
                                                 <label for="no_hp" class="col-sm-2 col-form-label">No. HP:</label>
                                                 <div class="col-sm-10">
-                                                    <input class="form-control" type="text" name="no_hp" id="no_hp" placeholder="Masukkan No. HP..." value="">
+                                                    <input class="form-control" type="number" name="no_hp" id="no_hp" placeholder="Masukkan No. HP..." value="">
                                                 </div>
                                             </div>
 
@@ -149,6 +149,13 @@
                                                 <label for="namabarang" class="col-sm-2 col-form-label">Barang:</label>
                                                 <div class="col-sm-10">
                                                     <input class="form-control" type="text" name="namabarang" id="namabarang" placeholder="Masukan nama barang..." value="">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" id="input-qty-barang">
+                                                <label for="qty_barang_return" class="col-sm-2 col-form-label">Qty:</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" type="number" name="qty_barang_return" id="qty_barang_return" placeholder="Masukkan jumlah barang..." value="">
                                                 </div>
                                             </div>
 
@@ -168,16 +175,53 @@
 
                                             <!-- Submit Button -->
                                             <div class="text-center mt-3">
-                                                <button type="button" class="btn btn-primary waves-effect waves-light" id="btn-service" onclick="">Submit</button>
+                                                <button type="button" class="btn btn-primary waves-effect waves-light" id="btn-service" onclick="saveFormData()">Submit</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
+                                <div class="card m-b-30" id="card-preview-return" style="display: none;">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title">Preview</h4>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p id="title-no-return"></p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p id="title-diterima-return"></p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p id="title-hp-return"></p>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Barang</th>
+                                                        <th>QTY</th>
+                                                        <th>Kelengkapan</th>
+                                                        <th>Kerusakan</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl-preview-return">
+
+                                                </tbody>
+                                            </table>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-primary waves-effect waves-light mt-3" id="btn-return-print" onclick="printFormData()">Print</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div> <!-- end col -->
 
-                            <!-- Modal Service -->
-                            <div class="modal fade" id="ModalService" tabindex="-1" role="dialog" aria-labelledby="ModalServiceLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+
+                            <!-- Modal daftar barang invoice pj untuk ke retur -->
+                            <div class="modal fade" id="Modal-return-cari-barang" tabindex="-1" role="dialog" aria-labelledby="ModalServiceLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="ModalServiceLabel">Konfirmasi</h5>
@@ -186,11 +230,69 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            Apakah Anda ingin mencetak dokumen ini?
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-sm mb-0" id="tbl-daftarbrg-retur" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No. Invoice</th>
+                                                            <th>Tanggal</th>
+                                                            <th>Referensi</th>
+                                                            <th>Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" id="btn-close-modal" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" id="btn-print" class="btn btn-primary" onclick="window.print()">Print</button>
+                                            <button type="button" id="btn-close-modal-retur-namabarang" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal view retur / service -->
+                            <div class="modal fade" id="Modal-view-return" tabindex="-1" role="dialog" aria-labelledby="ModalServiceLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ModalServiceLabel">Detail Data Return / Service</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="info-box">
+                                                <div class="info-box-content">
+                                                    No Nota: <b><span id="retur-nota-service">-</span></b><br>
+                                                    Tanggal Terima: <b><span id="retur-tanggal-terima">-</span></b><br>
+                                                    No Ref Marketplace: <b><span id="retur-noref">-</span></b><br>
+                                                    Tanggal Beli Marketplace: <b><span id="retur-tgl-beli">-</span></b><br>
+                                                    No HP: <b><span id="retur-hp">-</span></b><br>
+                                                    Nama Pengirim: <b><span id="retur-nama">-</span></b>
+                                                </div>
+                                            </div>
+                                            <h6>Daftar Barang:</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-sm mb-0" id="tbl-view-return" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nama Barang</th>
+                                                            <th>Jumlah</th>
+                                                            <th>Kelengkapan</th>
+                                                            <th>Kerusakan</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="isi-tbl-view-return">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" id="btn-close-modal-retur-namabarang" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
@@ -199,26 +301,70 @@
                             <div class="col-lg-6">
                                 <div class="card m-b-30">
                                     <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm mb-0" id="tbl-daftar-return" width="100%">
+                                                <thead>
+                                                    <tr style="text-align: center;">
+                                                        <th>No. Surat</th>
+                                                        <th>Tanggal</th>
+                                                        <th>No. Ref</th>
+                                                        <th>Pengirim</th>
+                                                        <th>HP</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="isi-tbl-daftar-return">
 
-                                        <h4 class="mt-0 header-title">Daftar Service</h4>
-                                        <p class="text-muted m-b-30 font-14">Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
                                     </div>
                                 </div>
-                            </div> <!-- end col -->
+                            </div>
+                        </div> <!-- end col -->
 
-                        </div> <!-- end row -->
+                    </div> <!-- end row -->
 
-                    </div><!-- container -->
+                    <!-- //MODAL EDIT STATUS RETURN -->
+                    <div class="modal fade" id="ModalEditStatusReturn" tabindex="-1" role="dialog" aria-labelledby="ModalEditStatusReturn" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="ModalEditStatusReturn">Edit Status</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body-return-edit">
+                                    <form action="" method="POST" id="form-edit-status-return">
+                                        <input type="text" name="edit_return_id" id="edit_return_id" value="" hidden>
 
-                </div> <!-- Page content Wrapper -->
+                                        <select class="form-control" name="edit_return_status" id="edit_return_status">
+                                            <option value="">Pilih Status</option>
+                                            <option value="on process">on process</option>
+                                            <option value="selesai">selesai</option>
+                                            <option value="reject">reject</option>
+                                        </select>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light mt-3 btn-save-edit-status-return" id="btn-save-edit-status-return" style="display: block; margin: 0 auto;" onclick="saveEditStatusReturn()">Save</button>
 
-            </div> <!-- content -->
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <?= $this->include('layout/footerc'); ?>
+                </div><!-- container -->
 
-        </div>
-        <!-- End Right content here -->
+            </div> <!-- Page content Wrapper -->
+
+        </div> <!-- content -->
+
+        <?= $this->include('layout/footerc'); ?>
+
+    </div>
+    <!-- End Right content here -->
 
     </div>
     <!-- END wrapper -->

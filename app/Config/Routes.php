@@ -55,6 +55,7 @@ $routes->get('/transaksi/pembelian/deletePembelian/(:segment)', 'Transaksi::dele
 $routes->get('/transaksi/penjualan/addbarang', 'Transaksi::addbarang');
 $routes->get('/transaksi/penjualan/print/(:segment)', 'Transaksi::printnota/$1');
 $routes->get('/transaksi/suratjalan/printsurat/(:segment)', 'Transaksi::printsurat/$1');
+$routes->get('/transaksi/return_service/print/(:segment)', 'Transaksi::printreturn/$1');
 $routes->get('/transaksi/return_service', 'Transaksi::serviceReturn');
 // $routes->get('/transaksi/garansi', 'Transaksi::garansi');
 $routes->get('/transaksi/suratjalan', 'Transaksi::suratJalan');
