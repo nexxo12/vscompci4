@@ -375,9 +375,11 @@ class Transaksi extends BaseController
 
 	public function TampilBarangReturn()
 	{
-		$viewdata = $this->inv_pj->table('inv_penjualan')->select('id_inv, TGL_TRX, inv_ol');
+		$viewdata = $this->inv_pj->table('inv_penjualan')->select('id_inv, TGL_TRX, inv_ol')->orderBy('TGL_TRX', 'DESC');
 		return DataTable::of($viewdata)->add('tambah', function ($row) {
 			return '<a href="/Transaksi/addreturn?invoice=' . $row->id_inv . '" class="add_return"><button class="btn btn-primary btn-sm mdi mdi-plus" type="button" onclick="tambahBarangReturn()"></button></a>';
+		})->add('detail', function ($row) {
+			return '<a href="/Transaksi/detailtransaksi?invoice=' . $row->id_inv . '" class="detail_return"><button class="btn btn-info btn-sm mdi mdi-eye" type="button" onclick="detailTransaksi()"></button></a>';
 		})->toJson(true);
 	}
 
@@ -421,6 +423,15 @@ class Transaksi extends BaseController
 		if ($this->request->isAJAX()) {
 			$invoice = $this->request->getVar('invoice');
 			$result = $this->inv_pj->show_edit_inv($invoice);
+			return json_encode($result);
+		}
+	}
+
+	public function detailtransaksi()
+	{
+		if ($this->request->isAJAX()) {
+			$invoice = $this->request->getVar('invoice');
+			$result = $this->penjualanID->GetListNota($invoice);
 			return json_encode($result);
 		}
 	}

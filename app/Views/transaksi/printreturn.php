@@ -5,6 +5,7 @@
  * @var array<int, array<string, mixed>> $viewsuratreturn
  * @var array<int, array<string, mixed>> $return
  * @var array<int, array<string, mixed>> $style
+ * @var array<int, array<string, mixed>> $no
  */
 ?>
 <title><?= $tittle; ?></title>
@@ -103,7 +104,6 @@
         <table class="table-responsive" border="1" style=" border-collapse: collapse;">
             <thead>
                 <tr style="border: 1px solid black;">
-                    <th scope="col" width="7%">No.</th>
                     <th scope="col" width="60%">Nama Barang</th>
                     <th scope="col" width="7%" class="text-center">Jumlah</th>
                     <th style="text-align: center;" width="10%">Kelengkapan</th>
@@ -113,7 +113,6 @@
             <tbody>
                 <?php foreach ($viewsuratreturn as $return) : $no = 1 ?>
                     <tr style="border: 1px solid black;">
-                        <td style="text-align: left;"><?= $no++; ?></td>
                         <td style="text-align: left;"><?= $return['BARANG']; ?></td>
                         <td style="text-align: center;"><?= $return['RETURN_QTY']; ?></td>
                         <td style="text-align: center;"><?= $return['KELENGKAPAN']; ?></td>

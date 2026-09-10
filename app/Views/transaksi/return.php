@@ -224,7 +224,7 @@
                                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="ModalServiceLabel">Konfirmasi</h5>
+                                            <h5 class="modal-title" id="ModalServiceLabel">Daftar Transaksi</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -238,6 +238,46 @@
                                                             <th>Tanggal</th>
                                                             <th>Referensi</th>
                                                             <th>Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" id="btn-close-modal-retur-namabarang" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal daftar barang transaksi untuk pembelian dari vinorious -->
+                            <div class="modal fade" id="Modal-detail-transaksi-addretur" tabindex="-1" role="dialog" aria-labelledby="ModalServiceLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ModalServiceLabel">Detail transaksi <p id="retur-no-invoice"></p>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="detail-trx-retur">
+                                                No. Invoice: <p id="retur-no-invoice2"></p>
+                                                Sales: <p id="retur-sales"></p>
+                                                Nama: <p id="retur-namacust"></p>
+                                                Tanggal Beli: <p id="retur-tglbeli"></p>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-sm mb-0" id="tbl-viewbrg-input-retur" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Barang</th>
+                                                            <th>QTY</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="">
@@ -268,8 +308,8 @@
                                                 <div class="info-box-content">
                                                     No Nota: <b><span id="retur-nota-service">-</span></b><br>
                                                     Tanggal Terima: <b><span id="retur-tanggal-terima">-</span></b><br>
-                                                    No Ref Marketplace: <b><span id="retur-noref">-</span></b><br>
-                                                    Tanggal Beli Marketplace: <b><span id="retur-tgl-beli">-</span></b><br>
+                                                    Sales Ref: <b><span id="retur-noref">-</span></b><br>
+                                                    Tanggal Beli: <b><span id="retur-tgl-beli">-</span></b><br>
                                                     No HP: <b><span id="retur-hp">-</span></b><br>
                                                     Nama Pengirim: <b><span id="retur-nama">-</span></b>
                                                 </div>

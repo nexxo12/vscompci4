@@ -385,7 +385,7 @@ function addinvoice_return() {
               columnDefs: [
                   {
                       render: function(data, type, row) {
-                          return row.tambah; 
+                          return row.tambah + ' ' + row.detail; // Gabungkan tombol tambah dan detail
                       },
                       targets: 3  //Target kolom indeks
                   },
@@ -406,6 +406,41 @@ function addinvoice_return() {
 
              ]
          });
+}
+
+function detailTransaksi() {
+    $(".detail_return").click(function(e) {
+        e.preventDefault();
+        $('#Modal-detail-transaksi-addretur').modal('show');
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $(this).attr('href'),
+            dataType: "JSON",
+            success: function(result) {
+                console.log(result);
+                var dataList = Array.isArray(result) ? result : (result ? [result] : []);
+                var rows = '';
+                var no = 1;
+                $.each(dataList, function(index, item) {
+                    $('#retur-no-invoice').text(item.INV_PENJUALAN);
+                    $('#retur-no-invoice2').text(item.INV_PENJUALAN);
+                    $('#retur-sales').text(item.NAMA);
+                    $('#retur-namacust').text(item.NAMACUST);
+                    $('#retur-tglbeli').text(item.TANGGAL_TRANSAKSI);
+                    rows += '<tr>' +
+                    '<td>' + no++ + '</td>' +
+                    '<td>' + (item.NAMA_BARANG || '-') + '</td>' +
+                    '<td>' + (item.JUMLAH_BELI || '-') + '</td>' +
+                    '</tr>';
+                });
+                $('#tbl-viewbrg-input-retur tbody').html(rows);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+    })
 }
 
 
