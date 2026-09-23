@@ -114,7 +114,7 @@
                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Supplier</label>
                                                 <div class="col-sm-10">
                                                     <div class="input-group mt-2 ">
-                                                        <select class="form-control select2 custom-select" data-live-search="true" name="nama_supp" id="nama_supp">
+                                                        <select class="form-control select2 custom-select" data-live-search="true" name="id_supp" id="id_supp">
 
                                                         </select>
                                                     </div>

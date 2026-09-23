@@ -33,11 +33,11 @@ $("#save-pembelian").click(function(e){
             console.log(result);
             if (result.status == 'success') {
                 alert(result.message);
-                // Reset form fields
                 $('#form-pembelian')[0].reset();
-                // $('#jumlah_barang').val(''); // Reset jumlah_barang
-                // $('#harga_barang').val('');
                 refreshid_Pembelian(); // Refresh ID with the latest data
+                $('#tbl-total-pembelian-by-month').DataTable().ajax.reload(); // Reload DataTable
+                // $('#tbl-show-all-buy').DataTable().ajax.reload(); // Reload DataTable
+
             }
             
         },
@@ -75,7 +75,7 @@ function showBuySupplier() {
         type: 'GET',
         dataType: 'json',
         success: function(result) {
-            var select = $("#nama_supp");
+            var select = $("#id_supp");
             select.empty();
             select.append('<option value="">-- Pilih Supplier --</option>');
             $.each(result, function(index, item) {
@@ -157,7 +157,8 @@ function deletePembelian() {
                 if (result.status == 'success') {
                     alert(result.message);
                     $('#tbl-total-pembelian-by-month').DataTable().ajax.reload();
-                    $('#tbl-show-all-buy').DataTable().ajax.reload();
+                    // $('#tbl-show-all-buy').DataTable().ajax.reload();
+                    refreshid_Pembelian();
                 } else {
                     alert(result.message);
                 }

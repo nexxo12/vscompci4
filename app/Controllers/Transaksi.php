@@ -113,7 +113,7 @@ class Transaksi extends BaseController
 		if ($this->request->isAJAX()) {
 			$this->pembelian->insert([
 				'ID_BELI' => $this->request->getVar('id_pembelian'),
-				'ID_SUPP' => $this->request->getVar('id-supp'),
+				'ID_SUPP' => $this->request->getVar('id_supp'),
 				'ID_BARANG' => $this->request->getVar('idbarang'),
 				'ID_LOGIN' => $this->request->getVar('idlogin'),
 				'JUMLAH' => $this->request->getVar('jumlah'),
