@@ -48,38 +48,84 @@ class Transaksi extends BaseController
 	{
 		$data = [
 			'tittle' => 'Pembelian - VSKomputer',
-			'autonum' => $this->pembelian->AutoNumID(),
-			'showbarang' => $this->masterbarang->ShowBarang(),
 			'supplier' => $this->supplier->ShowSupplier(),
 			'showpembelian' => $this->pembelian->showpembelian()
 		];
 		return view('/transaksi/pembelian', $data);
 	}
-	public function deletePembelian($id)
+	public function deletePembelian()
 	{
-		$this->pembelian->delete($id);
-		return redirect()->to('/transaksi/pembelian');
-		// $id = $this->request->getVar('id');
-		// $hapus = $this->pembelian->deletebuy($id);
-		// if ($hapus) {
-		// 	return redirect()->to('transaksi/pembelian');
-		// }
+		if ($this->request->isAJAX()) {
+			$idpembelian = $this->request->getVar('id');
+			$this->pembelian->delete($idpembelian);
+			$result = ['status' => 'success', 'message' => 'Data Pembelian Berhasil Dihapus'];
+			return json_encode($result);
+		}
 	}
+
+	public function refreshid_Pembelian()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->pembelian->AutoNumID();
+			return json_encode($result);
+		}
+	}
+
+	public function getBarangPembelian()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->masterbarang->ShowBarang();
+			return json_encode($result);
+		}
+	}
+
+	public function showpembelianMonth()
+	{
+		$viewdata = $this->pembelian->table('pembelian_barang')->select('ID_BELI, NAMA_BARANG, supplier.NAMA, NamaSUPP, JUMLAH, pembelian_barang.SATUAN, HARGA_BELI, TGL_GARANSI, TGL_BELI, BUY_PAYMENT')
+			->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
+			->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')->where('month(TGL_BELI)', date('m'))->where('year(TGL_BELI)', date('Y'))
+			->orderBy('TGL_BELI', 'DESC');
+		return DataTable::of($viewdata)->add('delete', function ($row) {
+			return '<a href="/Transaksi/deletePembelian?id=' . $row->ID_BELI . '" class="delete-buy"><button class="btn btn-danger btn-sm mdi mdi-delete" type="button" onclick="deletePembelian()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function showpembelianAll()
+	{
+		$viewdata = $this->pembelian->table('pembelian_barang')->select('ID_BELI, NAMA_BARANG, supplier.NAMA, NamaSUPP, JUMLAH, pembelian_barang.SATUAN, HARGA_BELI, TGL_GARANSI, TGL_BELI, BUY_PAYMENT')
+			->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
+			->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')->orderBy('TGL_BELI', 'DESC');
+		return DataTable::of($viewdata)->add('delete', function ($row) {
+			return '<a href="/Transaksi/deletePembelian?id=' . $row->ID_BELI . '" class="delete-buy"><button class="btn btn-danger btn-sm mdi mdi-delete" type="button" onclick="deletePembelian()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function getSupplierPembelian()
+	{
+		if ($this->request->isAJAX()) {
+			$result = $this->supplier->ShowSupplier();
+			return json_encode($result);
+		}
+	}
+
 	public function savePembelian()
 	{
-		$this->pembelian->insert([
-			'ID_BELI' => $this->request->getVar('id_pembelian'),
-			'ID_SUPP' => $this->request->getVar('id-supp'),
-			'ID_BARANG' => $this->request->getVar('idbarang'),
-			'JUMLAH' => $this->request->getVar('jumlah'),
-			'NamaSUPP' => $this->request->getVar('nama_supp'),
-			'SATUAN' => $this->request->getVar('satuan'),
-			'HARGA_BELI' => $this->request->getVar('hargabeli'),
-			'TGL_GARANSI' => $this->request->getVar('garansi_buy'),
-			'TGL_BELI' => $this->request->getVar('tanggal_input'),
-		]);
-		session()->setFlashData('pesan', 'Data Pembelian Berhasil Ditambahkan');
-		return redirect()->to('/transaksi/pembelian');
+		if ($this->request->isAJAX()) {
+			$this->pembelian->insert([
+				'ID_BELI' => $this->request->getVar('id_pembelian'),
+				'ID_SUPP' => $this->request->getVar('id-supp'),
+				'ID_BARANG' => $this->request->getVar('idbarang'),
+				'ID_LOGIN' => $this->request->getVar('idlogin'),
+				'JUMLAH' => $this->request->getVar('jumlah'),
+				'NamaSUPP' => $this->request->getVar('nama_supp'),
+				'SATUAN' => $this->request->getVar('satuan'),
+				'HARGA_BELI' => $this->request->getVar('hargabeli'),
+				'TGL_GARANSI' => $this->request->getVar('garansi_buy'),
+				'TGL_BELI' => $this->request->getVar('tanggal_input'),
+				'BUY_PAYMENT' => $this->request->getVar('buy-payment')
+			]);
+		}
+		return json_encode(['status' => 'success', 'message' => 'Data Pembelian Berhasil Ditambahkan']);
 	}
 	//  END CONTROLLER PEMBELIAN======================================
 

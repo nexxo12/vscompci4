@@ -14,6 +14,7 @@
 <script src="/assets/js/masterbarang.js"></script>
 <script src="/assets/js/returnservice.js"></script>
 <script src="/assets/js/suratjalan.js"></script>
+<script src="/assets/js/pembelian.js"></script>
 <script src="/assets/plugins/skycons/skycons.min.js"></script>
 <script src="/assets/plugins/raphael/raphael-min.js"></script>
 <script src="/assets/plugins/morris/morris.min.js"></script>
@@ -115,16 +116,16 @@
 
         $("#button-save-garansi").prop('disabled', true);
 
-        $("#input_supp").attr("style", "display: none");
+        // $("#input_supp").attr("style", "display: none");
         var select = $('#supp_buy').val();
 
-        $('#supp_buy').on('change', function() {
-            if (this.value == 20207 || this.value == 20216) {
-                $("#input_supp").attr("style", "visibility: visible");
-            } else {
-                $("#input_supp").attr("style", "display: none");
-            }
-        });
+        // $('#supp_buy').on('change', function() {
+        //     if (this.value == 20207 || this.value == 20216) {
+        //         $("#input_supp").attr("style", "visibility: visible");
+        //     } else {
+        //         $("#input_supp").attr("style", "display: none");
+        //     }
+        // });
 
         $("#refmp").attr("style", "display: none");
         $('#customer').on('change', function() {

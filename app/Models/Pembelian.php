@@ -8,7 +8,7 @@ class Pembelian extends Model
 {
     protected $table      = 'pembelian_barang';
     protected $primaryKey = 'ID_BELI';
-    protected $allowedFields = ['ID_BELI', 'ID_SUPP', 'ID_BARANG', 'JUMLAH', 'NamaSUPP', 'SATUAN', 'HARGA_BELI', 'TGL_GARANSI', 'TGL_BELI'];
+    protected $allowedFields = ['ID_BELI', 'ID_SUPP', 'ID_BARANG', 'ID_LOGIN', 'JUMLAH', 'NamaSUPP', 'SATUAN', 'HARGA_BELI', 'TGL_GARANSI', 'TGL_BELI', 'BUY_PAYMENT'];
 
 
     public function AutoNumID()
