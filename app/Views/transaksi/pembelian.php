@@ -147,6 +147,12 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="form-group row" id="input_tempo" style="display: none;">
+                                                <label for="example-text-input" class="col-sm-2 col-form-label">Jatuh Tempo</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" type="date" name="pembelian-jatuh-tempo" id="pembelian-jatuh-tempo">
+                                                </div>
+                                            </div>
 
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary waves-effect waves-light" id="save-pembelian">Simpan</button>

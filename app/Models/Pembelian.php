@@ -8,7 +8,7 @@ class Pembelian extends Model
 {
     protected $table      = 'pembelian_barang';
     protected $primaryKey = 'ID_BELI';
-    protected $allowedFields = ['ID_BELI', 'ID_SUPP', 'ID_BARANG', 'ID_LOGIN', 'JUMLAH', 'NamaSUPP', 'SATUAN', 'HARGA_BELI', 'TGL_GARANSI', 'TGL_BELI', 'BUY_PAYMENT'];
+    protected $allowedFields = ['ID_BELI', 'ID_SUPP', 'ID_BARANG', 'ID_LOGIN', 'JUMLAH', 'NamaSUPP', 'SATUAN', 'HARGA_BELI', 'TGL_GARANSI', 'TGL_BELI', 'BUY_PAYMENT', 'BUY_TGL_TEMPO', 'BUY_TGL_PELUNASAN'];
 
 
     public function AutoNumID()
@@ -25,6 +25,16 @@ class Pembelian extends Model
         return $this->table('pembelian_barang')->select('*')
             ->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
             ->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')->orderBy('ID_BELI', 'DESC')->findAll();
+    }
+
+    public function showpembelianbyID(mixed $id)
+    {
+        return $this->table('pembelian_barang')->select('*')
+            ->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
+            ->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')
+            ->where('ID_BELI', $id)
+            ->orderBy('ID_BELI', 'DESC')
+            ->first();
     }
 
     public function deletebuy(mixed $id)

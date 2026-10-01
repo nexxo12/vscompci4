@@ -193,7 +193,7 @@ class Finance extends BaseController
 	}
 	// End CONTROLLER PAGE BUKU KAS===================================
 
-
+	// CONTROLLER PAGE LAPORAN PEMBELIAN===================================
 	public function laporanbl()
 	{
 		$data = [
@@ -201,6 +201,36 @@ class Finance extends BaseController
 		];
 		return view('/finance/laporan_bl', $data);
 	}
+
+	public function showpembelianAll()
+	{
+		$viewdata = $this->pembelian->table('pembelian_barang')->select('ID_BELI, NAMA_BARANG, supplier.NAMA, NamaSUPP, JUMLAH, pembelian_barang.SATUAN, HARGA_BELI, TGL_GARANSI, TGL_BELI, BUY_PAYMENT, BUY_TGL_TEMPO, BUY_TGL_PELUNASAN')
+			->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
+			->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')->orderBy('TGL_BELI', 'DESC');
+		return DataTable::of($viewdata)->filter(function ($builder, $request) {
+			if (isset($request->start_date) && isset($request->end_date) && $request->start_date != '' && $request->end_date != '') {
+				$startDate = $request->start_date;
+				$endDate = $request->end_date;
+
+				$builder->where('TGL_BELI >=', $startDate)
+					->where('TGL_BELI <=', $endDate);
+			}
+		})->add('delete', function ($row) {
+			return '<a href="/Transaksi/deletePembelian?id=' . $row->ID_BELI . '" class="delete-buy"><button class="btn btn-danger btn-sm mdi mdi-delete" type="button" onclick="deletePembelian()"></button></a>';
+		})->add('edit', function ($row) {
+			return '<a href="/Finance/viewPembelian?id=' . $row->ID_BELI . '" class="edit-buy"><button class="btn btn-warning btn-sm mdi mdi-pencil" type="button" onclick="editPembelian()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function viewPembelian()
+	{
+		if ($this->request->isAJAX()) {
+			$idpembelian = $this->request->getVar('id');
+			$result = $this->pembelian->showpembelianbyID($idpembelian);
+			return json_encode($result);
+		}
+	}
+	// END CONTROLLER PAGE LAPORAN PEMBELIAN===================================
 
 	public function laba()
 	{

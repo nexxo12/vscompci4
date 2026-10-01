@@ -36,7 +36,8 @@ $("#save-pembelian").click(function(e){
                 $('#form-pembelian')[0].reset();
                 refreshid_Pembelian(); // Refresh ID with the latest data
                 $('#tbl-total-pembelian-by-month').DataTable().ajax.reload(); // Reload DataTable
-                // $('#tbl-show-all-buy').DataTable().ajax.reload(); // Reload DataTable
+                showBuySupplier();
+                showBarangPembelian();
 
             }
             
@@ -232,3 +233,11 @@ $('#tbl-show-all-buy').DataTable({
      $('#text-tampil-all-buy').show();
      $('#loading-tampil-all-buy').hide();
 }
+
+$("#buy-payment").change(function() {
+    if ($(this).val() === "Tempo") {
+        $("#input_tempo").show();   
+    } else {
+        $("#input_tempo").hide();
+    } 
+});

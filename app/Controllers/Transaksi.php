@@ -63,6 +63,7 @@ class Transaksi extends BaseController
 		}
 	}
 
+
 	public function refreshid_Pembelian()
 	{
 		if ($this->request->isAJAX()) {
@@ -122,7 +123,8 @@ class Transaksi extends BaseController
 				'HARGA_BELI' => $this->request->getVar('hargabeli'),
 				'TGL_GARANSI' => $this->request->getVar('garansi_buy'),
 				'TGL_BELI' => $this->request->getVar('tanggal_input'),
-				'BUY_PAYMENT' => $this->request->getVar('buy-payment')
+				'BUY_PAYMENT' => $this->request->getVar('buy-payment'),
+				'BUY_TGL_TEMPO' => $this->request->getVar('pembelian-jatuh-tempo')
 			]);
 		}
 		return json_encode(['status' => 'success', 'message' => 'Data Pembelian Berhasil Ditambahkan']);

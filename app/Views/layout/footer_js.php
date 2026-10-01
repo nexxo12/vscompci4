@@ -17,6 +17,7 @@
 <script src="/assets/js/suratjalan.js"></script>
 <script src="/assets/js/pembelian.js"></script>
 <script src="/assets/js/bukukas.js"></script>
+<script src="/assets/js/laporanPembelian.js"></script>
 <script src="/assets/plugins/skycons/skycons.min.js"></script>
 <script src="/assets/plugins/raphael/raphael-min.js"></script>
 <script src="/assets/plugins/morris/morris.min.js"></script>
