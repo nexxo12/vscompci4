@@ -73,6 +73,7 @@ $routes->get('/laporan/penjualan', 'Finance::view_invoice');
 $routes->get('/laporan/penjualan/delete-invoice/(:segment)', 'Finance::deleteInvoicePenjualan/$1');
 $routes->get('/laporan/pembelian', 'Finance::laporanbl');
 $routes->get('/laporan/laba', 'Finance::laba');
+$routes->get('/laporan/buku_kas', 'Finance::buku_kas');
 
 /*
  * --------------------------------------------------------------------

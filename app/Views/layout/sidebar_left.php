@@ -75,6 +75,8 @@
                     <ul class="list-unstyled">
                         <li><a href="/laporan/penjualan"><i class="mdi mdi-currency-usd"></i>Penjualan</a></li>
                         <li><a href="/laporan/pembelian"><i class="mdi mdi-currency-usd"></i>Pembelian</a></li>
+                        <li><a href="/laporan/buku_kas"><i class="mdi mdi-book-open-variant"></i>Buku Kas</a></li>
+                        <li><a href="/laporan/neraca"><i class="mdi mdi-scale-balance"></i>Neraca</a></li>
                         <li><a href="/laporan/laba"><i class="mdi mdi-currency-usd"></i>Laba</a></li>
                     </ul>
                 </li>

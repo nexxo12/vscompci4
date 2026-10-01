@@ -3,6 +3,7 @@
 <script src="/assets/js/popper.min.js"></script>
 <!-- <script src="/assets/js/bootstrap.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="/assets/js/modernizr.min.js"></script>
 <script src="/assets/js/detect.js"></script>
 <script src="/assets/js/fastclick.js"></script>
@@ -15,6 +16,7 @@
 <script src="/assets/js/returnservice.js"></script>
 <script src="/assets/js/suratjalan.js"></script>
 <script src="/assets/js/pembelian.js"></script>
+<script src="/assets/js/bukukas.js"></script>
 <script src="/assets/plugins/skycons/skycons.min.js"></script>
 <script src="/assets/plugins/raphael/raphael-min.js"></script>
 <script src="/assets/plugins/morris/morris.min.js"></script>

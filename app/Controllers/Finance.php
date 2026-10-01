@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\Listpenjualan;
 use App\Models\PenjualanModel;
 use App\Models\Garansi;
+use App\Models\BukuKas;
 use CodeIgniter\Exceptions\AlertError;
 use \Hermawan\DataTables\DataTable;
 
@@ -23,6 +24,7 @@ class Finance extends BaseController
 	protected Listpenjualan $list_pj;
 	protected PenjualanModel $penjualanID;
 	protected Garansi $garansi;
+	protected BukuKas $bukukas;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();
@@ -33,6 +35,7 @@ class Finance extends BaseController
 		$this->list_pj = new Listpenjualan();
 		$this->penjualanID = new PenjualanModel();
 		$this->garansi = new Garansi();
+		$this->bukukas = new BukuKas();
 	}
 
 	// CONTROLLER PAGE FINANCE===================================
@@ -141,6 +144,54 @@ class Finance extends BaseController
 		// }
 	}
 	// END CONTROLLER PAGE FINANCE / PENJUALAN===================================
+
+	// CONTROLLER PAGE BUKU KAS===================================
+	public function buku_kas()
+	{
+		$data = [
+			'tittle' => 'Buku Kas - VSKomputer'
+		];
+		return view('/finance/buku_kas', $data);
+	}
+
+	public function save_buku_kas()
+	{
+		$saldo = 0;
+		$jenis_transaksi = $this->request->getVar('jenis-transaksi-buku-kas');
+		$pemasukan = ($jenis_transaksi == 'pemasukan') ? $this->request->getVar('pemasukan-buku-kas') : 0;
+		$pengeluaran = ($jenis_transaksi == 'pengeluaran') ? $this->request->getVar('pengeluaran-buku-kas') : 0;
+
+		if ($this->request->isAJAX()) {
+			$data = [
+				'ID_LOGIN' => $this->request->getVar('id-login-buku-kas'),
+				'TANGGAL_KAS' => $this->request->getVar('tgl-buku-kas'),
+				'RINCIAN_KAS' => ucwords($this->request->getVar('rincian-buku-kas')),
+				'KATEGORI_KAS' => ucwords($this->request->getVar('kategori-buku-kas')),
+				'PEMASUKAN_KAS' => $pemasukan,
+				'PENGELUARAN_KAS' => $pengeluaran,
+			];
+			$this->bukukas->insert($data);
+			return json_encode(['status' => 'success', 'message' => 'Data Buku Kas Berhasil Ditambahkan']);
+		}
+	}
+
+	public function viewdata_buku_kas()
+	{
+
+		$viewdata = $this->bukukas->select('ID_KAS, TANGGAL_KAS, RINCIAN_KAS, KATEGORI_KAS, PEMASUKAN_KAS, PENGELUARAN_KAS, 
+		(SELECT SUM(b.PEMASUKAN_KAS - b.PENGELUARAN_KAS) FROM buku_kas b WHERE b.ID_KAS <= buku_kas.ID_KAS) AS SALDO', false);
+		return DataTable::of($viewdata)->addNumbering('no')
+			->format('PEMASUKAN_KAS', function ($value) {
+				return number_format($value, 0, ',', '.');
+			})->format('PENGELUARAN_KAS', function ($value) {
+				return number_format($value, 0, ',', '.');
+			})->format('SALDO', function ($value) {
+				$nilai = $value ? $value : 0;
+				return number_format($nilai, 0, ',', '.');
+			})
+			->toJson(true);
+	}
+	// End CONTROLLER PAGE BUKU KAS===================================
 
 
 	public function laporanbl()
