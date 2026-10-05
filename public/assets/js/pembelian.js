@@ -38,6 +38,7 @@ $("#save-pembelian").click(function(e){
                 $('#tbl-total-pembelian-by-month').DataTable().ajax.reload(); // Reload DataTable
                 showBuySupplier();
                 showBarangPembelian();
+                $("#input_tempo").hide();
 
             }
             

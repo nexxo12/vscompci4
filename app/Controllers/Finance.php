@@ -230,6 +230,22 @@ class Finance extends BaseController
 			return json_encode($result);
 		}
 	}
+
+	public function saveeditpembelian()
+	{
+		if ($this->request->isAJAX()) {
+			$idpembelian = $this->request->getVar('input-id-pembelian');
+			$data = [
+				// 'ID_BELI' => $this->request->getVar('input-id-pembelian'),
+				'BUY_PAYMENT' => $this->request->getVar('buy-payment'),
+				'BUY_TGL_TEMPO' => $this->request->getVar('tgl-tempo-edit'),
+				'BUY_TGL_PELUNASAN' => $this->request->getVar('tgl-pelunasan-edit')
+			];
+			$this->pembelian->update($idpembelian, $data);
+			$result = ['status' => 'success'];
+			return json_encode($result);
+		}
+	}
 	// END CONTROLLER PAGE LAPORAN PEMBELIAN===================================
 
 	public function laba()

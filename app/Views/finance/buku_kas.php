@@ -62,8 +62,10 @@
                                     <text>Panduan Kategori:</text>
                                     <ul>
                                         <li><b>Aktivitas Pendanaan:</b> modal disetor, pembayaran dividen, penarikan dana oleh pemilik (prive), serta penerimaan atau pelunasan pinjaman bank jangka panjang.</li>
+                                        <li><b>Persediaan Barang Dagang:</b> pengelompokan jenis produk yang dimiliki perusahaan dan disimpan untuk dijual kembali kepada pelanggan tanpa mengubah bentuk aslinya.</li>
                                         <li><b>Pendapatan Usaha:</b> Omset / Hasil Penjualan Utama</li>
                                         <li><b>Beban Perlengkapan:</b> Aset Habis Pakai (< 1 Tahun), plastik packing, lakban, kotak kemasan, kertas print, tinta printer, nota penjualan, brosur cetak, dsb.</li>
+                                        <li><b>Beban Gaji:</b> Pembayaran gaji tercatat sebagai pengeluaran kas rutin untuk kegiatan operasional</li>
                                         <li><b>Beban Utilitas & Sewa:</b> Pembayaran token listrik kantor, tagihan Wi-Fi/internet bulanan, pulsa operasional, sewa ruko/co-working space bulanan, dsb.</li>
                                         <li><b>Beban Operasional Lain:</b> Biaya pembuatan legalitas tambahan, biaya admin bulanan bank PT, biaya iklan (FB Ads/Google Ads), ongkos kirim sampel barang.</li>
                                         <li><b>Aktiva Tetap (Aset):</b> Pembelian barang modal berwujud yang berumur panjang seperti laptop kerja, printer, meja kursi kantor, handphone admin</li>
@@ -107,8 +109,10 @@
                                                     <select class="form-control" name="kategori-buku-kas" id="kategori-buku-kas" required>
                                                         <option value="">Pilih Kategori</option>
                                                         <option value="Aktivitas Pendanaan">Aktivitas Pendanaan</option>
+                                                        <option value="Persediaan Barang Dagang">Persediaan Barang Dagang</option>
                                                         <option value="Pendapatan Usaha">Pendapatan Usaha</option>
                                                         <option value="Beban Perlengkapan">Beban Perlengkapan</option>
+                                                        <option value="Beban Gaji">Beban Gaji</option>
                                                         <option value="Beban Operasional">Beban Operasional</option>
                                                         <option value="Beban Utilitas">Beban Utilitas</option>
                                                         <option value="Aktiva Tetap (ASET)">Aktiva Tetap (ASET)</option>
@@ -143,21 +147,23 @@
                                 <div class="card m-b-30">
                                     <div class="card-body">
                                         <h4 class="mt-0 header-title">Data Buku Kas</h4>
-                                        <table id="datatable-buku-kas" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Tanggal</th>
-                                                    <th>Rincian</th>
-                                                    <th>Kategori</th>
-                                                    <th>Pemasukan</th>
-                                                    <th>Pengeluaran</th>
-                                                    <th>Saldo</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table id="datatable-buku-kas" class="table table-bordered nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Tanggal</th>
+                                                        <th>Rincian</th>
+                                                        <th>Kategori</th>
+                                                        <th>Pemasukan</th>
+                                                        <th>Pengeluaran</th>
+                                                        <th>Saldo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- end col -->

@@ -101,6 +101,7 @@
                                                         <th>Pembayaran</th>
                                                         <th>Jatuh Tempo</th>
                                                         <th>Tanggal Pelunasan</th>
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -126,31 +127,36 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="" id="form-edit-barang">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <div class="detail-pembelian">
-                                                        <text>Kode: </text><text id="id_pembelian"></text><br>
-                                                        <text>Nama Barang: </text><text id="nama-barang-pembelian"></text><br>
-                                                        <text>Harga Beli: </text><text id="harga-beli-pembelian"></text><br>
-                                                        <text>Supplier: </text><text id="nama-supplier-pembelian"></text><br>
-                                                        <text>Tanggal Pembelian: </text><text id="tgl-pembelian"></text><br>
-                                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <div class="detail-pembelian">
+                                                    <text>Kode: </text><text id="id_pembelian"></text><br>
+                                                    <text>Nama Barang: </text><text id="nama-barang-pembelian"></text><br>
+                                                    <text>Harga Beli: </text><text id="harga-beli-pembelian"></text><br>
+                                                    <text>Supplier: </text><text id="nama-supplier-pembelian"></text><br>
+                                                    <text>Tanggal Pembelian: </text><text id="tgl-pembelian"></text><br>
+                                                </div>
+                                                <form id="form-edit-pembelian" action="" method="post">
+                                                    <input type="text" name="input-id-pembelian" id="input-id-pembelian" value="" hidden>
                                                     <label for="exampleInputEmail1">Pembayaran:</label>
                                                     <select class="custom-select" id="buy-payment" name="buy-payment">
                                                         <option value="Cash">Cash</option>
                                                         <option value="Tempo">Tempo</option>
                                                     </select>
+                                                    <label for="exampleInputEmail1">Jatuh Tempo:</label>
+                                                    <input type="date" class="form-control" name="tgl-tempo-edit" id="tgl-tempo-edit" value="">
                                                     <label for="exampleInputEmail1">Tanggal Pelunasan:</label>
                                                     <input type="date" class="form-control" name="tgl-pelunasan-edit" id="tgl-pelunasan-edit" value="">
-                                                    <div class="text-center mt-3">
-                                                        <button type="button" class="btn btn-primary" id="save-edit-barang" onclick="">Update</button>
-                                                    </div>
+                                                </form>
+                                                <div class="text-center mt-3">
+                                                    <button type="button" class="btn btn-primary" id="save-edit-pembelian" onclick="saveEditPembelian()">Update</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -189,7 +189,7 @@
                     <?php foreach ($viewnota as $nota) : ?><?php endforeach; ?>
                     <?php
                     if ($nota['ID_PELANGGAN'] == 1) {
-                        echo "<li class='bca'>Pembayaran lunas / DP silahkan ditransfer ke: <br> <strong>BCA 8980464289 a/n. Ravino Rahman</strong></li>";
+                        echo "<li class='bca'>Pembayaran lunas / DP silahkan ditransfer ke: <br> <strong>BCA 4720555889 a/n. Vinorious Sukses Komputindo</strong></li>";
                     } else {
                         echo "";
                     }
