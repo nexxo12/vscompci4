@@ -63,7 +63,25 @@
                             </div>
                         </div>
                         <!-- end page title end breadcrumb -->
+                        <div class="row mb-3">
+                            <!-- Tambahkan d-flex dan align-items-center agar teks dan input sejajar secara horizontal -->
+                            <div class="col-md-4 d-flex align-items-center">
+                                <!-- Tambahkan label teks di sini -->
+                                <label for="pj_start_date" style="white-space: nowrap; margin-right: 10px;">Start Date</label>
+                                <input type="date" id="pj_start_date" class="form-control" placeholder="Tanggal Awal">
+                            </div>
 
+                            <div class="col-md-4 d-flex align-items-center">
+                                <!-- Tambahkan label teks di sini -->
+                                <label for="pj_end_date" style="white-space: nowrap; margin-right: 10px;">End Date</label>
+                                <input type="date" id="pj_end_date" class="form-control" placeholder="Tanggal Akhir" value="<?= date('Y-m-d'); ?>">
+                            </div>
+
+                            <div class="col-md-4">
+                                <button id="btn-filter-pj" class="btn btn-primary mdi mdi-filter"></button>
+                                <button id="btn-reset-pj" class="btn btn-secondary mdi mdi-refresh"></button>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card m-b-30">
@@ -74,7 +92,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Nota</th>
-                                                        <th>Tanggal</th>
+                                                        <th>Tanggal Beli</th>
+                                                        <th>Jatuh Tempo</th>
+                                                        <th>Customer</th>
                                                         <th>Keterangan</th>
                                                         <th>Total Penjualan</th>
                                                         <th>Modal</th>
@@ -82,6 +102,7 @@
                                                         <th>Biaya lebih</th>
                                                         <th>Admin MP</th>
                                                         <th>Laba Bersih</th>
+                                                        <th>Status Pencairan</th>
                                                         <th style="width: 12%; text-align:center">Aksi</th>
                                                         <!-- <th></th>
                                                         <th></th> -->
@@ -104,7 +125,7 @@
             </div> <!-- content -->
 
             <footer class="footer">
-                © 2021 - VSKomputer.
+                <?= $this->include('layout/footerc'); ?>
             </footer>
 
         </div>
@@ -127,7 +148,11 @@
                                         <label for="exampleInputEmail1">Nota</label>
                                         <input type="text" class="form-control" name="invoice-laporan-edit" id="invoice-laporan-edit" value="">
                                         <label for="exampleInputEmail1">Tanggal</label>
-                                        <input type="text" class="form-control" name="tangal-laporan-edit" id="tangal-laporan-edit" value="">
+                                        <input type="date" class="form-control" name="tangal-laporan-edit" id="tangal-laporan-edit" value="">
+                                        <label for="exampleInputEmail1">Jatuh Tempo</label>
+                                        <input type="date" class="form-control" name="jatuh-tempo-laporan-edit" id="jatuh-tempo-laporan-edit" value="">
+                                        <label for="exampleInputEmail1">Customer</label>
+                                        <input type="text" class="form-control" name="customer-laporan-edit" id="customer-laporan-edit" value="">
                                         <label for="exampleInputEmail1">Keterangan</label>
                                         <input type="text" class="form-control" name="keterangan-laporan-edit" id="keterangan-laporan-edit" value="">
                                         <label for="exampleInputEmail1">Modal</label>
@@ -146,6 +171,8 @@
                                         <input type="number" class="form-control" name="biayaadm-laporan-edit" oninput="this.value = this.value.replace(/[.,]/g, '')" id="biayaadm-laporan-edit" value="0">
                                         <label for="exampleInputEmail1">Total Penjualan</label>
                                         <input type="number" class="form-control" name="gtotal-laporan-edit" id="gtotal-laporan-edit" value="" readonly>
+                                        <label for="exampleInputEmail1">Status</label>
+                                        <input type="number" class="form-control" name="status-laporan-edit" id="status-laporan-edit" value="" readonly>
                                         <!-- <label for="exampleInputEmail1">Laba</label> -->
                                         <input type="number" class="form-control" name="laba-laporan-edit" id="laba-laporan-edit" value="" readonly hidden>
 

@@ -92,6 +92,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
+                                                                <label for="example-text-input" class="col-sm-2 col-form-label">JaTem:</label>
+                                                                <div class="col-sm-10">
+                                                                    <input class="form-control" type="date" value="" name="tanggal-jatuhtempo" id="tanggal-jatuhtempo">
+                                                                    <script>
+                                                                        // Mendapatkan tanggal hari ini (format YYYY-MM-DD)
+                                                                        const tempo = new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+                                                                        // Mengisi nilai input dengan tanggal hari ini
+                                                                        document.getElementById('tanggal-jatuhtempo').value = tempo;
+                                                                    </script>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Kasir :</label>
                                                                 <div class="col-sm-10">
                                                                     <input class="form-control" type="text" value="<?php echo session('NAMA'); ?>" name="kasir" id="example-text-input" readonly>
@@ -106,6 +119,7 @@
                                                                             <option value="<?= $sc['ID_PELANGGAN']; ?>"><?= $sc['NAMA']; ?></option>
                                                                         <?php endforeach; ?>
                                                                     </select>
+                                                                    <input type="text" width="10%" value="" id="penjualan-typecustomer" name="penjualan-typecustomer" hidden>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row" id="nama">

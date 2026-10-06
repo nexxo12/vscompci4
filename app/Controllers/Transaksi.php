@@ -264,10 +264,11 @@ class Transaksi extends BaseController
 			$this->inv_pj->insert([
 				'id_inv' => $this->request->getVar('id'),
 				'TGL_TRX' => $this->request->getVar('tanggal'),
-				'BARANG' => $this->request->getVar('namabarang'),
+				'BARANG' => $this->request->getVar('typecustomer'),
 				'GRAND_TOTAL' => $this->request->getVar('grandtotal'),
 				'inv_ol' => $this->request->getVar('keterangan'),
 				'modal' => $this->request->getVar('summodal'),
+				'INV_JATUH_TEMPO' => $this->request->getVar('jatem')
 			]);
 		}
 		return json_encode(['status' => 'success']);

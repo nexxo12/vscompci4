@@ -7,9 +7,16 @@ $(document).ready(function() {
                 url: '/Finance/showpembelianAll',
                 type: 'GET',
                 data: function (d) {
-                // Mengambil nilai dari input HTML dan memasukkannya ke parameter AJAX
-                d.start_date = $('#start_date').val();
-                d.end_date = $('#end_date').val();
+                    // Mengambil nilai dari input HTML dan memasukkannya ke parameter AJAX
+                    var start = $('#start_date').val();
+                    var end = $('#end_date').val();
+                    d.start_date = start;
+                    d.end_date = end;
+
+                // SOLUSI MUTLAK: Jika filter terisi, paksa parameter length kirim -1 ke CI4
+                    if (start !== '' && end !== '') {
+                        d.length = -1;
+                    }
                 }
             },
             dom: 'Bfrtip',
@@ -114,12 +121,13 @@ $(document).ready(function() {
 
             ]
     });
-    $('#btn-filter').on('click', function() {
-        // me-reload tabel dengan parameter tanggal yang baru
+    $('#btn-filter').on('click', function(e) {
+        e.preventDefault();
         table.ajax.reload();
     });
 
-    $('#btn-reset').on('click', function() {
+    $('#btn-reset').on('click', function(e) {
+        e.preventDefault();
         $('#start_date').val('');
         $('#end_date').val('');
         table.ajax.reload();

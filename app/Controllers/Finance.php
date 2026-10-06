@@ -100,16 +100,38 @@ class Finance extends BaseController
 	{
 		if ($this->request->isAJAX()) {
 			$invoice = $this->request->getVar('invoice');
+			$tgl_trx = $this->request->getVar('tangal-laporan-edit');
+			$tgl_tempo = $this->request->getVar('jatuh-tempo-laporan-edit');
+			$status_text = 'Pencairan Dana Pending';
+			if (!empty($tgl_trx) && !empty($tgl_tempo)) {
+				$date_trx = new \DateTime($tgl_trx);
+				$date_tempo = new \DateTime($tgl_tempo);
+
+				// Menghilangkan komponen jam/menit/detik agar murni membandingkan tanggalnya saja
+				$date_trx->setTime(0, 0, 0);
+				$date_tempo->setTime(0, 0, 0);
+
+				if ($date_trx < $date_tempo) {
+					$status_text = 'Pending';
+				} elseif ($date_trx > $date_tempo) {
+					$status_text = 'Terlambat';
+				} else {
+					$status_text = 'Selesai';
+				}
+			}
 			// var_dump($invoice);
 			$data = [
 				'TGL_TRX' => $this->request->getVar('tangal-laporan-edit'),
 				'GRAND_TOTAL' => $this->request->getVar('gtotal-laporan-edit'),
+				'BARANG' => $this->request->getVar('customer-laporan-edit'),
 				'inv_ol' => $this->request->getVar('keterangan-laporan-edit'),
 				'ongkir' => $this->request->getVar('biayamin-laporan-edit'),
 				'laba_ongkir' => $this->request->getVar('biayaplus-laporan-edit'),
 				'potongan' => $this->request->getVar('biayaadm-laporan-edit'),
 				'modal' => $this->request->getVar('modal-laporan-edit'),
 				'laba_bersih' => $this->request->getVar('gtotal-laporan-edit') - $this->request->getVar('modal-laporan-edit') - $this->request->getVar('biayamin-laporan-edit') + $this->request->getVar('biayaplus-laporan-edit') - $this->request->getVar('biayaadm-laporan-edit'),
+				'INV_JATUH_TEMPO' => $this->request->getVar('jatuh-tempo-laporan-edit'),
+				'INV_STATUS' => $status_text
 			];
 			// var_dump($data);
 			$this->inv_pj->update($invoice, $data);
@@ -119,8 +141,19 @@ class Finance extends BaseController
 
 	public function viewdata_invoice_penjualan()
 	{
-		$viewdata = $this->inv_pj->select('id_inv, TGL_TRX, inv_ol, GRAND_TOTAL, ongkir, laba_ongkir, potongan, modal, laba_bersih')->orderBy('TGL_TRX', 'DESC');
-		return DataTable::of($viewdata)->addNumbering('no')->add('view', function ($row) {
+		$request = \Config\Services::request();
+
+		$viewdata = $this->inv_pj->select('id_inv, TGL_TRX, BARANG, inv_ol, GRAND_TOTAL, ongkir, laba_ongkir, potongan, modal, 
+		laba_bersih, INV_JATUH_TEMPO, INV_STATUS')->orderBy('TGL_TRX', 'DESC');
+		return DataTable::of($viewdata)->filter(function ($builder) use ($request) {
+			$startDate = $request->getGet('pj_start_date');
+			$endDate = $request->getGet('pj_end_date');
+
+			if (!empty($startDate) && !empty($endDate)) {
+				$builder->where('TGL_TRX >=', $startDate)
+					->where('TGL_TRX <=', $endDate);
+			}
+		})->add('view', function ($row) {
 			return '<a href="/finance/view_invoice?invoice=' . $row->id_inv . '" class="view-invoice"><button class="btn btn-primary btn-sm ti-list " type="button" onclick="view_inv()"></button></a>';
 		})->add('action', function ($row) {
 			return '<a href="/finance/edit_invoice?invoice=' . $row->id_inv . '" class="edit-invoice"><button class="btn btn-primary btn-sm ti-pencil-alt " type="button" onclick="edit_invoice()"></button></a>';
@@ -204,14 +237,18 @@ class Finance extends BaseController
 
 	public function showpembelianAll()
 	{
+		// 1. Ambil instance request aktif dari CodeIgniter 4
+		$request = \Config\Services::request();
+
 		$viewdata = $this->pembelian->table('pembelian_barang')->select('ID_BELI, NAMA_BARANG, supplier.NAMA, NamaSUPP, JUMLAH, pembelian_barang.SATUAN, HARGA_BELI, TGL_GARANSI, TGL_BELI, BUY_PAYMENT, BUY_TGL_TEMPO, BUY_TGL_PELUNASAN')
 			->join('master_barang', 'master_barang.ID_BARANG = pembelian_barang.ID_BARANG')
 			->join('supplier', 'supplier.ID_SUPP = pembelian_barang.ID_SUPP')->orderBy('TGL_BELI', 'DESC');
-		return DataTable::of($viewdata)->filter(function ($builder, $request) {
-			if (isset($request->start_date) && isset($request->end_date) && $request->start_date != '' && $request->end_date != '') {
-				$startDate = $request->start_date;
-				$endDate = $request->end_date;
 
+		return DataTable::of($viewdata)->filter(function ($builder) use ($request) {
+			$startDate = $request->getGet('start_date');
+			$endDate = $request->getGet('end_date');
+
+			if (!empty($startDate) && !empty($endDate)) {
 				$builder->where('TGL_BELI >=', $startDate)
 					->where('TGL_BELI <=', $endDate);
 			}

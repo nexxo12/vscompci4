@@ -8,7 +8,7 @@ class InvPenjualan extends Model
 {
     protected $table      = 'inv_penjualan';
     protected $primaryKey = 'id_inv';
-    protected $allowedFields = ['id_inv', 'TGL_TRX', 'BARANG', 'GRAND_TOTAL', 'inv_ol', 'ongkir', 'laba_ongkir', 'potongan', 'cashback', 'modal', 'laba_bersih'];
+    protected $allowedFields = ['id_inv', 'TGL_TRX', 'BARANG', 'GRAND_TOTAL', 'inv_ol', 'ongkir', 'laba_ongkir', 'potongan', 'cashback', 'modal', 'laba_bersih', 'INV_JATUH_TEMPO', 'INV_STATUS'];
 
 
     public function invoicepj()
