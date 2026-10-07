@@ -80,6 +80,8 @@ $(document).ready(function() {
                 },
                 {
                     defaultContent: '',
+                    searchable: false,
+                    orderable: false,
                     render: function(data, type, row) {
                         var pembayaran = row.BUY_PAYMENT ? row.BUY_PAYMENT.toLowerCase() : ''; 
                         var tglPelunasan = row.BUY_TGL_PELUNASAN;
@@ -116,7 +118,7 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    data: 'delete', orderable: false, searchable: false
+                    data: 'delete'
                 },
 
             ]

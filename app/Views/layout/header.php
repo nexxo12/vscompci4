@@ -12,7 +12,7 @@
                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                     <!-- item-->
                     <div class="dropdown-item noti-title">
-                        <h5>Welcome <?php echo session('NAMA'); ?></h5>
+                        <h5>Welcome <?php echo session('NAMA_LOGIN'); ?></h5>
                     </div>
                     <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile</a>
                     <a class="dropdown-item" href="#"><i class="mdi mdi-settings m-r-5 text-muted"></i> Settings</a>
