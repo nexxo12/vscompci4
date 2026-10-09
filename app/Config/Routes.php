@@ -41,6 +41,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->get('/laporan/penjualan', 'Finance::laporan_penjualan');
 	$routes->get('/transaksi/garansi', 'Transaksi::garansi');
 	$routes->get('/transaksi/pembelian', 'Transaksi::pembelian');
+	$routes->get('/laporan/pembelian', 'Finance::laporanbl');
+	$routes->get('/laporan/laba', 'Finance::laba');
+	$routes->get('/laporan/buku_kas', 'Finance::buku_kas');
+	$routes->get('/laporan/penjualan', 'Finance::view_invoice');
 	// Tambahkan route admin lainnya di sini...
 });
 
@@ -69,11 +73,8 @@ $routes->get('/karyawan/pengaturan', 'Finance::setting');
 $routes->get('/karyawan/gaji', 'Finance::gaji');
 
 // $routes->get('/laporan/penjualan', 'Finance::laporan_penjualan');
-$routes->get('/laporan/penjualan', 'Finance::view_invoice');
 $routes->get('/laporan/penjualan/delete-invoice/(:segment)', 'Finance::deleteInvoicePenjualan/$1');
-$routes->get('/laporan/pembelian', 'Finance::laporanbl');
-$routes->get('/laporan/laba', 'Finance::laba');
-$routes->get('/laporan/buku_kas', 'Finance::buku_kas');
+
 
 /*
  * --------------------------------------------------------------------

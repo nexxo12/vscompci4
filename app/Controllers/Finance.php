@@ -287,8 +287,34 @@ class Finance extends BaseController
 
 	public function laba()
 	{
+		$labaPaid = $this->inv_pj->JumlahLababyMonthSelesai()[0]['laba_bersih'];
+		$totalBeban = $this->bukukas->bebanOperasonal()[0]['PENGELUARAN_KAS'] + $this->bukukas->bebanGaji()[0]['PENGELUARAN_KAS'] + $this->bukukas->bebanPerlengkapan()[0]['PENGELUARAN_KAS'] + $this->bukukas->bebanUtilitas()[0]['PENGELUARAN_KAS'];
+		$hasilSebelumPajak = $labaPaid - $totalBeban;
 		$data = [
-			'tittle' => 'Laba Penjualan - VSKomputer'
+			'tittle' => 'Laba Penjualan - VSKomputer',
+			'LabaPaid' => $this->inv_pj->JumlahLababyMonthSelesai(),
+			'LabaPending' => $this->inv_pj->JumlahLababyMonthPending(),
+			'JumlahLabaBulanIni' => $this->inv_pj->JumlahLababyMonth(),
+			'BebanOperasional' => $this->bukukas->bebanOperasonal(),
+			'BebanGaji' => $this->bukukas->bebanGaji(),
+			'BebanPerlengkapan' => $this->bukukas->bebanPerlengkapan(),
+			'BebanUtilitas' => $this->bukukas->bebanUtilitas(),
+			'TotalBeban' => $totalBeban,
+			'HasilSebelumPajak' => $hasilSebelumPajak,
+			'PajakPaymentCash' => $this->inv_pj->PajakPaymentCash(),
+			'showBebanOperasional' => $this->bukukas->showBebanOperasional(),
+			'showBebanGaji' => $this->bukukas->showBebanGaji(),
+			'showBebanPerlengkapan' => $this->bukukas->showBebanPerlengkapan(),
+			'showBebanUtilitas' => $this->bukukas->showBebanUtilitas(),
+			'TotalLabaCASH' => $this->inv_pj->TotalLabaCASH(),
+			'TotalLabaTokopedia' => $this->inv_pj->TotalLabaTokopedia(),
+			'TotalLabaShopee' => $this->inv_pj->TotalLabaShopee(),
+			'TotalLabaCashPaid' => $this->inv_pj->TotalLabaCashPaid(),
+			'TotalLabaTokopediaPaid' => $this->inv_pj->TotalLabaTokopediaPaid(),
+			'TotalLabaShopeePaid' => $this->inv_pj->TotalLabaShopeePaid(),
+			'TotalLabaCashPending' => $this->inv_pj->TotalLabaCashPending(),
+			'TotalLabaTokopediaPending' => $this->inv_pj->TotalLabaTokopediaPending(),
+			'TotalLabaShopeePending' => $this->inv_pj->TotalLabaShopeePending()
 		];
 		return view('/finance/laba', $data);
 	}

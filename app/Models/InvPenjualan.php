@@ -46,4 +46,80 @@ class InvPenjualan extends Model
         return $this->table('inv_penjualan')->selectSum('laba_ongkir')
             ->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
     }
+
+    public function JumlahLababyMonth()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function JumlahLababyMonthSelesai()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('INV_STATUS', 'Selesai')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function JumlahLababyMonthPending()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('INV_STATUS', 'Pending')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function PajakPaymentCash()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'CASH')->where('INV_STATUS', 'Selesai')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaCASH()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'CASH')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+    public function TotalLabaTokopedia()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'Tokopedia')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+    public function TotalLabaShopee()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'Shopee')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaCashPaid()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'CASH')->where('INV_STATUS', 'Selesai')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaTokopediaPaid()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'Tokopedia')->where('INV_STATUS', 'Selesai')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaShopeePaid()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'Shopee')->where('INV_STATUS', 'Selesai')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaCashPending()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'CASH')->where('INV_STATUS', 'Pending')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaTokopediaPending()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'Tokopedia')->where('INV_STATUS', 'Pending')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
+
+    public function TotalLabaShopeePending()
+    {
+        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+            ->where('BARANG', 'Shopee')->where('INV_STATUS', 'Pending')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
+    }
 }
