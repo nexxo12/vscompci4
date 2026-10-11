@@ -35,6 +35,21 @@ class Masterbarang extends Model
         return $this->select('*')->join('pembelian_barang', 'pembelian_barang.ID_BARANG = master_barang.ID_BARANG')->where('master_barang.ID_BARANG', $idbarang)->orderBy('pembelian_barang.TGL_BELI', 'ASC')->findAll();
     }
 
+    public function showModalBarangbyStok()
+    {
+        return $this->selectSum('G_TOTAL')->where('STOK >', 0)->findAll();
+    }
+
+    public function showBarangbyStok()
+    {
+        return $this->select('*')->where('STOK >', 0)->findAll();
+    }
+
+    public function showJumlahisiTable()
+    {
+        return $this->countAllResults();
+    }
+
     // public function showbarangbyid($idbarang)
     // {
     //     return $this->select('master_barang.ID_BARANG, master_barang.STOK, MAX(pembelian_barang.HARGA_BELI) as HARGA_BELI')

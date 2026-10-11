@@ -42,6 +42,8 @@ class Master extends BaseController
 		$data = [
 			'tittle' => 'Master Barang - VSKomputer',
 			'kategori' => $this->kategori->showkategori(),
+			'total_modal' => $this->masterbarang->showModalBarangbyStok(),
+			'total_master' => $this->masterbarang->showJumlahisiTable()
 		];
 		return view('/master/masterBarang', $data);
 	}
@@ -77,6 +79,12 @@ class Master extends BaseController
 		})->add('delete', function ($row) {
 			return '<a href="/master/delete?id=' . $row->ID_BARANG . '" class="delete-barang"><button class="btn btn-danger btn-sm ti-trash " type="button" onclick="delete_barang()"></button></a>';
 		})->toJson(true);
+	}
+
+	public function showBarangbyStok()
+	{
+		$viewdata = $this->masterbarang->table('master_barang')->select('master_barang.ID_BARANG, kategori.KATEGORI, NAMA_BARANG, STOK, master_barang.SATUAN')->join('kategori', 'kategori.ID_KATEGORI = master_barang.ID_KATEGORI')->where('master_barang.STOK >', 0)->orderBy('master_barang.NAMA_BARANG', 'DESC');
+		return DataTable::of($viewdata)->addNumbering('nomor')->toJson(true);
 	}
 
 	public function edit_barang()

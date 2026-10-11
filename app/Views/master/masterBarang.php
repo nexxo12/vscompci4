@@ -3,6 +3,8 @@
 /**
  * @var string $tittle
  * @var array $kategori
+ * @var mixed $total_modal
+ * @var mixed $total_master
  */
 ?>
 <!DOCTYPE html>
@@ -17,7 +19,6 @@
     <meta content="Mannatthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <?= $this->include('layout/header_head'); ?>
-
 
 </head>
 
@@ -118,10 +119,46 @@
                                 </div>
                             </div> <!-- end col -->
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="card m-b-30">
                                     <div class="card-body">
-                                        <h4 class="mt-0 header-title">Manage Kategori</h4>
+                                        <h4 class="mt-0 header-title">Total Modal Stok</h4>
+                                        <div class="d-flex flex-row flex-wrap">
+                                            <div class="col-3 align-self-center">
+                                                <div class="round">
+                                                    <i class="mdi mdi-package"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 text-center align-self-center" style="font-size:large;">
+                                                <div class="m-l-10 ">
+                                                    <h5 class="mt-0 round-inner">Rp. <?= number_format($total_modal[0]['G_TOTAL'], 0, ',', '.') ?></h5>
+                                                    <p class="mb-0"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-right mt-3">
+                                                <button class="btn btn-primary btn-sm" style="font-size: 11px; padding: 2px 8px; white-space: nowrap;" onclick="showBarangTotalModal()">Lihat Detail &gt;&gt;</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                            <div class="col-lg-2">
+                                <div class="card m-b-30">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title">Total Master Barang </h4>
+                                        <div class="d-flex flex-row">
+                                            <div class="col-3 align-self-center">
+                                                <div class="round">
+                                                    <i class="mdi mdi-counter"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 text-center align-self-center">
+                                                <div class="m-l-10 ">
+                                                    <h5 class="mt-0 round-inner"><?= $total_master ?></h5>
+                                                    <p class="mb-0"></p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- end col -->
@@ -251,6 +288,43 @@
                             </div>
                         </div>
                         <!-- end modal edit kategori -->
+
+                        <!-- modal total modal -->
+                        <div class="modal fade" id="modal-barang-total-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Daftar Barang</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive" style="margin-top: 0 !important; padding-top: 0 !important;">
+                                            <table class="table table-bordered table-striped" id="tbl-masterbarang-total-modal">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Kode</th>
+                                                        <th>Nama Barang</th>
+                                                        <th>Kategori</th>
+                                                        <th>Satuan</th>
+                                                        <th>Stok</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end modal total modal -->
 
 
                     </div><!-- container -->

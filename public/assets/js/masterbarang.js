@@ -55,6 +55,61 @@ $('#tbl-masterbarang').DataTable({
         });
     }
 
+function showBarangTotalModal() {
+    // $('#tbl-masterbarang-total-modal').DataTable().destroy();
+    $('#modal-barang-total-modal').modal('show');
+    $('#tbl-masterbarang-total-modal').DataTable({
+            destroy: true,    
+            processing: false,
+            serverSide: true,
+            ajax: '/master/showBarangbyStok',
+            type: 'POST',
+            order: [[1, 'asc']],
+            pageLength: -1,
+            lengthChange: false,  // Menghilangkan dropdown "Show entries"
+            searching: false,     // Mematikan fungsi pencarian secara sistem
+
+            buttons: [
+            {
+                extend: 'excelHtml5',
+                text: '<i class="mdi mdi-file-excel-box"></i> Export Excel',
+                className: 'btn btn-success btn-sm mr-2'
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="mdi mdi-file-pdf-box"></i> Export PDF',
+                className: 'btn btn-danger btn-sm'
+            }
+            ],
+
+            dom: "<'row mb-2'<'col-sm-12'B>>" + 
+                 "tr" +
+                 "<'row'<'col-sm-12'i>>",
+            columns: [
+                {
+                    data: 'nomor', orderable: false
+                },
+                {
+                    data: 'ID_BARANG',
+                },
+                {
+                    data: 'NAMA_BARANG'
+                },
+                {
+                    data: 'KATEGORI'
+                },
+                {
+                    data: 'SATUAN'
+                },
+                {
+                    data: 'STOK'
+                },
+
+
+            ]
+        });
+}
+
 function edit_barang() {
     $(".edit-barang").click(function(e) {
         e.preventDefault();
