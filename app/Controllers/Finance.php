@@ -213,7 +213,9 @@ class Finance extends BaseController
 
 		$viewdata = $this->bukukas->select('ID_KAS, TANGGAL_KAS, RINCIAN_KAS, KATEGORI_KAS, PEMASUKAN_KAS, PENGELUARAN_KAS, 
 		(SELECT SUM(b.PEMASUKAN_KAS - b.PENGELUARAN_KAS) FROM buku_kas b WHERE b.ID_KAS <= buku_kas.ID_KAS) AS SALDO', false);
-		return DataTable::of($viewdata)->addNumbering('no')
+
+		$search = $this->request->getPost('search');
+		$dataTable =  DataTable::of($viewdata)->addNumbering('no')
 			->format('PEMASUKAN_KAS', function ($value) {
 				return number_format($value, 0, ',', '.');
 			})->format('PENGELUARAN_KAS', function ($value) {
@@ -221,8 +223,15 @@ class Finance extends BaseController
 			})->format('SALDO', function ($value) {
 				$nilai = $value ? $value : 0;
 				return number_format($nilai, 0, ',', '.');
-			})
-			->toJson(true);
+			});
+
+		if (isset($search['value']) && $search['value'] !== "") {
+			$dataTable->postQuery(function ($builder) {
+				// Mengosongkan batasan LIMIT yang otomatis dibuat oleh library
+				$builder->limit(null, null);
+			});
+		}
+		return $dataTable->toJson(true);
 	}
 	// End CONTROLLER PAGE BUKU KAS===================================
 

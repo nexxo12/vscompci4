@@ -67,7 +67,7 @@ class InvPenjualan extends Model
 
     public function PajakPaymentCash()
     {
-        return $this->table('inv_penjualan')->selectSum('laba_bersih')
+        return $this->table('inv_penjualan')->selectSum('GRAND_TOTAL')
             ->where('BARANG', 'CASH')->where('INV_STATUS', 'Selesai')->where('month(TGL_TRX)', date('m'))->where('year(TGL_TRX)', date('Y'))->findAll();
     }
 

@@ -307,17 +307,17 @@
                                                         <td></td>
                                                         <td>Pajak Penghasilan (PPh 0.5%)
                                                             <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
-                                                                <span>CASH: Rp. <?= number_format($PajakPaymentCash[0]['laba_bersih'], 0, ',', '.'); ?> x 0.5%</span>
+                                                                <span>Omzet CASH: Rp. <?= number_format($PajakPaymentCash[0]['GRAND_TOTAL'], 0, ',', '.'); ?> x 0.5%</span>
                                                             </div>
                                                             <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
                                                                 <span>Shopee & Tokopedia: dipotong di aplikasi</span>
                                                             </div>
                                                         </td>
-                                                        <td><?= 'Rp. ' . number_format($PajakPaymentCash[0]['laba_bersih'] * 0.005, 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($PajakPaymentCash[0]['GRAND_TOTAL'] * 0.005, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr class="bg-light" style="font-weight: bold; text-align: right;">
                                                         <td colspan="2">Laba / Rugi Setelah Pajak</td>
-                                                        <td><?= 'Rp. ' . number_format($HasilSebelumPajak - ($PajakPaymentCash[0]['laba_bersih'] * 0.005), 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($HasilSebelumPajak - ($PajakPaymentCash[0]['GRAND_TOTAL'] * 0.005), 0, ',', '.');  ?></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

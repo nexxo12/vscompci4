@@ -81,7 +81,7 @@ $("#btn-save-buku-kas").click(function(e){
 })
 
 $(document).ready(function() {
-    $('#datatable-buku-kas').DataTable({
+   var table=  $('#datatable-buku-kas').DataTable({
         processing: true,
         serverSide: true,
         dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
@@ -101,7 +101,10 @@ $(document).ready(function() {
             }
         ],
 
-        ajax: '/Finance/viewdata_buku_kas',
+        ajax: {
+            url: '/Finance/viewdata_buku_kas',
+            type: 'POST', // Pastikan method POST/GET sesuai controller Anda
+        },
         order: [[1, 'asc']],
         columns: [
             {
@@ -129,6 +132,23 @@ $(document).ready(function() {
             }
         ]
     });
+    
+    table.on('search.dt', function() {
+        var query = table.search(); // Mengambil teks yang sedang dicari
+        
+        if (query === "") {
+            // Jika kolom pencarian kosong, kembalikan ke pagination standar (20 data)
+            if (table.page.len() !== 10) {
+                table.page.len(10).draw(false);
+            }
+        } else {
+            // Jika ada teks pencarian, ubah limit internal DataTable menjadi -1 (Tampilkan Semua)
+            if (table.page.len() !== -1) {
+                table.page.len(-1).draw(false);
+            }
+        }
+    });
+
 });
 
 $(document).ready(function() {
