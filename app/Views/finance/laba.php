@@ -125,23 +125,23 @@
                                 <div class="alert alert-primary" role="alert" style="font-size: large;">
                                     <div style="display: flex; align-items: center; gap: 8px; color:black;">
                                         <i class="mdi mdi-cash" style="font-size: 58px;"></i>
-                                        <span><?= 'Rp. ' . number_format($JumlahLabaBulanIni[0]['laba_bersih'], 0, ',', '.');  ?></span>
+                                        <span><?= 'Rp. ' . number_format($JumlahLabaBulanIni[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></span>
                                     </div>
                                     <table style="font-size: small; font-style: italic; border: none; margin-top: 8px; color:black;">
                                         <tr>
                                             <td>CASH</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaCASH[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaCASH[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                         <tr>
                                             <td>Tokopedia</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaTokopedia[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaTokopedia[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                         <tr>
                                             <td>Shopee</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaShopee[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaShopee[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -153,23 +153,23 @@
                                 <div class="alert alert-success" role="alert" style="font-size: large;">
                                     <div style=" display: flex; align-items: center; gap: 8px; color:black;">
                                         <i class="mdi mdi-check-circle" style="font-size: 58px;"></i>
-                                        <span><?= 'Rp. ' . number_format($LabaPaid[0]['laba_bersih'], 0, ',', '.');  ?></span>
+                                        <span><?= 'Rp. ' . number_format($LabaPaid[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></span>
                                     </div>
                                     <table style="font-size: small; font-style: italic; border: none; margin-top: 8px; color:black;">
                                         <tr>
                                             <td>CASH</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaCashPaid[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaCashPaid[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                         <tr>
                                             <td>Tokopedia</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaTokopediaPaid[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaTokopediaPaid[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                         <tr>
                                             <td>Shopee</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaShopeePaid[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaShopeePaid[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -181,23 +181,23 @@
                                 <div class="alert alert-warning" role="alert" style="font-size: large;">
                                     <div style=" display: flex; align-items: center; gap: 8px; color:black;">
                                         <i class="mdi mdi-clock-alert" style="font-size: 58px;"></i>
-                                        <span><?= 'Rp. ' . number_format($LabaPending[0]['laba_bersih'], 0, ',', '.');  ?></span>
+                                        <span><?= 'Rp. ' . number_format($LabaPending[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></span>
                                     </div>
                                     <table style="font-size: small; font-style: italic; border: none; margin-top: 8px; color:black;">
                                         <tr>
                                             <td>CASH</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaCashPending[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaCashPending[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                         <tr>
                                             <td>Tokopedia</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaTokopediaPending[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaTokopediaPending[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
                                         <tr>
                                             <td>Shopee</td>
                                             <td>:</td>
-                                            <td><?= 'Rp. ' . number_format($TotalLabaShopeePending[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                            <td><?= 'Rp. ' . number_format($TotalLabaShopeePending[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                         </tr>
 
                                     </table>
@@ -231,7 +231,7 @@
                                                     <tr>
                                                         <td>Pendapatan</td>
                                                         <td>Laba Bersih Usaha</td>
-                                                        <td><?= 'Rp. ' . number_format($LabaPaid[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($LabaPaid[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td></td>
@@ -240,7 +240,7 @@
                                                     </tr>
                                                     <tr class="bg-light" style="font-weight: bold; text-align: right;">
                                                         <td colspan="2">Total Pendapatan</td>
-                                                        <td><?= 'Rp. ' . number_format($LabaPaid[0]['laba_bersih'], 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($LabaPaid[0]['laba_bersih'] ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Beban</td>
@@ -249,11 +249,11 @@
                                                             <?php foreach ($showBebanOperasional as $sbo) : ?>
                                                                 <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
                                                                     <span><?= $no++; ?>. <?= $sbo['RINCIAN_KAS']; ?></span>
-                                                                    <span><?= 'Rp. ' . number_format($sbo['PENGELUARAN_KAS'], 0, ',', '.');  ?></span>
+                                                                    <span><?= 'Rp. ' . number_format($sbo['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></span>
                                                                 </div>
                                                             <?php endforeach; ?>
                                                         </td>
-                                                        <td><?= 'Rp. ' . number_format($BebanOperasional[0]['PENGELUARAN_KAS'], 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($BebanOperasional[0]['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td></td>
@@ -262,11 +262,11 @@
                                                             <?php foreach ($showBebanPerlengkapan as $sbp) : ?>
                                                                 <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
                                                                     <span><?= $no++; ?>. <?= $sbp['RINCIAN_KAS']; ?></span>
-                                                                    <span><?= 'Rp. ' . number_format($sbp['PENGELUARAN_KAS'], 0, ',', '.');  ?></span>
+                                                                    <span><?= 'Rp. ' . number_format($sbp['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></span>
                                                                 </div>
                                                             <?php endforeach; ?>
                                                         </td>
-                                                        <td><?= 'Rp. ' . number_format($BebanPerlengkapan[0]['PENGELUARAN_KAS'], 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($BebanPerlengkapan[0]['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td></td>
@@ -275,11 +275,11 @@
                                                             <?php foreach ($showBebanGaji as $sbg) : ?>
                                                                 <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
                                                                     <span><?= $no++; ?>. <?= $sbg['RINCIAN_KAS']; ?></span>
-                                                                    <span><?= 'Rp. ' . number_format($sbg['PENGELUARAN_KAS'], 0, ',', '.');  ?></span>
+                                                                    <span><?= 'Rp. ' . number_format($sbg['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></span>
                                                                 </div>
                                                             <?php endforeach; ?>
                                                         </td>
-                                                        <td><?= 'Rp. ' . number_format($BebanGaji[0]['PENGELUARAN_KAS'], 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($BebanGaji[0]['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td></td>
@@ -288,36 +288,36 @@
                                                             <?php foreach ($showBebanUtilitas as $sbu) : ?>
                                                                 <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
                                                                     <span><?= $no++; ?>. <?= $sbu['RINCIAN_KAS']; ?></span>
-                                                                    <span><?= 'Rp. ' . number_format($sbu['PENGELUARAN_KAS'], 0, ',', '.');  ?></span>
+                                                                    <span><?= 'Rp. ' . number_format($sbu['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></span>
                                                                 </div>
                                                             <?php endforeach; ?>
                                                         </td>
-                                                        <td><?= 'Rp. ' . number_format($BebanUtilitas[0]['PENGELUARAN_KAS'], 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($BebanUtilitas[0]['PENGELUARAN_KAS'] ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr class="bg-light" style="font-weight: bold; text-align: right;">
                                                         <td colspan="2">Total Beban</td>
-                                                        <td><?= 'Rp. ' . number_format($TotalBeban, 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($TotalBeban ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Hasil</td>
                                                         <td>Laba / Rugi Sebelum Pajak</td>
-                                                        <td><?= 'Rp. ' . number_format($HasilSebelumPajak, 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($HasilSebelumPajak ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td></td>
                                                         <td>Pajak Penghasilan (PPh 0.5%)
                                                             <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
-                                                                <span>Omzet CASH: Rp. <?= number_format($PajakPaymentCash[0]['GRAND_TOTAL'], 0, ',', '.'); ?> x 0.5%</span>
+                                                                <span>Omzet CASH: Rp. <?= number_format($PajakPaymentCash[0]['GRAND_TOTAL'] ?? 0, 0, ',', '.'); ?> x 0.5%</span>
                                                             </div>
                                                             <div style="display: flex; justify-content: space-between; font-size: small; font-style: italic;">
                                                                 <span>Shopee & Tokopedia: dipotong di aplikasi</span>
                                                             </div>
                                                         </td>
-                                                        <td><?= 'Rp. ' . number_format($PajakPaymentCash[0]['GRAND_TOTAL'] * 0.005, 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($PajakPaymentCash[0]['GRAND_TOTAL'] * 0.005 ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                     <tr class="bg-light" style="font-weight: bold; text-align: right;">
                                                         <td colspan="2">Laba / Rugi Setelah Pajak</td>
-                                                        <td><?= 'Rp. ' . number_format($HasilSebelumPajak - ($PajakPaymentCash[0]['GRAND_TOTAL'] * 0.005), 0, ',', '.');  ?></td>
+                                                        <td><?= 'Rp. ' . number_format($HasilSebelumPajak - ($PajakPaymentCash[0]['GRAND_TOTAL'] * 0.005) ?? 0, 0, ',', '.');  ?></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace Hermawan\DataTables;
 
 class Helper
@@ -8,14 +9,11 @@ class Helper
 	{
 		$rp = new \ReflectionProperty($object, $varName);
 
-		if($rp->isPublic())
+		if ($rp->isPublic())
 			return $object->$varName;
-		else
-		{
-			$rp->setAccessible(TRUE);
+		else {
+			//$rp->setAccessible(TRUE);
 			return $rp->getValue($object);
 		}
-
 	}
-   
 }   // End of Helper Library Class.

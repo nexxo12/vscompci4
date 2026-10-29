@@ -44,6 +44,8 @@ class Format extends BaseConfig
 		'application/xml'  => 'CodeIgniter\Format\XMLFormatter',
 		'text/xml'         => 'CodeIgniter\Format\XMLFormatter',
 	];
+	public int $jsonEncodeOptions = JSON_UNESCAPED_SLASHES;
+	public int $jsonEncodeDepth   = 512;
 
 	/**
 	 * --------------------------------------------------------------------------

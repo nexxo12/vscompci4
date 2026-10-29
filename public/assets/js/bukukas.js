@@ -110,6 +110,10 @@ $(document).ready(function() {
             {
                 data: 'no', orderable: false
             },
+            { 
+                data: 'ID_KAS', 
+                visible: false
+            },
             {
                 data: 'TANGGAL_KAS'
             },
@@ -132,8 +136,15 @@ $(document).ready(function() {
             }
         ]
     });
+
+// table.on('draw.dt', function () {
+//     var info = table.page.info();
+//     table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+//         cell.innerHTML = info.start + i + 1;
+//     });
+// });
     
-    table.on('search.dt', function() {
+table.on('search.dt', function() {
         var query = table.search(); // Mengambil teks yang sedang dicari
         
         if (query === "") {

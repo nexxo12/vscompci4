@@ -152,6 +152,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
+                                                        <th>ID Kas</th>
                                                         <th>Tanggal</th>
                                                         <th>Rincian</th>
                                                         <th>Kategori</th>

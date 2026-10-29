@@ -285,29 +285,57 @@ class Finance extends BaseController
 
 	public function viewdata_buku_kas()
 	{
+		$builder = $this->bukukas->builder();
 
-		$viewdata = $this->bukukas->select('ID_KAS, TANGGAL_KAS, RINCIAN_KAS, KATEGORI_KAS, PEMASUKAN_KAS, PENGELUARAN_KAS, 
-		(SELECT SUM(b.PEMASUKAN_KAS - b.PENGELUARAN_KAS) FROM buku_kas b WHERE b.ID_KAS <= buku_kas.ID_KAS) AS SALDO', false);
+		// SOLUSI: Tambahkan '' AS SALDO agar properti SALDO terdaftar resmi di objek baris data library
+		$builder->select("ID_KAS, TANGGAL_KAS, RINCIAN_KAS, KATEGORI_KAS, PEMASUKAN_KAS, PENGELUARAN_KAS, '' AS SALDO");
 
-		$search = $this->request->getPost('search');
-		$dataTable =  DataTable::of($viewdata)->addNumbering('no')
+		$dataTable = DataTable::of($builder)
+			->addNumbering('no')
+			->edit('SALDO', function ($row) {
+				// Hitung nilai saldo berjalan dinamis per baris data
+				$db = \Config\Database::connect();
+				$query = $db->query("SELECT SUM(b.PEMASUKAN_KAS - b.PENGELUARAN_KAS) AS total FROM buku_kas b WHERE b.ID_KAS <= ?", [$row->ID_KAS]);
+				$result = $query->getRow();
+
+				$nilai = $result->total ?? 0;
+				return number_format($nilai, 0, ',', '.');
+			})
 			->format('PEMASUKAN_KAS', function ($value) {
 				return number_format($value, 0, ',', '.');
-			})->format('PENGELUARAN_KAS', function ($value) {
+			})
+			->format('PENGELUARAN_KAS', function ($value) {
 				return number_format($value, 0, ',', '.');
-			})->format('SALDO', function ($value) {
-				$nilai = $value ? $value : 0;
-				return number_format($nilai, 0, ',', '.');
 			});
 
-		if (isset($search['value']) && $search['value'] !== "") {
-			$dataTable->postQuery(function ($builder) {
-				// Mengosongkan batasan LIMIT yang otomatis dibuat oleh library
-				$builder->limit(null, null);
-			});
-		}
 		return $dataTable->toJson(true);
 	}
+
+	// public function viewdata_buku_kas()
+	// {
+
+	// 	$viewdata = $this->bukukas->select('ID_KAS, TANGGAL_KAS, RINCIAN_KAS, KATEGORI_KAS, PEMASUKAN_KAS, PENGELUARAN_KAS, 
+	// 	(SELECT SUM(b.PEMASUKAN_KAS - b.PENGELUARAN_KAS) FROM buku_kas b WHERE b.ID_KAS <= buku_kas.ID_KAS) AS SALDO', false);
+
+	// 	$search = $this->request->getPost('search');
+	// 	$dataTable =  DataTable::of($viewdata)
+	// 		->format('PEMASUKAN_KAS', function ($value) {
+	// 			return number_format($value, 0, ',', '.');
+	// 		})->format('PENGELUARAN_KAS', function ($value) {
+	// 			return number_format($value, 0, ',', '.');
+	// 		})->format('SALDO', function ($value) {
+	// 			$nilai = $value ? $value : 0;
+	// 			return number_format($nilai, 0, ',', '.');
+	// 		});
+
+	// 	if (isset($search['value']) && $search['value'] !== "") {
+	// 		$dataTable->postQuery(function ($builder) {
+	// 			// Mengosongkan batasan LIMIT yang otomatis dibuat oleh library
+	// 			$builder->limit(null, null);
+	// 		});
+	// 	}
+	// 	return $dataTable->toJson(true);
+	// }
 	// End CONTROLLER PAGE BUKU KAS===================================
 
 	// CONTROLLER PAGE LAPORAN PEMBELIAN===================================
