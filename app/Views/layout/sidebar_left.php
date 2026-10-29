@@ -65,7 +65,7 @@
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-multiple"></i> <span> Karyawan </span> <span class="float-right"><i class="mdi mdi-chevron-right"></i></span></a>
                     <ul class="list-unstyled">
-                        <li><a href="/karyawan/add"><i class="mdi mdi-account-multiple-plus"></i>Tambah Karyawan</a></li>
+                        <li><a href="/karyawan"><i class="mdi mdi-account-multiple-plus"></i>Karyawan</a></li>
                         <li><a href="/karyawan/pengaturan"><i class="mdi mdi-account-settings-variant"></i>Pengaturan</a></li>
                         <li><a href="/karyawan/gaji"><i class="mdi mdi-cash-usd"></i>Gaji</a></li>
                     </ul>

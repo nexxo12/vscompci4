@@ -11,6 +11,9 @@ use App\Models\Listpenjualan;
 use App\Models\PenjualanModel;
 use App\Models\Garansi;
 use App\Models\BukuKas;
+use App\Models\Karyawan;
+use App\Models\Jabatan;
+use App\Models\GajiKaryawan;
 use CodeIgniter\Exceptions\AlertError;
 use \Hermawan\DataTables\DataTable;
 
@@ -25,6 +28,9 @@ class Finance extends BaseController
 	protected PenjualanModel $penjualanID;
 	protected Garansi $garansi;
 	protected BukuKas $bukukas;
+	protected Karyawan $karyawan;
+	protected Jabatan $jabatan;
+	protected GajiKaryawan $gajikaryawan;
 	public function __construct()
 	{
 		$this->pembelian = new Pembelian();
@@ -36,21 +42,26 @@ class Finance extends BaseController
 		$this->penjualanID = new PenjualanModel();
 		$this->garansi = new Garansi();
 		$this->bukukas = new BukuKas();
+		$this->karyawan = new Karyawan();
+		$this->jabatan = new Jabatan();
+		$this->gajikaryawan = new GajiKaryawan();
 	}
 
 	// CONTROLLER PAGE FINANCE===================================
-	public function add()
+	// CONTROLLER PAGE FINANCE > KARYAWAN===================================
+	public function index()
 	{
 		$data = [
-			'tittle' => 'Tambah Karyawan - VSKomputer'
+			'tittle' => 'Karyawan - VSKomputer'
 		];
-		return view('/finance/add_karyawan', $data);
+		return view('/finance/karyawan', $data);
 	}
 
 	public function setting()
 	{
 		$data = [
-			'tittle' => 'Setting Karyawan - VSKomputer'
+			'tittle' => 'Setting Karyawan - VSKomputer',
+			'jabatan' => $this->jabatan->showjabatan()
 		];
 		return view('/finance/setting_karyawan', $data);
 	}
@@ -63,6 +74,70 @@ class Finance extends BaseController
 		return view('/finance/gaji', $data);
 	}
 
+	public function addnewKaryawan()
+	{
+		if ($this->request->isAJAX()) {
+			$data = [
+				'id_jabatan' => $this->request->getVar('kategori-jabatan-karyawan'),
+				'nik_karyawan' => $this->request->getVar('nik-karyawan'),
+				'nama_karyawan' => ucwords($this->request->getVar('nama-karyawan')),
+				'email_karyawan' => $this->request->getVar('email-karyawan'),
+				'hp_karyawan' => $this->request->getVar('hp-karyawan'),
+				'ttl_karyawan' => $this->request->getVar('tl-karyawan'),
+				'jenkel_karyawan' => $this->request->getVar('jenkel-karyawan'),
+				'alamat_karyawan' => ucwords($this->request->getVar('alamat-karyawan')),
+				'tglmasuk_karyawan' => $this->request->getVar('tanggal-masuk-karyawan'),
+				'status_karyawan' => $this->request->getVar('status-karyawan')
+			];
+			$this->karyawan->insert($data);
+			return json_encode(['status' => 'success', 'message' => 'Data Buku Kas Berhasil Ditambahkan']);
+		}
+	}
+
+	public function addnewJabatan()
+	{
+		if ($this->request->isAJAX()) {
+			$data = [
+				'departement_jabatan' => ucwords($this->request->getVar('dept-jabatan')),
+				'nama_jabatan' => ucwords($this->request->getVar('nama-jabatan')),
+				'gaji_jabatan' => $this->request->getVar('gaji-jabatan'),
+			];
+			$this->jabatan->insert($data);
+			return json_encode(['status' => 'success', 'message' => 'Data Buku Kas Berhasil Ditambahkan']);
+		}
+	}
+
+	public function showdatakaryawan()
+	{
+		$viewdata = $this->karyawan->table('karyawan')->select('id_karyawan, nik_karyawan, nama_karyawan, email_karyawan, 
+		hp_karyawan, ttl_karyawan, jenkel_karyawan, alamat_karyawan, tglmasuk_karyawan, status_karyawan, departement_jabatan, nama_jabatan')->join('jabatan', 'jabatan.id_jabatan = karyawan.id_jabatan')->orderBy('karyawan.id_jabatan', 'DESC');
+		return DataTable::of($viewdata)->add('aksi', function ($row) {
+			return '<a href="/finance/edit_karyawan?id=' . $row->id_karyawan . '" class="edit-karyawan"><button class="btn btn-warning btn-sm ti-pencil-alt " type="button" onclick=""></button></a>';
+		})->add('delete', function ($row) {
+			return '<a href="/finance/delete_karyawan?id=' . $row->id_karyawan . '" class="delete-karyawan"><button class="btn btn-danger btn-sm ti-trash " type="button" onclick="delete_karyawan()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function delete_karyawan()
+	{
+		if ($this->request->isAJAX()) {
+			$idkaryawan = $this->request->getVar('id');
+			$this->karyawan->delete($idkaryawan);
+			$result = ['status' => 'success'];
+			return json_encode($result);
+		}
+	}
+
+	public function showdatajabatan()
+	{
+		$viewdata = $this->jabatan->table('jabatan')->select('id_jabatan, departement_jabatan, nama_jabatan, gaji_jabatan');
+		return DataTable::of($viewdata)->add('delete', function ($row) {
+			return '<a href="/finance/delete_jabatan?id=' . $row->id_jabatan . '" class="delete-jabatan"><button class="btn btn-danger btn-sm ti-trash " type="button" onclick=""></button></a>';
+		})->add('edit', function ($row) {
+			return '<a href="/finance/edit_jabatan?id=' . $row->id_jabatan . '" class="edit-jabatan"><button class="btn btn-warning btn-sm ti-pencil-alt" type="button" onclick=""></button></a>';
+		})->toJson(true);
+	}
+	// END CONTROLLER PAGE FINANCE > KARYAWAN===================================
 	// CONTROLLER PAGE FINANCE / PENJUALAN===================================
 	public function laporan_penjualan()
 	{

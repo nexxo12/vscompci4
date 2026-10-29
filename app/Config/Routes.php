@@ -68,7 +68,7 @@ $routes->get('/master_barang', 'Master::barang');
 // $routes->get('/master_customer', 'Master::customer');
 // $routes->get('/master_supplier', 'Master::supplier');
 
-$routes->get('/karyawan/add', 'Finance::add');
+$routes->get('/karyawan', 'Finance::index');
 $routes->get('/karyawan/pengaturan', 'Finance::setting');
 $routes->get('/karyawan/gaji', 'Finance::gaji');
 
