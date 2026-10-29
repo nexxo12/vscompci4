@@ -1,24 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * This file is part of the CodeIgniter 4 framework.
+ * This file is part of CodeIgniter 4 framework.
  *
  * (c) CodeIgniter Foundation <admin@codeigniter.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace CodeIgniter\Autoloader;
 
+use Closure;
+use CodeIgniter\Exceptions\ConfigException;
+use CodeIgniter\Exceptions\InvalidArgumentException;
+use CodeIgniter\Exceptions\RuntimeException;
 use Composer\Autoload\ClassLoader;
+use Composer\InstalledVersions;
 use Config\Autoload;
+use Config\Kint as KintConfig;
 use Config\Modules;
-use InvalidArgumentException;
+use Kint\Kint;
+use Kint\Renderer\CliRenderer;
+use Kint\Renderer\RichRenderer;
 
 /**
- * CodeIgniter Autoloader
- *
  * An autoloader that uses both PSR4 autoloading, and traditional classmaps.
  *
  * Given a foo-bar package of classes in the file system at the following paths:
@@ -52,321 +60,526 @@ use InvalidArgumentException;
  *      // register the autoloader
  *      $loader->register();
  * ```
+ *
+ * @see \CodeIgniter\Autoloader\AutoloaderTest
  */
 class Autoloader
 {
-	/**
-	 * Stores namespaces as key, and path as values.
-	 *
-	 * @var array<string, array<string>>
-	 */
-	protected $prefixes = [];
+    /**
+     * Stores namespaces as key, and path as values.
+     *
+     * @var array<non-empty-string, list<non-empty-string>>
+     */
+    protected $prefixes = [];
 
-	/**
-	 * Stores class name as key, and path as values.
-	 *
-	 * @var array<string, string>
-	 */
-	protected $classmap = [];
+    /**
+     * Stores class name as key, and path as values.
+     *
+     * @var array<class-string, non-empty-string>
+     */
+    protected $classmap = [];
 
-	/**
-	 * Stores files as a list.
-	 *
-	 * @var array<int, string>
-	 */
-	protected $files = [];
+    /**
+     * Stores files as a list.
+     *
+     * @var list<non-empty-string>
+     */
+    protected $files = [];
 
-	/**
-	 * Reads in the configuration array (described above) and stores
-	 * the valid parts that we'll need.
-	 *
-	 * @param Autoload $config
-	 * @param Modules  $modules
-	 *
-	 * @return $this
-	 */
-	public function initialize(Autoload $config, Modules $modules)
-	{
-		// We have to have one or the other, though we don't enforce the need
-		// to have both present in order to work.
-		if (empty($config->psr4) && empty($config->classmap))
-		{
-			throw new InvalidArgumentException('Config array must contain either the \'psr4\' key or the \'classmap\' key.');
-		}
+    /**
+     * Stores helper list.
+     * Always load the URL helper, it should be used in most apps.
+     *
+     * @var list<non-empty-string>
+     */
+    protected $helpers = ['url'];
 
-		if (isset($config->psr4))
-		{
-			$this->addNamespace($config->psr4);
-		}
+    /**
+     * Stores the closures registered with spl_autoload_register()
+     * so that unregister() can remove the exact same instances.
+     *
+     * @var list<Closure(string): void>
+     */
+    private array $registeredClosures = [];
 
-		if (isset($config->classmap))
-		{
-			$this->classmap = $config->classmap;
-		}
+    public function __construct(private readonly string $composerPath = COMPOSER_PATH)
+    {
+    }
 
-		if (isset($config->files))
-		{
-			$this->files = $config->files;
-		}
+    /**
+     * Reads in the configuration array (described above) and stores
+     * the valid parts that we'll need.
+     *
+     * @return $this
+     */
+    public function initialize(Autoload $config, Modules $modules)
+    {
+        $this->prefixes = [];
+        $this->classmap = [];
+        $this->files    = [];
 
-		// Should we load through Composer's namespaces, also?
-		if ($modules->discoverInComposer)
-		{
-			$this->discoverComposerNamespaces();
-		}
+        // We have to have one or the other, though we don't enforce the need
+        // to have both present in order to work.
+        if ($config->psr4 === [] && $config->classmap === []) {
+            throw new InvalidArgumentException('Config array must contain either the \'psr4\' key or the \'classmap\' key.');
+        }
 
-		return $this;
-	}
+        if ($config->psr4 !== []) {
+            $this->addNamespace($config->psr4);
+        }
 
-	/**
-	 * Register the loader with the SPL autoloader stack.
-	 */
-	public function register()
-	{
-		// Prepend the PSR4  autoloader for maximum performance.
-		spl_autoload_register([$this, 'loadClass'], true, true); // @phpstan-ignore-line
+        if ($config->classmap !== []) {
+            $this->classmap = $config->classmap;
+        }
 
-		// Now prepend another loader for the files in our class map.
-		spl_autoload_register([$this, 'loadClassmap'], true, true); // @phpstan-ignore-line
+        if ($config->files !== []) {
+            $this->files = $config->files;
+        }
 
-		// Load our non-class files
-		foreach ($this->files as $file)
-		{
-			if (is_string($file))
-			{
-				$this->includeFile($file);
-			}
-		}
-	}
+        if ($config->helpers !== []) {
+            $this->helpers = [...$this->helpers, ...$config->helpers];
+        }
 
-	/**
-	 * Registers namespaces with the autoloader.
-	 *
-	 * @param array|string $namespace
-	 * @param string       $path
-	 *
-	 * @return $this
-	 */
-	public function addNamespace($namespace, string $path = null)
-	{
-		if (is_array($namespace))
-		{
-			foreach ($namespace as $prefix => $path)
-			{
-				$prefix = trim($prefix, '\\');
+        if (is_file($this->composerPath)) {
+            $this->loadComposerAutoloader($modules);
+        }
 
-				if (is_array($path))
-				{
-					foreach ($path as $dir)
-					{
-						$this->prefixes[$prefix][] = rtrim($dir, '\\/') . DIRECTORY_SEPARATOR;
-					}
+        return $this;
+    }
 
-					continue;
-				}
+    private function loadComposerAutoloader(Modules $modules): void
+    {
+        // The path to the vendor directory.
+        // We do not want to enforce this, so set the constant if Composer was used.
+        if (! defined('VENDORPATH')) {
+            define('VENDORPATH', dirname($this->composerPath) . DIRECTORY_SEPARATOR);
+        }
 
-				$this->prefixes[$prefix][] = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
-			}
-		}
-		else
-		{
-			$this->prefixes[trim($namespace, '\\')][] = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
-		}
+        /** @var ClassLoader $composer */
+        $composer = include $this->composerPath;
 
-		return $this;
-	}
+        // Should we load through Composer's namespaces, also?
+        if ($modules->discoverInComposer) {
+            $composerPackages = $modules->composerPackages;
+            $this->loadComposerNamespaces($composer, $composerPackages ?? []);
+        }
 
-	/**
-	 * Get namespaces with prefixes as keys and paths as values.
-	 *
-	 * If a prefix param is set, returns only paths to the given prefix.
-	 *
-	 * @param string|null $prefix
-	 *
-	 * @return array
-	 */
-	public function getNamespace(string $prefix = null)
-	{
-		if ($prefix === null)
-		{
-			return $this->prefixes;
-		}
+        unset($composer);
+    }
 
-		return $this->prefixes[trim($prefix, '\\')] ?? [];
-	}
+    /**
+     * Register the loader with the SPL autoloader stack
+     * in the following order:
+     *
+     * 1. Classmap loader
+     * 2. PSR-4 autoloader
+     * 3. Non-class files
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // Store the exact Closure instances so unregister() can remove them.
+        // First-class callable syntax (e.g. $this->loadClass(...)) creates a
+        // new Closure object on every call, so we must reuse the same instances.
+        $loadClassmap = $this->loadClassmap(...);
+        $loadClass    = $this->loadClass(...);
 
-	/**
-	 * Removes a single namespace from the psr4 settings.
-	 *
-	 * @param string $namespace
-	 *
-	 * @return $this
-	 */
-	public function removeNamespace(string $namespace)
-	{
-		if (isset($this->prefixes[trim($namespace, '\\')]))
-		{
-			unset($this->prefixes[trim($namespace, '\\')]);
-		}
+        $this->registeredClosures[] = $loadClassmap;
+        $this->registeredClosures[] = $loadClass;
 
-		return $this;
-	}
+        spl_autoload_register($loadClassmap, true);
+        spl_autoload_register($loadClass, true);
 
-	/**
-	 * Load a class using available class mapping.
-	 *
-	 * @param string $class
-	 *
-	 * @return string|false
-	 */
-	public function loadClassmap(string $class)
-	{
-		$file = $this->classmap[$class] ?? '';
+        foreach ($this->files as $file) {
+            $this->includeFile($file);
+        }
+    }
 
-		if (is_string($file) && $file !== '')
-		{
-			return $this->includeFile($file);
-		}
+    /**
+     * Unregisters the autoloader from the SPL autoload stack.
+     */
+    public function unregister(): void
+    {
+        foreach ($this->registeredClosures as $closure) {
+            spl_autoload_unregister($closure);
+        }
 
-		return false;
-	}
+        $this->registeredClosures = [];
+    }
 
-	/**
-	 * Loads the class file for a given class name.
-	 *
-	 * @param string $class The fully qualified class name.
-	 *
-	 * @return string|false The mapped file on success, or boolean false
-	 *                          on failure.
-	 */
-	public function loadClass(string $class)
-	{
-		$class = trim($class, '\\');
-		$class = str_ireplace('.php', '', $class);
+    /**
+     * Registers namespaces with the autoloader.
+     *
+     * @param array<non-empty-string, list<non-empty-string>|non-empty-string>|non-empty-string $namespace
+     *
+     * @return $this
+     */
+    public function addNamespace($namespace, ?string $path = null)
+    {
+        if (is_array($namespace)) {
+            foreach ($namespace as $prefix => $namespacedPath) {
+                $prefix = trim($prefix, '\\');
 
-		return $this->loadInNamespace($class);
-	}
+                if (is_array($namespacedPath)) {
+                    foreach ($namespacedPath as $dir) {
+                        $this->prefixes[$prefix][] = rtrim($dir, '\\/') . DIRECTORY_SEPARATOR;
+                    }
 
-	/**
-	 * Loads the class file for a given class name.
-	 *
-	 * @param string $class The fully-qualified class name
-	 *
-	 * @return string|false The mapped file name on success, or boolean false on fail
-	 */
-	protected function loadInNamespace(string $class)
-	{
-		if (strpos($class, '\\') === false)
-		{
-			return false;
-		}
+                    continue;
+                }
 
-		foreach ($this->prefixes as $namespace => $directories)
-		{
-			foreach ($directories as $directory)
-			{
-				$directory = rtrim($directory, '\\/');
+                $this->prefixes[$prefix][] = rtrim($namespacedPath, '\\/') . DIRECTORY_SEPARATOR;
+            }
+        } else {
+            $this->prefixes[trim($namespace, '\\')][] = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
+        }
 
-				if (strpos($class, $namespace) === 0)
-				{
-					$filePath = $directory . str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($namespace))) . '.php';
-					$filename = $this->includeFile($filePath);
+        return $this;
+    }
 
-					if ($filename)
-					{
-						return $filename;
-					}
-				}
-			}
-		}
+    /**
+     * Get namespaces with prefixes as keys and paths as values.
+     *
+     * If a prefix param is set, returns only paths to the given prefix.
+     *
+     * @return ($prefix is null ? array<non-empty-string, list<non-empty-string>> : list<non-empty-string>)
+     */
+    public function getNamespace(?string $prefix = null)
+    {
+        if ($prefix === null) {
+            return $this->prefixes;
+        }
 
-		// never found a mapped file
-		return false;
-	}
+        return $this->prefixes[trim($prefix, '\\')] ?? [];
+    }
 
-	/**
-	 * A central way to include a file. Split out primarily for testing purposes.
-	 *
-	 * @param string $file
-	 *
-	 * @return string|false The filename on success, false if the file is not loaded
-	 */
-	protected function includeFile(string $file)
-	{
-		$file = $this->sanitizeFilename($file);
+    /**
+     * Removes a single namespace from the psr4 settings.
+     *
+     * @return $this
+     */
+    public function removeNamespace(string $namespace)
+    {
+        if (isset($this->prefixes[trim($namespace, '\\')])) {
+            unset($this->prefixes[trim($namespace, '\\')]);
+        }
 
-		if (is_file($file))
-		{
-			include_once $file;
+        return $this;
+    }
 
-			return $file;
-		}
+    /**
+     * Load a class using available class mapping.
+     *
+     * @param class-string $class The fully qualified class name.
+     *
+     * @internal For `spl_autoload_register` use.
+     */
+    public function loadClassmap(string $class): void
+    {
+        $file = $this->classmap[$class] ?? '';
 
-		return false;
-	}
+        if (is_string($file) && $file !== '') {
+            $this->includeFile($file);
+        }
+    }
 
-	/**
-	 * Sanitizes a filename, replacing spaces with dashes.
-	 *
-	 * Removes special characters that are illegal in filenames on certain
-	 * operating systems and special characters requiring special escaping
-	 * to manipulate at the command line. Replaces spaces and consecutive
-	 * dashes with a single dash. Trim period, dash and underscore from beginning
-	 * and end of filename.
-	 *
-	 * @param string $filename
-	 *
-	 * @return string The sanitized filename
-	 */
-	public function sanitizeFilename(string $filename): string
-	{
-		// Only allow characters deemed safe for POSIX portable filenames.
-		// Plus the forward slash for directory separators since this might be a path.
-		// http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_278
-		// Modified to allow backslash and colons for on Windows machines.
-		$filename = preg_replace('/[^0-9\p{L}\s\/\-\_\.\:\\\\]/u', '', $filename);
+    /**
+     * Loads the class file for a given class name.
+     *
+     * @param class-string $class The fully qualified class name.
+     *
+     * @internal For `spl_autoload_register` use.
+     */
+    public function loadClass(string $class): void
+    {
+        $this->loadInNamespace($class);
+    }
 
-		// Clean up our filename edges.
-		$filename = trim($filename, '.-_');
+    /**
+     * Loads the class file for a given class name.
+     *
+     * @param class-string $class The fully qualified class name.
+     *
+     * @return false|non-empty-string The mapped file name on success, or boolean false on fail
+     */
+    protected function loadInNamespace(string $class)
+    {
+        if (! str_contains($class, '\\')) {
+            return false;
+        }
 
-		return $filename;
-	}
+        foreach ($this->prefixes as $namespace => $directories) {
+            if (str_starts_with($class, $namespace)) {
+                $relativeClassPath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($namespace)));
 
-	/**
-	 * Locates autoload information from Composer, if available.
-	 *
-	 * @return void
-	 */
-	protected function discoverComposerNamespaces()
-	{
-		if (! is_file(COMPOSER_PATH))
-		{
-			return;
-		}
+                foreach ($directories as $directory) {
+                    $directory = rtrim($directory, '\\/');
 
-		/**
-		 * @var ClassLoader $composer
-		 */
-		$composer = include COMPOSER_PATH;
-		$paths    = $composer->getPrefixesPsr4();
-		$classes  = $composer->getClassMap();
+                    $filePath = $directory . $relativeClassPath . '.php';
+                    $filename = $this->includeFile($filePath);
 
-		unset($composer);
+                    if ($filename !== false) {
+                        return $filename;
+                    }
+                }
+            }
+        }
 
-		// Get rid of CodeIgniter so we don't have duplicates
-		if (isset($paths['CodeIgniter\\']))
-		{
-			unset($paths['CodeIgniter\\']);
-		}
+        return false;
+    }
 
-		$newPaths = [];
-		foreach ($paths as $key => $value)
-		{
-			// Composer stores namespaces with trailing slash. We don't.
-			$newPaths[rtrim($key, '\\ ')] = $value;
-		}
+    /**
+     * A central way to include a file. Split out primarily for testing purposes.
+     *
+     * @return false|non-empty-string The filename on success, false if the file is not loaded
+     */
+    protected function includeFile(string $file)
+    {
+        if (is_file($file)) {
+            include_once $file;
 
-		$this->prefixes = array_merge($this->prefixes, $newPaths);
-		$this->classmap = array_merge($this->classmap, $classes);
-	}
+            return $file;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check file path.
+     *
+     * Checks special characters that are illegal in filenames on certain
+     * operating systems and special characters requiring special escaping
+     * to manipulate at the command line. Replaces spaces and consecutive
+     * dashes with a single dash. Trim period, dash and underscore from beginning
+     * and end of filename.
+     *
+     * @return string The sanitized filename
+     *
+     * @deprecated No longer used. See https://github.com/codeigniter4/CodeIgniter4/issues/7055
+     */
+    public function sanitizeFilename(string $filename): string
+    {
+        // Only allow characters deemed safe for POSIX portable filenames.
+        // Plus the forward slash for directory separators since this might be a path.
+        // http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_278
+        // Modified to allow backslash and colons for on Windows machines.
+        $result = preg_match_all('/[^0-9\p{L}\s\/\-_.:\\\\]/u', $filename, $matches);
+
+        if ($result > 0) {
+            $chars = implode('', $matches[0]);
+
+            throw new InvalidArgumentException(
+                'The file path contains special characters "' . $chars
+                . '" that are not allowed: "' . $filename . '"',
+            );
+        }
+        if ($result === false) {
+            $message = preg_last_error_msg();
+
+            throw new RuntimeException($message . '. filename: "' . $filename . '"');
+        }
+
+        // Clean up our filename edges.
+        $cleanFilename = trim($filename, '.-_');
+
+        if ($filename !== $cleanFilename) {
+            throw new InvalidArgumentException('The characters ".-_" are not allowed in filename edges: "' . $filename . '"');
+        }
+
+        return $cleanFilename;
+    }
+
+    /**
+     * @param array{only?: list<string>, exclude?: list<string>} $composerPackages
+     */
+    private function loadComposerNamespaces(ClassLoader $composer, array $composerPackages): void
+    {
+        $namespacePaths = $composer->getPrefixesPsr4();
+
+        // Get rid of duplicated namespaces.
+        $duplicatedNamespaces = ['CodeIgniter', APP_NAMESPACE, 'Config'];
+
+        foreach ($duplicatedNamespaces as $ns) {
+            if (isset($namespacePaths[$ns . '\\'])) {
+                unset($namespacePaths[$ns . '\\']);
+            }
+        }
+
+        if (! method_exists(InstalledVersions::class, 'getAllRawData')) { // @phpstan-ignore function.alreadyNarrowedType
+            throw new RuntimeException(
+                'Your Composer version is too old.'
+                . ' Please update Composer (run `composer self-update`) to v2.0.14 or later'
+                . ' and remove your vendor/ directory, and run `composer update`.',
+            );
+        }
+        // This method requires Composer 2.0.14 or later.
+        $allData     = InstalledVersions::getAllRawData();
+        $packageList = [];
+
+        foreach ($allData as $list) {
+            $packageList = array_merge($packageList, $list['versions']);
+        }
+
+        // Check config for $composerPackages.
+        $only    = $composerPackages['only'] ?? [];
+        $exclude = $composerPackages['exclude'] ?? [];
+        if ($only !== [] && $exclude !== []) {
+            throw new ConfigException('Cannot use "only" and "exclude" at the same time in "Config\Modules::$composerPackages".');
+        }
+
+        // Get install paths of packages to add namespace for auto-discovery.
+        $installPaths = [];
+        if ($only !== []) {
+            foreach ($packageList as $packageName => $data) {
+                if (in_array($packageName, $only, true) && isset($data['install_path'])) {
+                    $installPaths[] = $data['install_path'];
+                }
+            }
+        } else {
+            foreach ($packageList as $packageName => $data) {
+                if (! in_array($packageName, $exclude, true) && isset($data['install_path'])) {
+                    $installPaths[] = $data['install_path'];
+                }
+            }
+        }
+
+        $newPaths = [];
+
+        foreach ($namespacePaths as $namespace => $srcPaths) {
+            $add = false;
+
+            foreach ($srcPaths as $path) {
+                foreach ($installPaths as $installPath) {
+                    if (str_starts_with($path, $installPath)) {
+                        $add = true;
+                        break 2;
+                    }
+                }
+            }
+
+            if ($add) {
+                // Composer stores namespaces with trailing slash. We don't.
+                $newPaths[rtrim($namespace, '\\ ')] = $srcPaths;
+            }
+        }
+
+        $this->addNamespace($newPaths);
+    }
+
+    /**
+     * Locates autoload information from Composer, if available.
+     *
+     * @deprecated No longer used.
+     *
+     * @return void
+     */
+    protected function discoverComposerNamespaces()
+    {
+        if (! is_file($this->composerPath)) {
+            return;
+        }
+
+        /** @var ClassLoader $composer */
+        $composer = include $this->composerPath;
+        $paths    = $composer->getPrefixesPsr4();
+        $classes  = $composer->getClassMap();
+
+        unset($composer);
+
+        // Get rid of CodeIgniter so we don't have duplicates
+        if (isset($paths['CodeIgniter\\'])) {
+            unset($paths['CodeIgniter\\']);
+        }
+
+        $newPaths = [];
+
+        foreach ($paths as $key => $value) {
+            // Composer stores namespaces with trailing slash. We don't.
+            $newPaths[rtrim($key, '\\ ')] = $value;
+        }
+
+        $this->prefixes = array_merge($this->prefixes, $newPaths);
+        $this->classmap = array_merge($this->classmap, $classes);
+    }
+
+    /**
+     * Loads helpers
+     */
+    public function loadHelpers(): void
+    {
+        helper($this->helpers);
+    }
+
+    /**
+     * Initializes Kint
+     */
+    public function initializeKint(bool $debug = false): void
+    {
+        if ($debug) {
+            $this->autoloadKint();
+            $this->configureKint();
+        } elseif (class_exists(Kint::class)) {
+            // In case that Kint is already loaded via Composer.
+            Kint::$enabled_mode = false;
+        }
+
+        helper('kint');
+    }
+
+    private function autoloadKint(): void
+    {
+        // If we have KINT_DIR it means it's already loaded via composer
+        if (! defined('KINT_DIR')) {
+            spl_autoload_register(static function ($class): void {
+                $class = explode('\\', $class);
+
+                if (array_shift($class) !== 'Kint') {
+                    return;
+                }
+
+                $file = SYSTEMPATH . 'ThirdParty/Kint/' . implode('/', $class) . '.php';
+
+                if (is_file($file)) {
+                    require_once $file;
+                }
+            });
+
+            require_once SYSTEMPATH . 'ThirdParty/Kint/init.php';
+        }
+    }
+
+    private function configureKint(): void
+    {
+        $config = new KintConfig();
+
+        Kint::$depth_limit         = $config->maxDepth;
+        Kint::$display_called_from = $config->displayCalledFrom;
+        Kint::$expanded            = $config->expanded;
+
+        if (isset($config->plugins) && is_array($config->plugins)) {
+            Kint::$plugins = $config->plugins;
+        }
+
+        $csp = service('csp');
+        if ($csp->enabled()) {
+            RichRenderer::$js_nonce  = $csp->getScriptNonce();
+            RichRenderer::$css_nonce = $csp->getStyleNonce();
+        }
+
+        RichRenderer::$theme  = $config->richTheme;
+        RichRenderer::$folder = $config->richFolder;
+
+        if (isset($config->richObjectPlugins) && is_array($config->richObjectPlugins)) {
+            RichRenderer::$value_plugins = $config->richObjectPlugins;
+        }
+        if (isset($config->richTabPlugins) && is_array($config->richTabPlugins)) {
+            RichRenderer::$tab_plugins = $config->richTabPlugins;
+        }
+
+        CliRenderer::$cli_colors         = $config->cliColors;
+        CliRenderer::$force_utf8         = $config->cliForceUTF8;
+        CliRenderer::$detect_width       = $config->cliDetectWidth;
+        CliRenderer::$min_terminal_width = $config->cliMinWidth;
+    }
 }

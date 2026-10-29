@@ -19,6 +19,11 @@ class Modules extends BaseModules
 	 */
 	public $enabled = true;
 
+	public array $composerPackages = [
+		'only' => [],
+		'exclude' => [],
+	];
+
 	/**
 	 * --------------------------------------------------------------------------
 	 * Enable Auto-Discovery Within Composer Packages?

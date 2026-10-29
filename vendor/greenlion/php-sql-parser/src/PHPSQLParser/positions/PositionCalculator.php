@@ -90,7 +90,11 @@ class PositionCalculator {
                                                 ExpressionType::SUBPARTITION_HASH, ExpressionType::SUBPARTITION_COUNT,
                                                 ExpressionType::CHARSET, ExpressionType::ENGINE, ExpressionType::QUERY,
                                                 ExpressionType::INDEX_ALGORITHM, ExpressionType::INDEX_LOCK,
-    											ExpressionType::SUBQUERY_FACTORING, ExpressionType::CUSTOM_FUNCTION
+    											ExpressionType::SUBQUERY_FACTORING, ExpressionType::CUSTOM_FUNCTION,
+                                                ExpressionType::SIMPLE_FUNCTION,
+                                                ExpressionType::WINDOW_FUNCTION, ExpressionType::WINDOW_SPEC,
+                                                ExpressionType::WINDOW_DEF, ExpressionType::WINDOW_FRAME,
+                                                ExpressionType::WINDOW_FRAME_BOUND
     );
 
     /**
@@ -127,6 +131,9 @@ class PositionCalculator {
     }
 
     protected function findPositionWithinString($sql, $value, $expr_type) {
+        if ($value === '') {
+            return false;
+        }
 
         $offset = 0;
         $ok = false;
@@ -145,8 +152,9 @@ class PositionCalculator {
             }
 
             // if we have a quoted string, we every character is allowed after it
-            // see issue 137
-            $quoted = ($sql[$pos + strlen($value) - 1] === '`');
+            // see issues 137 and 361
+            $quotedBefore = in_array($sql[$pos], array('`', '('), true);
+            $quotedAfter = in_array($sql[$pos + strlen($value) - 1], array('`', ')'), true);
             $after = "";
             if (isset($sql[$pos + strlen($value)])) {
                 $after = $sql[$pos + strlen($value)];
@@ -175,10 +183,11 @@ class PositionCalculator {
             // in all other cases we accept
             // whitespace, comma, operators, parenthesis and end_of_string
 
-            $ok = ($before === "" || in_array($before, self::$allowedOnOther, true));
+            $ok = ($before === "" || in_array($before, self::$allowedOnOther, true)
+                || ($quotedBefore && (strtolower($before) >= 'a' && strtolower($before) <= 'z')));
             $ok = $ok
                 && ($after === "" || in_array($after, self::$allowedOnOther, true)
-                    || ($quoted && (strtolower($after) >= 'a' && strtolower($after) <= 'z')));
+                    || ($quotedAfter && (strtolower($after) >= 'a' && strtolower($after) <= 'z')));
 
             if ($ok) {
                 break;

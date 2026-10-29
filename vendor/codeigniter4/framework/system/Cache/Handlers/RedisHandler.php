@@ -1,352 +1,257 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * This file is part of the CodeIgniter 4 framework.
+ * This file is part of CodeIgniter 4 framework.
  *
  * (c) CodeIgniter Foundation <admin@codeigniter.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace CodeIgniter\Cache\Handlers;
 
 use CodeIgniter\Exceptions\CriticalError;
+use CodeIgniter\I18n\Time;
 use Config\Cache;
 use Redis;
 use RedisException;
 
 /**
  * Redis cache handler
+ *
+ * @see \CodeIgniter\Cache\Handlers\RedisHandlerTest
  */
 class RedisHandler extends BaseHandler
 {
-	/**
-	 * Default config
-	 *
-	 * @var array
-	 */
-	protected $config = [
-		'host'     => '127.0.0.1',
-		'password' => null,
-		'port'     => 6379,
-		'timeout'  => 0,
-		'database' => 0,
-	];
+    /**
+     * Default config
+     *
+     * @var array{
+     *   host: string,
+     *   password: string|null,
+     *   port: int,
+     *   timeout: int,
+     *   persistent: bool,
+     *   database: int,
+     * }
+     */
+    protected $config = [
+        'host'       => '127.0.0.1',
+        'password'   => null,
+        'port'       => 6379,
+        'timeout'    => 0,
+        'persistent' => false,
+        'database'   => 0,
+    ];
 
-	/**
-	 * Redis connection
-	 *
-	 * @var Redis
-	 */
-	protected $redis;
+    /**
+     * Redis connection
+     *
+     * @var Redis|null
+     */
+    protected $redis;
 
-	//--------------------------------------------------------------------
+    /**
+     * Note: Use `CacheFactory::getHandler()` to instantiate.
+     */
+    public function __construct(Cache $config)
+    {
+        $this->prefix = $config->prefix;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param Cache $config
-	 */
-	public function __construct(Cache $config)
-	{
-		$this->prefix = $config->prefix;
+        $this->config = array_merge($this->config, $config->redis);
+    }
 
-		if (! empty($config))
-		{
-			$this->config = array_merge($this->config, $config->redis);
-		}
-	}
+    public function initialize(): void
+    {
+        $config = $this->config;
 
-	/**
-	 * Class destructor
-	 *
-	 * Closes the connection to Redis if present.
-	 */
-	public function __destruct()
-	{
-		if (isset($this->redis))
-		{
-			$this->redis->close();
-		}
-	}
+        $this->redis = new Redis();
 
-	//--------------------------------------------------------------------
+        try {
+            $funcConnection = isset($config['persistent']) && $config['persistent'] ? 'pconnect' : 'connect';
 
-	/**
-	 * Takes care of any handler-specific setup that must be done.
-	 */
-	public function initialize()
-	{
-		$config = $this->config;
+            // Note:: If Redis is your primary cache choice, and it is "offline", every page load will end up been delayed by the timeout duration.
+            // I feel like some sort of temporary flag should be set, to indicate that we think Redis is "offline", allowing us to bypass the timeout for a set period of time.
+            if (! $this->redis->{$funcConnection}($config['host'], ($config['host'][0] === '/' ? 0 : $config['port']), $config['timeout'])) {
+                // Note:: I'm unsure if log_message() is necessary, however I'm not 100% comfortable removing it.
+                log_message('error', 'Cache: Redis connection failed. Check your configuration.');
 
-		$this->redis = new Redis();
+                throw new CriticalError('Cache: Redis connection failed. Check your configuration.');
+            }
 
-		// Try to connect to Redis, if an issue occurs throw a CriticalError exception,
-		// so that the CacheFactory can attempt to initiate the next cache handler.
-		try
-		{
-			// Note:: If Redis is your primary cache choice, and it is "offline", every page load will end up been delayed by the timeout duration.
-			// I feel like some sort of temporary flag should be set, to indicate that we think Redis is "offline", allowing us to bypass the timeout for a set period of time.
+            if (isset($config['password']) && ! $this->redis->auth($config['password'])) {
+                log_message('error', 'Cache: Redis authentication failed.');
 
-			if (! $this->redis->connect($config['host'], ($config['host'][0] === '/' ? 0 : $config['port']), $config['timeout']))
-			{
-				// Note:: I'm unsure if log_message() is necessary, however I'm not 100% comfortable removing it.
-				log_message('error', 'Cache: Redis connection failed. Check your configuration.');
-				throw new CriticalError('Cache: Redis connection failed. Check your configuration.');
-			}
+                throw new CriticalError('Cache: Redis authentication failed.');
+            }
 
-			if (isset($config['password']) && ! $this->redis->auth($config['password']))
-			{
-				log_message('error', 'Cache: Redis authentication failed.');
-				throw new CriticalError('Cache: Redis authentication failed.');
-			}
+            if (isset($config['database']) && ! $this->redis->select($config['database'])) {
+                log_message('error', 'Cache: Redis select database failed.');
 
-			if (isset($config['database']) && ! $this->redis->select($config['database']))
-			{
-				log_message('error', 'Cache: Redis select database failed.');
-				throw new CriticalError('Cache: Redis select database failed.');
-			}
-		}
-		catch (RedisException $e)
-		{
-			// $this->redis->connect() can sometimes throw a RedisException.
-			// We need to convert the exception into a CriticalError exception and throw it.
-			throw new CriticalError('Cache: RedisException occurred with message (' . $e->getMessage() . ').');
-		}
-	}
+                throw new CriticalError('Cache: Redis select database failed.');
+            }
+        } catch (RedisException $e) {
+            throw new CriticalError('Cache: RedisException occurred with message (' . $e->getMessage() . ').', $e->getCode(), $e);
+        }
+    }
 
-	//--------------------------------------------------------------------
+    public function get(string $key): mixed
+    {
+        $key  = static::validateKey($key, $this->prefix);
+        $data = $this->redis->hMget($key, ['__ci_type', '__ci_value']);
 
-	/**
-	 * Attempts to fetch an item from the cache store.
-	 *
-	 * @param string $key Cache item name
-	 *
-	 * @return mixed
-	 */
-	public function get(string $key)
-	{
-		$key  = static::validateKey($key, $this->prefix);
-		$data = $this->redis->hMGet($key, ['__ci_type', '__ci_value']);
+        if (! isset($data['__ci_type'], $data['__ci_value']) || $data['__ci_value'] === false) {
+            return null;
+        }
 
-		if (! isset($data['__ci_type'], $data['__ci_value']) || $data['__ci_value'] === false)
-		{
-			return null;
-		}
+        return match ($data['__ci_type']) {
+            'array', 'object'                                => unserialize($data['__ci_value']),
+            'boolean', 'integer', 'double', 'string', 'NULL' => settype($data['__ci_value'], $data['__ci_type']) ? $data['__ci_value'] : null,
+            default                                          => null,
+        };
+    }
 
-		switch ($data['__ci_type'])
-		{
-			case 'array':
-			case 'object':
-				return unserialize($data['__ci_value']);
-			case 'boolean':
-			case 'integer':
-			case 'double': // Yes, 'double' is returned and NOT 'float'
-			case 'string':
-			case 'NULL':
-				return settype($data['__ci_value'], $data['__ci_type']) ? $data['__ci_value'] : null;
-			case 'resource':
-			default:
-				return null;
-		}
-	}
+    public function save(string $key, mixed $value, int $ttl = 60): bool
+    {
+        $key = static::validateKey($key, $this->prefix);
 
-	//--------------------------------------------------------------------
+        switch ($dataType = gettype($value)) {
+            case 'array':
+            case 'object':
+                $value = serialize($value);
+                break;
 
-	/**
-	 * Saves an item to the cache store.
-	 *
-	 * @param string  $key   Cache item name
-	 * @param mixed   $value The data to save
-	 * @param integer $ttl   Time To Live, in seconds (default 60)
-	 *
-	 * @return boolean Success or failure
-	 */
-	public function save(string $key, $value, int $ttl = 60)
-	{
-		$key = static::validateKey($key, $this->prefix);
+            case 'boolean':
+            case 'integer':
+            case 'double':
+            case 'string':
+            case 'NULL':
+                break;
 
-		switch ($dataType = gettype($value))
-		{
-			case 'array':
-			case 'object':
-				$value = serialize($value);
-				break;
-			case 'boolean':
-			case 'integer':
-			case 'double': // Yes, 'double' is returned and NOT 'float'
-			case 'string':
-			case 'NULL':
-				break;
-			case 'resource':
-			default:
-				return false;
-		}
+            case 'resource':
+            default:
+                return false;
+        }
 
-		if (! $this->redis->hMSet($key, ['__ci_type' => $dataType, '__ci_value' => $value]))
-		{
-			return false;
-		}
+        if (! $this->redis->hMset($key, ['__ci_type' => $dataType, '__ci_value' => $value])) {
+            return false;
+        }
 
-		if ($ttl)
-		{
-			$this->redis->expireAt($key, time() + $ttl);
-		}
+        if ($ttl !== 0) {
+            $this->redis->expireAt($key, Time::now()->getTimestamp() + $ttl);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	//--------------------------------------------------------------------
+    public function delete(string $key): bool
+    {
+        $key = static::validateKey($key, $this->prefix);
 
-	/**
-	 * Deletes a specific item from the cache store.
-	 *
-	 * @param string $key Cache item name
-	 *
-	 * @return boolean Success or failure
-	 */
-	public function delete(string $key)
-	{
-		$key = static::validateKey($key, $this->prefix);
+        return $this->redis->del($key) === 1;
+    }
 
-		return $this->redis->del($key) === 1;
-	}
+    public function deleteMatching(string $pattern): int
+    {
+        /** @var list<string> $matchedKeys */
+        $matchedKeys = [];
+        $pattern     = static::validateKey($pattern, $this->prefix);
+        $iterator    = null;
 
-	//--------------------------------------------------------------------
+        do {
+            /** @var false|list<string> $keys */
+            $keys = $this->redis->scan($iterator, $pattern);
 
-	/**
-	 * Deletes items from the cache store matching a given pattern.
-	 *
-	 * @param string $pattern Cache items glob-style pattern
-	 *
-	 * @return integer The number of deleted items
-	 */
-	public function deleteMatching(string $pattern)
-	{
-		$matchedKeys = [];
-		$iterator    = null;
+            if (is_array($keys)) {
+                $matchedKeys = [...$matchedKeys, ...$keys];
+            }
+        } while ($iterator > 0);
 
-		do
-		{
-			// Scan for some keys
-			$keys = $this->redis->scan($iterator, $pattern);
+        return (int) $this->redis->del($matchedKeys);
+    }
 
-			// Redis may return empty results, so protect against that
-			if ($keys !== false)
-			{
-				foreach ($keys as $key)
-				{
-					$matchedKeys[] = $key;
-				}
-			}
-		}
-		while ($iterator > 0);
+    public function increment(string $key, int $offset = 1): int
+    {
+        $key = static::validateKey($key, $this->prefix);
 
-		return $this->redis->del($matchedKeys);
-	}
+        return $this->redis->hIncrBy($key, '__ci_value', $offset);
+    }
 
-	//--------------------------------------------------------------------
+    public function decrement(string $key, int $offset = 1): int
+    {
+        return $this->increment($key, -$offset);
+    }
 
-	/**
-	 * Performs atomic incrementation of a raw stored value.
-	 *
-	 * @param string  $key    Cache ID
-	 * @param integer $offset Step/value to increase by
-	 *
-	 * @return integer
-	 */
-	public function increment(string $key, int $offset = 1)
-	{
-		$key = static::validateKey($key, $this->prefix);
+    public function clean(): bool
+    {
+        return $this->redis->flushDB();
+    }
 
-		return $this->redis->hIncrBy($key, 'data', $offset);
-	}
+    public function getCacheInfo(): array
+    {
+        return $this->redis->info();
+    }
 
-	//--------------------------------------------------------------------
+    public function getMetaData(string $key): ?array
+    {
+        $value = $this->get($key);
 
-	/**
-	 * Performs atomic decrementation of a raw stored value.
-	 *
-	 * @param string  $key    Cache ID
-	 * @param integer $offset Step/value to increase by
-	 *
-	 * @return integer
-	 */
-	public function decrement(string $key, int $offset = 1)
-	{
-		$key = static::validateKey($key, $this->prefix);
+        if ($value !== null) {
+            $time = Time::now()->getTimestamp();
+            $ttl  = $this->redis->ttl(static::validateKey($key, $this->prefix));
+            assert(is_int($ttl));
 
-		return $this->redis->hIncrBy($key, 'data', -$offset);
-	}
+            return [
+                'expire' => $ttl > 0 ? $time + $ttl : null,
+                'mtime'  => $time,
+                'data'   => $value,
+            ];
+        }
 
-	//--------------------------------------------------------------------
+        return null;
+    }
 
-	/**
-	 * Will delete all items in the entire cache.
-	 *
-	 * @return boolean Success or failure
-	 */
-	public function clean()
-	{
-		return $this->redis->flushDB();
-	}
+    public function isSupported(): bool
+    {
+        return extension_loaded('redis');
+    }
 
-	//--------------------------------------------------------------------
+    public function ping(): bool
+    {
+        if (! isset($this->redis)) {
+            return false;
+        }
 
-	/**
-	 * Returns information on the entire cache.
-	 *
-	 * The information returned and the structure of the data
-	 * varies depending on the handler.
-	 *
-	 * @return array
-	 */
-	public function getCacheInfo()
-	{
-		return $this->redis->info();
-	}
+        try {
+            $result = $this->redis->ping();
 
-	//--------------------------------------------------------------------
+            return in_array($result, [true, '+PONG'], true);
+        } catch (RedisException) {
+            return false;
+        }
+    }
 
-	/**
-	 * Returns detailed information about the specific item in the cache.
-	 *
-	 * @param string $key Cache item name.
-	 *
-	 * @return array|null
-	 *   Returns null if the item does not exist, otherwise array<string, mixed>
-	 *   with at least the 'expire' key for absolute epoch expiry (or null).
-	 */
-	public function getMetaData(string $key)
-	{
-		$key   = static::validateKey($key, $this->prefix);
-		$value = $this->get($key);
+    public function reconnect(): bool
+    {
+        if (isset($this->redis)) {
+            try {
+                $this->redis->close();
+            } catch (RedisException) {
+                // Connection already dead, that's fine
+            }
+        }
 
-		if ($value !== null)
-		{
-			$time = time();
-			$ttl  = $this->redis->ttl($key);
+        try {
+            $this->initialize();
 
-			return [
-				'expire' => $ttl > 0 ? time() + $ttl : null,
-				'mtime'  => $time,
-				'data'   => $value,
-			];
-		}
+            return true;
+        } catch (CriticalError $e) {
+            log_message('error', 'Cache: Redis reconnection failed: ' . $e->getMessage());
 
-		return null;
-	}
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Determines if the driver is supported on this system.
-	 *
-	 * @return boolean
-	 */
-	public function isSupported(): bool
-	{
-		return extension_loaded('redis');
-	}
+            return false;
+        }
+    }
 }

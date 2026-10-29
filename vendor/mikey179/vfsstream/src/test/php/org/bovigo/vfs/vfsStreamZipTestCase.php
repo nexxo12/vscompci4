@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of vfsStream.
  *
@@ -8,15 +7,13 @@
  *
  * @package  org\bovigo\vfs
  */
-
 namespace org\bovigo\vfs;
-
 /**
  * Test for org\bovigo\vfs\vfsStreamWrapper in conjunction with ext/zip.
  *
  * @group  zip
  */
-class vfsStreamZipTestCase extends \PHPUnit\Framework\TestCase
+class vfsStreamZipTestCase extends \BC_PHPUnit_Framework_TestCase
 {
     /**
      * set up test environment
@@ -31,6 +28,7 @@ class vfsStreamZipTestCase extends \PHPUnit\Framework\TestCase
 
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(vfsStream::newDirectory('root'));
+
     }
 
     /**
@@ -38,8 +36,8 @@ class vfsStreamZipTestCase extends \PHPUnit\Framework\TestCase
      */
     public function createZipArchive()
     {
-        $zip = new \ZipArchive();
-        $this->assertTrue($zip->open(vfsStream::url('root/test.zip'), \ZipArchive::CREATE));
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open(vfsStream::url('root/test.zip'), ZipArchive::CREATE));
         $this->assertTrue($zip->addFromString("testfile1.txt", "#1 This is a test string added as testfile1.txt.\n"));
         $this->assertTrue($zip->addFromString("testfile2.txt", "#2 This is a test string added as testfile2.txt.\n"));
         $zip->setArchiveComment('a test');

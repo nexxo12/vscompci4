@@ -1,91 +1,95 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * This file is part of the CodeIgniter 4 framework.
+ * This file is part of CodeIgniter 4 framework.
  *
  * (c) CodeIgniter Foundation <admin@codeigniter.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace CodeIgniter\Commands\Cache;
 
-use CodeIgniter\Cache\CacheFactory;
+use CodeIgniter\Autoloader\FileLocatorCached;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use Config\Cache;
 
 /**
  * Clears current cache.
  */
 class ClearCache extends BaseCommand
 {
-	/**
-	 * Command grouping.
-	 *
-	 * @var string
-	 */
-	protected $group = 'Cache';
+    /**
+     * Command grouping.
+     *
+     * @var string
+     */
+    protected $group = 'Cache';
 
-	/**
-	 * The Command's name
-	 *
-	 * @var string
-	 */
-	protected $name = 'cache:clear';
+    /**
+     * The Command's name
+     *
+     * @var string
+     */
+    protected $name = 'cache:clear';
 
-	/**
-	 * the Command's short description
-	 *
-	 * @var string
-	 */
-	protected $description = 'Clears the current system caches.';
+    /**
+     * the Command's short description
+     *
+     * @var string
+     */
+    protected $description = 'Clears the current system caches.';
 
-	/**
-	 * the Command's usage
-	 *
-	 * @var string
-	 */
-	protected $usage = 'cache:clear [driver]';
+    /**
+     * the Command's usage
+     *
+     * @var string
+     */
+    protected $usage = 'cache:clear [<driver>]';
 
-	/**
-	 * the Command's Arguments
-	 *
-	 * @var array
-	 */
-	protected $arguments = [
-		'driver' => 'The cache driver to use',
-	];
+    /**
+     * the Command's Arguments
+     *
+     * @var array<string, string>
+     */
+    protected $arguments = [
+        'driver' => 'The cache driver to use',
+    ];
 
-	/**
-	 * Clears the cache
-	 *
-	 * @param array $params
-	 */
-	public function run(array $params)
-	{
-		$config  = config('Cache');
-		$handler = $params[0] ?? $config->handler;
+    /**
+     * Clears the cache
+     */
+    public function run(array $params)
+    {
+        $config  = config(Cache::class);
+        $handler = $params[0] ?? $config->handler;
 
-		if (! array_key_exists($handler, $config->validHandlers))
-		{
-			CLI::error($handler . ' is not a valid cache handler.');
+        if (! array_key_exists($handler, $config->validHandlers)) {
+            CLI::error(lang('Cache.invalidHandler', [$handler]));
 
-			return;
-		}
+            return EXIT_ERROR;
+        }
 
-		$config->handler = $handler;
-		$cache           = CacheFactory::getHandler($config);
+        $config->handler = $handler;
 
-		if (! $cache->clean())
-		{
-			// @codeCoverageIgnoreStart
-			CLI::error('Error while clearing the cache.');
+        if (! service('cache', $config)->clean()) {
+            CLI::error('Error while clearing the cache.');
 
-			return;
-			// @codeCoverageIgnoreEnd
-		}
+            return EXIT_ERROR;
+        }
 
-		CLI::write(CLI::color('Cache cleared.', 'green'));
-	}
+        $locator = service('locator');
+
+        if ($handler === 'file' && $locator instanceof FileLocatorCached) {
+            $locator->deleteCache();
+        }
+
+        CLI::write(CLI::color('Cache cleared.', 'green'));
+
+        return EXIT_SUCCESS;
+    }
 }

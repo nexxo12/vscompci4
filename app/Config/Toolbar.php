@@ -23,6 +23,7 @@ use CodeIgniter\Debug\Toolbar\Collectors\Views;
  */
 class Toolbar extends BaseConfig
 {
+	public bool $collectVarData = true;
 	/**
 	 * --------------------------------------------------------------------------
 	 * Toolbar Collectors
@@ -33,6 +34,7 @@ class Toolbar extends BaseConfig
 	 *
 	 * @var string[]
 	 */
+
 	public $collectors = [
 		Timers::class,
 		Database::class,

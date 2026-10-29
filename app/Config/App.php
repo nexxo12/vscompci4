@@ -37,6 +37,8 @@ class App extends BaseConfig
 	 * @var string
 	 */
 	public $indexPage = '';
+	public array $allowedHostnames = [];
+	public string $permittedURIChars = 'a-z 0-9~%.:_\-';
 
 	/**
 	 * --------------------------------------------------------------------------
@@ -342,7 +344,9 @@ class App extends BaseConfig
 	 *
 	 * @var string|string[]
 	 */
-	public $proxyIPs = '';
+	public array $proxyIPs = [
+		'127.0.0.1' => 'X-Forwarded-For',
+	];
 
 	/**
 	 * --------------------------------------------------------------------------

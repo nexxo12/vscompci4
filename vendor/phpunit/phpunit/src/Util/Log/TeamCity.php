@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,9 +7,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Util\Log;
 
+use const PHP_EOL;
 use function class_exists;
 use function count;
 use function explode;
@@ -80,7 +78,7 @@ final class TeamCity extends DefaultResultPrinter
                 'message'  => self::getMessage($t),
                 'details'  => self::getDetails($t),
                 'duration' => self::toMilliseconds($time),
-            ]
+            ],
         );
     }
 
@@ -172,7 +170,7 @@ final class TeamCity extends DefaultResultPrinter
                 'message'  => self::getMessage($t),
                 'details'  => self::getDetails($t),
                 'duration' => self::toMilliseconds($time),
-            ]
+            ],
         );
     }
 
@@ -192,7 +190,7 @@ final class TeamCity extends DefaultResultPrinter
 
             $this->printEvent(
                 'testCount',
-                ['count' => count($suite)]
+                ['count' => count($suite)],
             );
         }
 
@@ -274,11 +272,13 @@ final class TeamCity extends DefaultResultPrinter
             [
                 'name'     => $test->getName(),
                 'duration' => self::toMilliseconds($time),
-            ]
+            ],
         );
     }
 
-    protected function writeProgress(string $progress): void {}
+    protected function writeProgress(string $progress): void
+    {
+    }
 
     private function printEvent(string $eventName, array $params = []): void
     {
@@ -352,7 +352,7 @@ final class TeamCity extends DefaultResultPrinter
         return str_replace(
             ['|', "'", "\n", "\r", ']', '['],
             ['||', "|'", '|n', '|r', '|]', '|['],
-            $text
+            $text,
         );
     }
 
@@ -367,8 +367,8 @@ final class TeamCity extends DefaultResultPrinter
         } catch (ReflectionException $e) {
             throw new Exception(
                 $e->getMessage(),
-                (int) $e->getCode(),
-                $e
+                $e->getCode(),
+                $e,
             );
         }
         // @codeCoverageIgnoreEnd

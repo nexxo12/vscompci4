@@ -1,311 +1,238 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * This file is part of the CodeIgniter 4 framework.
+ * This file is part of CodeIgniter 4 framework.
  *
  * (c) CodeIgniter Foundation <admin@codeigniter.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace CodeIgniter\Cache\Handlers;
 
 use CodeIgniter\Exceptions\CriticalError;
+use CodeIgniter\I18n\Time;
 use Config\Cache;
 use Exception;
 use Predis\Client;
 use Predis\Collection\Iterator\Keyspace;
+use Predis\Response\Status;
 
 /**
  * Predis cache handler
+ *
+ * @see \CodeIgniter\Cache\Handlers\PredisHandlerTest
  */
 class PredisHandler extends BaseHandler
 {
-	/**
-	 * Default config
-	 *
-	 * @var array
-	 */
-	protected $config = [
-		'scheme'   => 'tcp',
-		'host'     => '127.0.0.1',
-		'password' => null,
-		'port'     => 6379,
-		'timeout'  => 0,
-	];
+    /**
+     * Default config
+     *
+     * @var array{
+     *   scheme: string,
+     *   host: string,
+     *   password: string|null,
+     *   port: int,
+     *   async: bool,
+     *   persistent: bool,
+     *   timeout: int
+     * }
+     */
+    protected $config = [
+        'scheme'     => 'tcp',
+        'host'       => '127.0.0.1',
+        'password'   => null,
+        'port'       => 6379,
+        'async'      => false,
+        'persistent' => false,
+        'timeout'    => 0,
+    ];
 
-	/**
-	 * Predis connection
-	 *
-	 * @var Client
-	 */
-	protected $redis;
+    /**
+     * Predis connection
+     *
+     * @var Client
+     */
+    protected $redis;
 
-	//--------------------------------------------------------------------
+    /**
+     * Note: Use `CacheFactory::getHandler()` to instantiate.
+     */
+    public function __construct(Cache $config)
+    {
+        $this->prefix = $config->prefix;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param Cache $config
-	 */
-	public function __construct(Cache $config)
-	{
-		$this->prefix = $config->prefix;
+        $this->config = array_merge($this->config, $config->redis);
+    }
 
-		if (isset($config->redis))
-		{
-			$this->config = array_merge($this->config, $config->redis);
-		}
-	}
+    public function initialize(): void
+    {
+        try {
+            $this->redis = new Client($this->config, ['prefix' => $this->prefix]);
+            $this->redis->time();
+        } catch (Exception $e) {
+            throw new CriticalError('Cache: Predis connection refused (' . $e->getMessage() . ').', $e->getCode(), $e);
+        }
+    }
 
-	//--------------------------------------------------------------------
+    public function get(string $key): mixed
+    {
+        $key = static::validateKey($key);
 
-	/**
-	 * Takes care of any handler-specific setup that must be done.
-	 */
-	public function initialize()
-	{
-		// Try to connect to Redis, if an issue occurs throw a CriticalError exception,
-		// so that the CacheFactory can attempt to initiate the next cache handler.
-		try
-		{
-			// Create a new instance of Predis\Client
-			$this->redis = new Client($this->config, ['prefix' => $this->prefix]);
+        $data = array_combine(
+            ['__ci_type', '__ci_value'],
+            $this->redis->hmget($key, ['__ci_type', '__ci_value']),
+        );
 
-			// Check if the connection is valid by trying to get the time.
-			$this->redis->time();
-		}
-		catch (Exception $e)
-		{
-			// thrown if can't connect to redis server.
-			throw new CriticalError('Cache: Predis connection refused (' . $e->getMessage() . ').');
-		}
-	}
+        if (! isset($data['__ci_type'], $data['__ci_value']) || $data['__ci_value'] === false) {
+            return null;
+        }
 
-	//--------------------------------------------------------------------
+        return match ($data['__ci_type']) {
+            'array', 'object'                                => unserialize($data['__ci_value']),
+            'boolean', 'integer', 'double', 'string', 'NULL' => settype($data['__ci_value'], $data['__ci_type']) ? $data['__ci_value'] : null,
+            default                                          => null,
+        };
+    }
 
-	/**
-	 * Attempts to fetch an item from the cache store.
-	 *
-	 * @param string $key Cache item name
-	 *
-	 * @return mixed
-	 */
-	public function get(string $key)
-	{
-		$key = static::validateKey($key);
+    public function save(string $key, mixed $value, int $ttl = 60): bool
+    {
+        $key = static::validateKey($key);
 
-		$data = array_combine([
-			'__ci_type',
-			'__ci_value',
-		],
-			$this->redis->hmget($key, ['__ci_type', '__ci_value'])
-		);
+        switch ($dataType = gettype($value)) {
+            case 'array':
+            case 'object':
+                $value = serialize($value);
+                break;
 
-		if (! isset($data['__ci_type'], $data['__ci_value']) || $data['__ci_value'] === false)
-		{
-			return null;
-		}
+            case 'boolean':
+            case 'integer':
+            case 'double':
+            case 'string':
+            case 'NULL':
+                break;
 
-		switch ($data['__ci_type'])
-		{
-			case 'array':
-			case 'object':
-				return unserialize($data['__ci_value']);
-			case 'boolean':
-			case 'integer':
-			case 'double': // Yes, 'double' is returned and NOT 'float'
-			case 'string':
-			case 'NULL':
-				return settype($data['__ci_value'], $data['__ci_type']) ? $data['__ci_value'] : null;
-			case 'resource':
-			default:
-				return null;
-		}
-	}
+            case 'resource':
+            default:
+                return false;
+        }
 
-	//--------------------------------------------------------------------
+        if (! $this->redis->hmset($key, ['__ci_type' => $dataType, '__ci_value' => $value]) instanceof Status) {
+            return false;
+        }
 
-	/**
-	 * Saves an item to the cache store.
-	 *
-	 * @param string  $key   Cache item name
-	 * @param mixed   $value The data to save
-	 * @param integer $ttl   Time To Live, in seconds (default 60)
-	 *
-	 * @return boolean Success or failure
-	 */
-	public function save(string $key, $value, int $ttl = 60)
-	{
-		$key = static::validateKey($key);
+        if ($ttl !== 0) {
+            $this->redis->expireat($key, Time::now()->getTimestamp() + $ttl);
+        }
 
-		switch ($dataType = gettype($value))
-		{
-			case 'array':
-			case 'object':
-				$value = serialize($value);
-				break;
-			case 'boolean':
-			case 'integer':
-			case 'double': // Yes, 'double' is returned and NOT 'float'
-			case 'string':
-			case 'NULL':
-				break;
-			case 'resource':
-			default:
-				return false;
-		}
+        return true;
+    }
 
-		if (! $this->redis->hmset($key, ['__ci_type' => $dataType, '__ci_value' => $value]))
-		{
-			return false;
-		}
+    public function delete(string $key): bool
+    {
+        $key = static::validateKey($key);
 
-		$this->redis->expireat($key, time() + $ttl);
+        return $this->redis->del($key) === 1;
+    }
 
-		return true;
-	}
+    public function deleteMatching(string $pattern): int
+    {
+        $matchedKeys = [];
 
-	//--------------------------------------------------------------------
+        foreach (new Keyspace($this->redis, $pattern) as $key) {
+            $matchedKeys[] = $key;
+        }
 
-	/**
-	 * Deletes a specific item from the cache store.
-	 *
-	 * @param string $key Cache item name
-	 *
-	 * @return boolean Success or failure
-	 */
-	public function delete(string $key)
-	{
-		$key = static::validateKey($key);
+        if ($matchedKeys === []) {
+            return 0;
+        }
 
-		return $this->redis->del($key) === 1;
-	}
+        return $this->redis->del($matchedKeys);
+    }
 
-	//--------------------------------------------------------------------
+    public function increment(string $key, int $offset = 1): int
+    {
+        $key = static::validateKey($key);
 
-	/**
-	 * Deletes items from the cache store matching a given pattern.
-	 *
-	 * @param string $pattern Cache items glob-style pattern
-	 *
-	 * @return integer The number of deleted items
-	 */
-	public function deleteMatching(string $pattern)
-	{
-		$matchedKeys = [];
+        return $this->redis->hincrby($key, 'data', $offset);
+    }
 
-		foreach (new Keyspace($this->redis, $pattern) as $key)
-		{
-			$matchedKeys[] = $key;
-		}
+    public function decrement(string $key, int $offset = 1): int
+    {
+        $key = static::validateKey($key);
 
-		return $this->redis->del($matchedKeys);
-	}
+        return $this->redis->hincrby($key, 'data', -$offset);
+    }
 
-	//--------------------------------------------------------------------
+    public function clean(): bool
+    {
+        return $this->redis->flushdb()->getPayload() === 'OK';
+    }
 
-	/**
-	 * Performs atomic incrementation of a raw stored value.
-	 *
-	 * @param string  $key    Cache ID
-	 * @param integer $offset Step/value to increase by
-	 *
-	 * @return integer
-	 */
-	public function increment(string $key, int $offset = 1)
-	{
-		$key = static::validateKey($key);
+    public function getCacheInfo(): array
+    {
+        return $this->redis->info();
+    }
 
-		return $this->redis->hincrby($key, 'data', $offset);
-	}
+    public function getMetaData(string $key): ?array
+    {
+        $key = static::validateKey($key);
 
-	//--------------------------------------------------------------------
+        $data = array_combine(['__ci_value'], $this->redis->hmget($key, ['__ci_value']));
 
-	/**
-	 * Performs atomic decrementation of a raw stored value.
-	 *
-	 * @param string  $key    Cache ID
-	 * @param integer $offset Step/value to increase by
-	 *
-	 * @return integer
-	 */
-	public function decrement(string $key, int $offset = 1)
-	{
-		$key = static::validateKey($key);
+        if (isset($data['__ci_value']) && $data['__ci_value'] !== false) {
+            $time = Time::now()->getTimestamp();
+            $ttl  = $this->redis->ttl($key);
 
-		return $this->redis->hincrby($key, 'data', -$offset);
-	}
+            return [
+                'expire' => $ttl > 0 ? $time + $ttl : null,
+                'mtime'  => $time,
+                'data'   => $data['__ci_value'],
+            ];
+        }
 
-	//--------------------------------------------------------------------
+        return null;
+    }
 
-	/**
-	 * Will delete all items in the entire cache.
-	 *
-	 * @return boolean Success or failure
-	 */
-	public function clean()
-	{
-		return $this->redis->flushdb()->getPayload() === 'OK';
-	}
+    public function isSupported(): bool
+    {
+        return class_exists(Client::class);
+    }
 
-	//--------------------------------------------------------------------
+    public function ping(): bool
+    {
+        try {
+            $result = $this->redis->ping();
 
-	/**
-	 * Returns information on the entire cache.
-	 *
-	 * The information returned and the structure of the data
-	 * varies depending on the handler.
-	 *
-	 * @return array
-	 */
-	public function getCacheInfo()
-	{
-		return $this->redis->info();
-	}
+            if (is_object($result)) {
+                return $result->getPayload() === 'PONG';
+            }
 
-	//--------------------------------------------------------------------
+            return $result === 'PONG';
+        } catch (Exception) {
+            return false;
+        }
+    }
 
-	/**
-	 * Returns detailed information about the specific item in the cache.
-	 *
-	 * @param string $key Cache item name.
-	 *
-	 * @return array|false|null
-	 *   Returns null if the item does not exist, otherwise array<string, mixed>
-	 *   with at least the 'expire' key for absolute epoch expiry (or null).
-	 */
-	public function getMetaData(string $key)
-	{
-		$key = static::validateKey($key);
+    public function reconnect(): bool
+    {
+        try {
+            $this->redis->disconnect();
+        } catch (Exception) {
+            // Connection already dead, that's fine
+        }
 
-		$data = array_combine(['__ci_value'], $this->redis->hmget($key, ['__ci_value']));
+        try {
+            $this->initialize();
 
-		if (isset($data['__ci_value']) && $data['__ci_value'] !== false)
-		{
-			$time = time();
-			$ttl  = $this->redis->ttl($key);
+            return true;
+        } catch (CriticalError $e) {
+            log_message('error', 'Cache: Predis reconnection failed: ' . $e->getMessage());
 
-			return [
-				'expire' => $ttl > 0 ? time() + $ttl : null,
-				'mtime'  => $time,
-				'data'   => $data['__ci_value'],
-			];
-		}
-
-		return null;
-	}
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Determines if the driver is supported on this system.
-	 *
-	 * @return boolean
-	 */
-	public function isSupported(): bool
-	{
-		return class_exists('\Predis\Client');
-	}
+            return false;
+        }
+    }
 }
