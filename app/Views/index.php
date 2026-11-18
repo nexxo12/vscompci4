@@ -92,9 +92,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-6 align-self-center text-center">
-                                                <?php foreach ($totalpenjualan as $penjualan) : ?><?php endforeach; ?>
+                                                <?php
+                                                $total = 0;
+                                                if (!empty($totalpenjualan)) {
+                                                    foreach ($totalpenjualan as $penjualan) {
+                                                        $total = $penjualan['HARGA_JL'] ?? 0;
+                                                    }
+                                                }
+                                                ?>
                                                 <div class="m-l-10">
-                                                    <h5 class="mt-0 round-inner"><?= number_format($penjualan['HARGA_JL'], 0, ',', '.'); ?></h5>
+                                                    <h5 class="mt-0 round-inner"><?= number_format((float) $total, 0, ',', '.'); ?></h5>
                                                     <p class="mb-0 text-muted">Total Penjualan <?= date('M'); ?></p>
                                                 </div>
                                             </div>
@@ -149,8 +156,16 @@
                                             </div>
                                             <div class="col-6 align-self-center text-center">
                                                 <div class="m-l-10 ">
+                                                    <?php
+                                                    $total = 0;
+                                                    if (!empty($totalpembelian)) {
+                                                        foreach ($totalpembelian as $pembelian) {
+                                                            $totalbeli = $pembelian['HARGA_BELI'] ?? 0;
+                                                        }
+                                                    }
+                                                    ?>
                                                     <?php foreach ($totalpembelian as $pembelian) : ?><?php endforeach; ?>
-                                                    <h5 class="mt-0 round-inner"><?= number_format($pembelian['HARGA_BELI'], 0, ',', '.'); ?></h5>
+                                                    <h5 class="mt-0 round-inner"><?= number_format((float)$totalbeli, 0, ',', '.'); ?></h5>
                                                     <p class="mb-0 text-muted">Total Pembelian <?= date('M'); ?></p>
                                                 </div>
                                             </div>

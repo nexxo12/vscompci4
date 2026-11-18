@@ -395,6 +395,7 @@
                     var idpj = parseInt(result[i].ID_PENJUALAN);
                     idpj++;
                     $("#idpenjualan").val(idpj);
+                    $("#id_penjualan_edit_laporan_pj").val(idpj);
 
                 }
             },

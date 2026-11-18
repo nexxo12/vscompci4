@@ -301,7 +301,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="table-responsive" style="margin-top: 0 !important; padding-top: 0 !important;">
-                                            <table class="table table-bordered table-striped" id="tbl-masterbarang-total-modal">
+                                            <table class="table table-bordered table-striped  w-100" id="tbl-masterbarang-total-modal" width="100%" style="width: 100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>

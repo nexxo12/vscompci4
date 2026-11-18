@@ -185,7 +185,7 @@
                 <ul style="font-size: 14px;">
                     <li>Simpan kardus komponen untuk administrasi garansi</li>
                     <li>Barang yang dibeli tidak dapat dikembalikan / ditukar (kecuali ada perjanjian)</li>
-                    <li>Cek info garansi silahkan kunjungi www.vskomputer.com/garansi.html</li>
+                    <li>Cek info garansi silahkan kunjungi www.vskomputer.com/garansi</li>
                     <?php foreach ($viewnota as $nota) : ?><?php endforeach; ?>
                     <?php
                     if ($nota['ID_PELANGGAN'] == 1) {

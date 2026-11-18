@@ -215,7 +215,7 @@ function refreshid_masterbarang() {
                 for (var i = 0; i < result.length; i++) {
                     var idpj = parseInt(result[i].ID_BARANG);
                     idpj++;
-                    $("#idbarang").val("BRG" + idpj);
+                    $("#idbarang").val("BAR" + idpj);
 
                 }
             },

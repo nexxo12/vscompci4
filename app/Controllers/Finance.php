@@ -147,7 +147,7 @@ class Finance extends BaseController
 		return view('/finance/laporan_pj', $data);
 	}
 
-	public function view_invoice()
+	public function view_invoice() //function modal edit penjualan tabel bawah tampil list barang
 	{
 		$invoice = $this->request->getVar('invoice');
 		$result_listnota = $this->penjualanID->GetListNota($invoice);
@@ -239,7 +239,15 @@ class Finance extends BaseController
 		})->toJson(true);
 	}
 
-	public function deleteInvoicePenjualan($id)
+	public function viewdata_masterbarang_edit_laporan_penjualan()
+	{
+		$viewdata = $this->masterbarang->table('master_barang')->select('master_barang.ID_BARANG, NAMA_BARANG, STOK, master_barang.SATUAN')->join('kategori', 'kategori.ID_KATEGORI = master_barang.ID_KATEGORI')->orderBy('master_barang.ID_BARANG', 'DESC');
+		return DataTable::of($viewdata)->add('add', function ($row) {
+			return '<a href="/transaksi/addbarang?id=' . $row->ID_BARANG . '" class="add-listbarang-laporan-pj"><button class="btn btn-primary btn-sm fa fa-plus" type="button" onclick="addbrgfromlist_edit_laporan_pj()"></button></a>';
+		})->toJson(true);
+	}
+
+	public function deleteInvoicePenjualan(mixed $id)
 	{
 		$this->inv_pj->delete($id);
 		$this->penjualanID->where('INV_PENJUALAN', $id)->delete();

@@ -161,6 +161,7 @@ class Transaksi extends BaseController
 		return json_encode($result);
 	}
 
+
 	public function printnota($inv) //FUNCTICON DI ROUTE
 	{
 		// $invnota = $this->request->getVar('inv');
@@ -313,6 +314,35 @@ class Transaksi extends BaseController
 		}
 	}
 
+	// public function addcartFromEditPenjualan()
+	// {
+	// 	if ($this->request->isAJAX()) {
+	// 		$this->list_pj->insert([
+	// 			'ID_PENJUALAN' => $this->request->getVar('idpenjualan'),
+	// 			'INV_PENJUALAN' => $this->request->getVar('invoice'),
+	// 			'ID_BARANG' => $this->request->getVar('idbarang'),
+	// 			'ID_PELANGGAN' => $this->request->getVar('typecustomer'),
+	// 			'ID_LOGIN' => $this->request->getVar('idkasir'),
+	// 			'TANGGAL_TRANSAKSI' => $this->request->getVar('tanggal'),
+	// 			'NAMACUST' => $this->request->getVar('namacustomer'),
+	// 			'ALAMAT' => $this->request->getVar('alamat'),
+	// 			'REFMP' => $this->request->getVar('refinv_mp'),
+	// 			'CATATAN' => $this->request->getVar('catatan'),
+	// 			'JUMLAH_BELI' => $this->request->getVar('qty'),
+	// 			'HARGA_AWAL' => $this->request->getVar('modalbarang'),
+	// 			'HARGA_JL' => $this->request->getVar('harga'),
+	// 			'DP' => $this->request->getVar('input-dp'),
+	// 			'DISKON' => $this->request->getVar('input-diskon'),
+	// 			'SUBTOTAL' => $this->request->getVar('harga') * $this->request->getVar('qty'),
+	// 			'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-diskon'),
+	// 			'TOTAL_NETT' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-dp') - $this->request->getVar('input-diskon'),
+	// 			'LABA' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-diskon') - $this->request->getVar('modalbarang') * $this->request->getVar('qty')
+
+	// 		]);
+	// 		// return redirect()->to('index');
+	// 	}
+	// }
+
 	public function ClearListPenjualan()
 	{
 		if ($this->request->isAJAX()) {
@@ -333,7 +363,8 @@ class Transaksi extends BaseController
 		$id = $this->request->getVar('id');
 		$result = [
 			'delete' => $this->penjualanID->deletelist($id),
-			'delete_garansi' => $this->garansi->delete_garansi($id)
+			'delete_garansi' => $this->garansi->delete_garansi($id),
+			'delete_list' => $this->list_pj->deletelist($id)
 		];
 		return json_encode($result);
 	}

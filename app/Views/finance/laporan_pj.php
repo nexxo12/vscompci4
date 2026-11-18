@@ -142,11 +142,11 @@
                     </div>
                     <div class="modal-body">
                         <form action="" id="form-info-invoice">
-                            <div class="row">
+                            <div class="row border rounded-3 p-4 bg-white shadow-sm">
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Nota</label>
-                                        <input type="text" class="form-control" name="invoice-laporan-edit" id="invoice-laporan-edit" value="">
+                                        <input type="text" class="form-control" name="invoice-laporan-edit" id="invoice-laporan-edit" value="" readonly>
                                         <label for="exampleInputEmail1">Tanggal</label>
                                         <input type="date" class="form-control" name="tangal-laporan-edit" id="tangal-laporan-edit" value="">
                                         <label for="exampleInputEmail1">Jatuh Tempo</label>
@@ -181,13 +181,85 @@
                                 </div>
                             </div>
                         </form>
-                        <div style="display: flex; justify-content: center;">
+                        <br>
+                        <div clas="" style="display: flex; justify-content: center;">
                             <button type="button" class="btn btn-primary waves-effect waves-light" id="alertify-success" onclick="save_edit_invoice()">
                                 <span id="text-simpan">Save</span>
                                 <span id="loading-simpan" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
                             </button>
                         </div>
                         <br>
+                        <div class="form-row align-items-end mb-3">
+                            <!-- Kolom 1: Input Pencarian + Tombol -->
+                            <div class="col-12 col-md-auto mb-2 mb-md-0">
+                                <label class="d-block small font-weight-bold text-muted mb-0">Cari Barang</label>
+                                <button class="btn btn-primary btn-block" type="button" id="btn_cari_barang_laporan_pj" title="Cari Barang" onclick="cari_barang_laporan_pj()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+
+                            <!-- Kolom 2: ID Penjualan -->
+                            <div class="col-6 col-md-2 mb-2 mb-md-0" style="display: none;">
+                                <label for="id_penjualan_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">ID Penjualan</label>
+                                <input type="text" class="form-control" id="id_penjualan_edit_laporan_pj" name="id_penjualan_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <!-- Kolom 3: ID Barang -->
+                            <div class="col-6 col-md-2 mb-2 mb-md-0">
+                                <label for="id_barang_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">ID Barang</label>
+                                <input type="text" class="form-control" id="id_barang_edit_laporan_pj" name="id_barang_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <!-- Kolom 4: ID Pelanggan -->
+                            <div class="col-6 col-md-2" style="display: none;">
+                                <label for="id_pelanggan_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">ID Pelanggan</label>
+                                <input type="text" class="form-control" id="id_pelanggan_edit_laporan_pj" name="id_pelanggan_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <div class="col-6 col-md-2" style="display: none;">
+                                <label for="id_login_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">ID login</label>
+                                <input type="text" class="form-control" id="id_login_edit_laporan_pj" name="id_login_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <div class="col-6 col-md-2" style="display: none;">
+                                <label for="customer_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">customer</label>
+                                <input type="text" class="form-control" id="customer_edit_laporan_pj" name="customer_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <div class="col-6 col-md-2" style="display: none;">
+                                <label for="ref_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">ref</label>
+                                <input type="text" class="form-control" id="ref_edit_laporan_pj" name="ref_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <div class="col-6 col-md-2" style="display: none;">
+                                <label for="alamat_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">Alamat</label>
+                                <input type="text" class="form-control" id="alamat_edit_laporan_pj" name="alamat_edit_laporan_pj" value="">
+                            </div>
+
+                            <div class="col-6 col-md-2">
+                                <label for="hargamodal_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">modal</label>
+                                <input type="number" class="form-control" id="hargamodal_edit_laporan_pj" name="hargamodal_edit_laporan_pj" value="" readonly>
+                            </div>
+
+                            <div class="col-6 col-md-2">
+                                <label for="qty_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">QTY</label>
+                                <input type="number" class="form-control text-right" id="qty_edit_laporan_pj" name="qty_edit_laporan_pj" value="0">
+                            </div>
+
+                            <!-- Kolom 5: Harga Jual -->
+                            <div class="col-6 col-md-2">
+                                <label for="hargajual_edit_laporan_pj" class="d-block small font-weight-bold text-muted mb-0">Harga Jual</label>
+                                <input type="number" class="form-control text-right" id="hargajual_edit_laporan_pj" name="hargajual_edit_laporan_pj" value="0">
+                            </div>
+
+                            <div class="col-6 col-md-auto">
+                                <label class="d-block small mb-0"> </label>
+                                <button type="button" class="btn btn-success btn-block px-4" id="btn_update_barang_laporan_pj" onclick="update_barang_laporan_pj()">
+                                    <i class="fa fa-save mr-1"></i> Update
+                                </button>
+                            </div>
+
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped" id="">
                                 <thead>
@@ -212,6 +284,43 @@
             </div>
         </div>
         <!-- END Modal edit-->
+        <!-- Modal Cari barang laporan PJ-->
+        <div class="modal fade" id="modal-cari-barang-laporan-pj" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cari Barang</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped w-100" id="tbl-cari-barang-laporan-pj" width="100%" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Kode</th>
+                                        <th>Nama Barang</th>
+                                        <th>Stok</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end model Cari barang laporan PJ -->
+
+
+
         <!-- Modal VIEW invoice-->
         <div class="modal fade" id="modal-view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
