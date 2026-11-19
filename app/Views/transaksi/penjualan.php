@@ -159,7 +159,7 @@
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Invoice :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input class="form-control" type="text" value="VSC<?= date('dm'); ?><?= date('y'); ?>-<?= $autonumPJ; ?>" name="invoice" id="invoiceid">
+                                                                    <input class="form-control" type="text" value="VSC<?= date('dm'); ?><?= date('y'); ?>-<?= $autonumPJ; ?>" name="invoice" id="invoiceid" readonly>
                                                                 </div>
 
                                                             </div>
@@ -169,11 +169,11 @@
                                                                     <div class="input-group mt-2">
                                                                         <input type="text" width="10%" value="" id="idpenjualan" name="idpenjualan" hidden>
                                                                         <input type="text" width="10%" value="" id="idbarang" name="idbarang" hidden>
-                                                                        <input type="text" style="width: 12%;" value="" id="modalbarang" name="modalbarang" readonly>
+                                                                        <input type="text" style="width: 12%;" value="" id="modalbarang" name="modalbarang" readonly hidden>
                                                                         <input type="text" width="10%" value="" id="stokdb" hidden>
                                                                         <input type="text" class="form-control" value="" id="namabarang" name="namabarang" placeholder="Cari Barang.." aria-label="Search for..." readonly>
                                                                         <span class="input-group-append">
-                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="#Modalcaribrg" onclick=""></button>
+                                                                            <button class="btn btn-primary ti-search" type="button" data-toggle="modal" data-target="" onclick="caribarang()"></button>
                                                                             <!-- data-toggle="modal" data-target="#exampleModal" -->
                                                                         </span>
                                                                     </div>
@@ -182,32 +182,26 @@
 
                                                             <!-- Modal CARI BARANG-->
                                                             <div class="modal fade" id="Modalcaribrg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                                <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
-                                                                            <h5 class="modal-title" id="exampleModalLabel">List Barang</h5>
+                                                                            <h5 class="modal-title" id="exampleModalLabel">Cari Barang</h5>
                                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                                 <span aria-hidden="true">&times;</span>
                                                                             </button>
                                                                         </div>
                                                                         <div class="modal-body">
                                                                             <div class="table-responsive">
-                                                                                <table id="datatable_caribarang" class="table">
+                                                                                <table class="table table-bordered table-striped w-100" id="datatable_caribarang" width="100%" style="width: 100%;">
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th>Kode</th>
                                                                                             <th>Nama Barang</th>
-                                                                                            <th>STOK</th>
+                                                                                            <th>Stok</th>
                                                                                             <th>Aksi</th>
                                                                                         </tr>
                                                                                     </thead>
-                                                                                    <tbody id="tb_caribarang">
-                                                                                        <tr>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                        </tr>
+                                                                                    <tbody id="">
                                                                                     </tbody>
                                                                                 </table>
                                                                             </div>
@@ -220,15 +214,12 @@
                                                                 </div>
                                                             </div>
                                                             <!-- End Modal -->
+
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Qty :</label>
                                                                 <div class="col-sm-5">
                                                                     <input class="form-control" type="number" value="" name="qty" id="qty" required>
                                                                 </div>
-                                                                <label for="example-text-input" class="col-sm-4 col-form-label">
-                                                                    <div id="stokinfo">Stok: </div>
-                                                                </label>
-
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label for="example-text-input" class="col-sm-2 col-form-label">Harga :</label>

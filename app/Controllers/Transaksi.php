@@ -145,13 +145,18 @@ class Transaksi extends BaseController
 
 	public function showstok()
 	{
-		if ($this->request->isAJAX()) {
-			$result = $this->masterbarang->showCariBarang();
-			return json_encode($result);
-			// $db = \Config\Database::connect();
-			// $builder = $db->table('master_barang')->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL');
-			// return DataTable::of($builder)->toJson();
-		}
+		// if ($this->request->isAJAX()) {
+		// 	$result = $this->masterbarang->showCariBarang();
+		// 	return json_encode($result);
+		// 	// $db = \Config\Database::connect();
+		// 	// $builder = $db->table('master_barang')->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL');
+		// 	// return DataTable::of($builder)->toJson();
+		// }
+
+		$viewdata = $this->masterbarang->table('master_barang')->select('master_barang.ID_BARANG, NAMA_BARANG, STOK, master_barang.SATUAN')->join('kategori', 'kategori.ID_KATEGORI = master_barang.ID_KATEGORI')->orderBy('master_barang.ID_BARANG', 'DESC');
+		return DataTable::of($viewdata)->add('add', function ($row) {
+			return '<a href="/transaksi/addbarang?id=' . $row->ID_BARANG . '" class="addbrg-fromlist"><button class="btn btn-primary btn-sm fa fa-plus" type="button" onclick="addbrgfromlist()"></button></a>';
+		})->toJson(true);
 	}
 
 	public function addbarang()
