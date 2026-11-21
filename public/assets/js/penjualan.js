@@ -11,7 +11,6 @@ $(document).ready(function() {
         'alamat',    
         'refinv_mp',      
         'catatan',        
-        'invoice' 
     ];
 
     // 2. Fungsi memulihkan data ke dalam input saat halaman dibuka
@@ -96,11 +95,14 @@ function rupiah(nStr) {
 }
 
  function caribarang() {
-        $('#datatable_caribarang').DataTable().destroy(); // Hapus instance DataTable sebelumnya
+        if ($.fn.DataTable.isDataTable('#datatable_caribarang')) {
+            $('#datatable_caribarang').DataTable().destroy(); // Hapus instance DataTable sebelumnya
+        }
         $('#Modalcaribrg').modal('show');
         $('#datatable_caribarang').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: '/transaksi/showstok',
             type: 'POST',
             columnDefs: [
@@ -116,6 +118,31 @@ function rupiah(nStr) {
                     data: 'STOK'
                 },
                 {
+                    data: 'HARGA_BELI_MASTER',
+                    render: function(data, type, row) {
+                    // Jika data HPP kosong/null, tampilkan tanda strip
+                    if (data === null || String(data).trim() === '') {
+                        return '<span class="text-muted">-</span>';
+                    }
+
+                    let angka = parseFloat(String(data).replace(/[^0-9.-]/g, '')) || 0;
+                    if (type !== 'display') {
+                        return angka;
+                    }
+
+                    let formatRupiah = 'Rp ' + angka.toLocaleString('id-ID');
+
+                    return `
+                        <div class="d-flex justify-content-between align-items-center text-nowrap">
+                            <span class="hpp-value" data-asli="${formatRupiah}" data-tampil="false">Rp ••••••</span>
+                            <button type="button" class="btn btn-link btn-sm text-secondary p-0 ml-2 btn-toggle-hpp" title="Lihat HPP">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    `;
+                    }
+                },
+                {
                     data: 'add',
                 },
             ],
@@ -124,8 +151,8 @@ function rupiah(nStr) {
                 let stok = parseInt(String(data.STOK).replace(/<[^>]*>/g, '').trim(), 10) || 0;
 
                 if (stok <= 0) {
-                    // Cari elemen button atau a di dalam kolom ke-4 (indeks 3)
-                    $('td:eq(3)', row).find('button, a')
+                    // Cari elemen button atau a di dalam kolom ke-4 (indeks 4)
+                    $('td:eq(4)', row).find('button, a')
                         .prop('disabled', true)
                         .addClass('disabled')
                         .removeClass('btn-primary btn-info btn-success')
@@ -140,6 +167,29 @@ function rupiah(nStr) {
             }
         });
 }
+
+//script sensor harga hpp daftar barang
+$(document).on('click', '.btn-toggle-hpp', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let $wrapper = $(this).closest('div');
+    let $teksHpp = $wrapper.find('.hpp-value');
+    let $ikon    = $(this).find('i');
+    let sedangTampil = $teksHpp.attr('data-tampil') === 'true';
+
+    if (sedangTampil) {
+        // Kembalikan ke mode sensor
+        $teksHpp.text('Rp ••••••').attr('data-tampil', 'false');
+        $ikon.removeClass('fa-eye-slash').addClass('fa-eye');
+        $(this).attr('title', 'Lihat HPP');
+    } else {
+        // Tampilkan nominal Rupiah asli
+        $teksHpp.text($teksHpp.attr('data-asli')).attr('data-tampil', 'true');
+        $ikon.removeClass('fa-eye').addClass('fa-eye-slash');
+        $(this).attr('title', 'Sembunyikan HPP');
+    }
+});
 
  // FUNGSI MENDAPATKAN ID & NAMA BARANG KETIKA KLIK TOMBOL PLUS PADA DAFTAR BARANG
     function addbrgfromlist() {

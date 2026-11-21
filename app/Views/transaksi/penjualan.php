@@ -71,6 +71,11 @@
                                 <div class="card m-b-30">
                                     <form action="" id="form_addchart">
                                         <div class="card-body">
+                                            <div class="d-flex justify-content-end mb-2">
+                                                <a href="<?= base_url('transaksi/liveOrder') ?>" target="_blank" class="btn btn-danger btn-sm">
+                                                    <i class="fa fa-circle mr-1" style="font-size: 8px; vertical-align: middle;"></i> Live Order
+                                                </a>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="card m-b-30">
@@ -198,6 +203,7 @@
                                                                                             <th>Kode</th>
                                                                                             <th>Nama Barang</th>
                                                                                             <th>Stok</th>
+                                                                                            <th>Hpp</th>
                                                                                             <th>Aksi</th>
                                                                                         </tr>
                                                                                     </thead>

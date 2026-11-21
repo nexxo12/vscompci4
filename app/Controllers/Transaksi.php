@@ -145,15 +145,7 @@ class Transaksi extends BaseController
 
 	public function showstok()
 	{
-		// if ($this->request->isAJAX()) {
-		// 	$result = $this->masterbarang->showCariBarang();
-		// 	return json_encode($result);
-		// 	// $db = \Config\Database::connect();
-		// 	// $builder = $db->table('master_barang')->select('ID_BARANG, NAMA_BARANG, STOK, HARGA_JUAL');
-		// 	// return DataTable::of($builder)->toJson();
-		// }
-
-		$viewdata = $this->masterbarang->table('master_barang')->select('master_barang.ID_BARANG, NAMA_BARANG, STOK, master_barang.SATUAN')->join('kategori', 'kategori.ID_KATEGORI = master_barang.ID_KATEGORI')->orderBy('master_barang.ID_BARANG', 'DESC');
+		$viewdata = $this->masterbarang->table('master_barang')->select('master_barang.ID_BARANG, NAMA_BARANG, STOK, master_barang.SATUAN, HARGA_BELI_MASTER')->join('kategori', 'kategori.ID_KATEGORI = master_barang.ID_KATEGORI')->orderBy('master_barang.ID_BARANG', 'DESC');
 		return DataTable::of($viewdata)->add('add', function ($row) {
 			return '<a href="/transaksi/addbarang?id=' . $row->ID_BARANG . '" class="addbrg-fromlist"><button class="btn btn-primary btn-sm fa fa-plus" type="button" onclick="addbrgfromlist()"></button></a>';
 		})->toJson(true);
@@ -319,35 +311,6 @@ class Transaksi extends BaseController
 		}
 	}
 
-	// public function addcartFromEditPenjualan()
-	// {
-	// 	if ($this->request->isAJAX()) {
-	// 		$this->list_pj->insert([
-	// 			'ID_PENJUALAN' => $this->request->getVar('idpenjualan'),
-	// 			'INV_PENJUALAN' => $this->request->getVar('invoice'),
-	// 			'ID_BARANG' => $this->request->getVar('idbarang'),
-	// 			'ID_PELANGGAN' => $this->request->getVar('typecustomer'),
-	// 			'ID_LOGIN' => $this->request->getVar('idkasir'),
-	// 			'TANGGAL_TRANSAKSI' => $this->request->getVar('tanggal'),
-	// 			'NAMACUST' => $this->request->getVar('namacustomer'),
-	// 			'ALAMAT' => $this->request->getVar('alamat'),
-	// 			'REFMP' => $this->request->getVar('refinv_mp'),
-	// 			'CATATAN' => $this->request->getVar('catatan'),
-	// 			'JUMLAH_BELI' => $this->request->getVar('qty'),
-	// 			'HARGA_AWAL' => $this->request->getVar('modalbarang'),
-	// 			'HARGA_JL' => $this->request->getVar('harga'),
-	// 			'DP' => $this->request->getVar('input-dp'),
-	// 			'DISKON' => $this->request->getVar('input-diskon'),
-	// 			'SUBTOTAL' => $this->request->getVar('harga') * $this->request->getVar('qty'),
-	// 			'TOTAL_HARGA' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-diskon'),
-	// 			'TOTAL_NETT' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-dp') - $this->request->getVar('input-diskon'),
-	// 			'LABA' => $this->request->getVar('harga') * $this->request->getVar('qty') - $this->request->getVar('input-diskon') - $this->request->getVar('modalbarang') * $this->request->getVar('qty')
-
-	// 		]);
-	// 		// return redirect()->to('index');
-	// 	}
-	// }
-
 	public function ClearListPenjualan()
 	{
 		if ($this->request->isAJAX()) {
@@ -374,6 +337,60 @@ class Transaksi extends BaseController
 		return json_encode($result);
 	}
 	//  END CONTROLLER PENJUALAN======================================
+
+
+	//CONTROLLER LIVE ORDER========================================
+	public function liveOrder()
+	{
+		$data = [
+			'title' => 'Live Order - VSKomputer'
+		];
+		return view('/transaksi/order', $data);
+	}
+
+	public function viewdata_order()
+	{
+		$request = \Config\Services::request();
+		$tanggal = $request->getGet('tanggal') ?: date('Y-m-d');
+
+		$viewdata = $this->inv_pj
+			->select('id_inv, TGL_TRX, BARANG, GRAND_TOTAL, inv_ol')
+			->orderBy("CAST(SUBSTRING_INDEX(id_inv, '-', -1) AS UNSIGNED)", 'DESC', false);
+
+		return DataTable::of($viewdata)
+			->filter(function ($builder) use ($tanggal) {
+				$builder->where('DATE(TGL_TRX)', $tanggal);
+			})->add('print', function ($row) {
+				return '<a href="/transaksi/penjualan/print/' . $row->id_inv . '" target="_blank" class="btn btn-success btn-sm btn-print-order" data-id="' . $row->id_inv . '"><i class="fa fa-print"></i></a>';
+			})
+			->toJson(true);
+	}
+
+	public function cek_order_terbaru()
+	{
+		$tanggal = $this->request->getGet('tanggal') ?: date('Y-m-d');
+
+		$total = $this->inv_pj
+			->where('DATE(TGL_TRX)', $tanggal)
+			->countAllResults();
+
+		$latest = $this->inv_pj
+			->select('id_inv')
+			->where('DATE(TGL_TRX)', $tanggal)
+			->orderBy("CAST(SUBSTRING_INDEX(id_inv, '-', -1) AS UNSIGNED)", 'DESC', false)
+			->first();
+
+		$lastId = is_array($latest) ? ($latest['id_inv'] ?? '') : ($latest->id_inv ?? '');
+
+		return $this->response->setJSON([
+			'total'   => (int) $total,
+			'last_id' => (string) $lastId
+		]);
+	}
+
+	//END CONTROLLER LIVE ORDER========================================
+
+
 	// CONTROLLER GARANSI===================================
 
 	public function viewdata_garansi()

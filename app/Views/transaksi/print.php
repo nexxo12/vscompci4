@@ -236,19 +236,6 @@
             </tbody>
         </table>
         <p style="font-size: 25px;">Note : <?= $nota['CATATAN']; ?></p>
-        <div style="font-size: 25px;">
-            Pengiriman:
-            <select name="pengiriman" id="pengiriman" style="font-size: 25px; border: none; outline: none;" border="none;">
-                <option value="">Instant</option>
-                <option value="">Kirim Sendiri</option>
-                <option value="">J&T Cargo</option>
-                <option value="">J&T Biasa</option>
-                <option value="">JNE</option>
-                <option value="">SPX</option>
-                <option value="">Sicepat</option>
-                <option value="">Anteraja</option>
-            </select>
-        </div>
     </div>
 
     <script type="text/javascript">
